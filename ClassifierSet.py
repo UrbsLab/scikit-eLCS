@@ -40,7 +40,7 @@ class ClassifierSet:
                 setNumerositySum += cl.numerosity
 
                 #Covering Check
-                if elcs.parameters['env'].formatData.discretePhenotype:
+                if elcs.env.formatData.discretePhenotype:
                     if cl.phenotype == phenotype:
                         doCovering = False
                     else:
@@ -75,7 +75,7 @@ class ClassifierSet:
         for i in range(self.matchSet.size):
             ref = self.matchSet[i]
             #Discrete Phenotype
-            if elcs.parameters['env'].formatData.discretePhenotype:
+            if elcs.env.formatData.discretePhenotype:
                 if self.popSet[ref].phenotype == phenotype:
                     self.correctSet = np.append(self.correctSet,ref)
 
@@ -145,18 +145,18 @@ class ClassifierSet:
 
     def runGA(self,elcs,exploreIter,state,phenotype):
         #GA Run Requirement
-        if (exploreIter - self.getIterStampAverage()) < elcs.parameters['theta_GA']:
+        if (exploreIter - self.getIterStampAverage()) < elcs.theta_GA:
             return
 
         self.setIterStamps(exploreIter)
         changed = False
 
         #Select Parents
-        if elcs.parameters['selectionMethod'] == "roulette":
+        if elcs.selectionMethod == "roulette":
             selectList = self.selectClassifierRW()
             clP1 = selectList[0]
             clP2 = selectList[1]
-        elif elcs.parameters['selectionMethod'] == "tournament":
+        elif elcs.selectionMethod == "tournament":
             selectList = self.selectClassifierT(elcs)
             clP1 = selectList[0]
             clP2 = selectList[1]
@@ -169,18 +169,18 @@ class ClassifierSet:
             cl2 = Classifier(clP2, exploreIter)
 
         #Crossover Operator (uniform crossover)
-        if not cl1.equals(cl2) and random.random() < elcs.parameters['chi']:
+        if not cl1.equals(cl2) and random.random() < elcs.chi:
             changed = cl1.uniformCrossover(elcs,cl2)
 
         #Initialize Key Offspring Parameters
         if changed:
             cl1.setAccuracy((cl1.accuracy + cl2.accuracy) / 2.0)
-            cl1.setFitness(elcs.parameters['fitnessReduction'] * (cl1.fitness + cl2.fitness) / 2.0)
+            cl1.setFitness(elcs.fitnessReduction * (cl1.fitness + cl2.fitness) / 2.0)
             cl2.setAccuracy(cl1.accuracy)
             cl2.setFitness(cl1.fitness)
         else:
-            cl1.setFitness(elcs.parameters['fitnessReduction'] * cl1.fitness)
-            cl2.setFitness(elcs.parameters['fitnessReduction'] * cl2.fitness)
+            cl1.setFitness(elcs.fitnessReduction * cl1.fitness)
+            cl2.setFitness(elcs.fitnessReduction * cl2.fitness)
 
         #Mutation Operator
         nowchanged = cl1.Mutation(elcs,state,phenotype)
@@ -240,7 +240,7 @@ class ClassifierSet:
         setList = self.correctSet
 
         while currentCount < 2:
-            tSize = int(setList.size * elcs.parameters['theta_sel'])
+            tSize = int(setList.size * elcs.theta_sel)
 
             #Select tSize elements from correctSet
             copyList = copy.deepcopy(self.correctSet)
@@ -264,7 +264,7 @@ class ClassifierSet:
         return selectList
 
     def insertDiscoveredClassifiers(self,elcs,cl1,cl2,clP1,clP2,exploreIter):
-        if elcs.parameters['doSubsumption']:
+        if elcs.doSubsumption:
             if cl1.specifiedAttList.size > 0:
                 self.subsumeClassifier(elcs,cl1,clP1,clP2)
             if cl2.specifiedAttList.size > 0:
@@ -299,7 +299,7 @@ class ClassifierSet:
         self.addClassifierToPopulation(cl,False)
 
     def deletion(self,elcs,exploreIter):
-        while (self.microPopSize > elcs.parameters['N']):
+        while (self.microPopSize > elcs.N):
             self.deleteFromPopulation(elcs)
 
     def deleteFromPopulation(self,elcs):

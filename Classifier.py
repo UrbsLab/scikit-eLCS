@@ -11,7 +11,7 @@ class Classifier():
         self.condition = np.array([]) #array of ClassifierConditionElements
         self.phenotype = None #Can be either np_array of min and max or a discrete phenotype
 
-        self.fitness = elcs.parameters['init_fit']
+        self.fitness = elcs.init_fit
         self.accuracy = 0.0
         self.numerosity = 1
         self.aveMatchSetSize = None
@@ -36,7 +36,7 @@ class Classifier():
         self.timeStampGA = exploreIter
         self.initTimeStamp = exploreIter
         self.aveMatchSetSize = setSize
-        dataInfo = elcs.parameters['env'].formatData
+        dataInfo = elcs.env.formatData
 
         # -------------------------------------------------------
         # DISCRETE PHENOTYPE
@@ -55,7 +55,7 @@ class Classifier():
 
         while self.specifiedAttList.size < 1:
             for attRef in range(state.size):
-                if random.random() < elcs.parameters['p_spec'] and state[attRef].value != elcs.parameters['labelMissingData']:
+                if random.random() < elcs.p_spec and state[attRef].value != elcs.labelMissingData:
                     self.specifiedAttList = np.append(self.specifiedAttList,attRef)
                     self.condition = np.append(self.condition,self.buildMatch(elcs,attRef,state))#Add classifierConditionElement
 
@@ -70,7 +70,7 @@ class Classifier():
         self.accuracy = toCopy.accuracy
 
     def buildMatch(self,elcs,attRef,state):
-        attributeInfo = elcs.parameters['env'].formatData.attributeInfo[attRef]
+        attributeInfo = elcs.env.formatData.attributeInfo[attRef]
 
         #Continuous attribute
         if attributeInfo.type:
@@ -89,12 +89,12 @@ class Classifier():
     #Matching
     def match(self,state,elcs):
         for i in range(self.condition.size):
-            attributeInfo = elcs.parameters['env'].formatData.attributeInfo[self.specifiedAttList[i]]
+            attributeInfo = elcs.env.formatData.attributeInfo[self.specifiedAttList[i]]
 
             #Continuous
             if attributeInfo.type:
                 instanceValue = state[self.specifiedAttList[i]].value
-                if self.condition[i].list[0] < instanceValue < self.condition[i].list[1] or instanceValue == elcs.parameters['labelMissingData']:
+                if self.condition[i].list[0] < instanceValue < self.condition[i].list[1] or instanceValue == elcs.labelMissingData:
                     pass
                 else:
                     return False
@@ -102,7 +102,7 @@ class Classifier():
             #Discrete
             else:
                 stateRep = state[self.specifiedAttList[i]].value
-                if stateRep == self.condition[i].value or stateRep == elcs.parameters['labelMissingData']:
+                if stateRep == self.condition[i].value or stateRep == elcs.labelMissingData:
                     pass
                 else:
                     return False
@@ -144,11 +144,11 @@ class Classifier():
 
     def updateMatchSetSize(self, elcs,matchSetSize):
         """  Updates the average match set size. """
-        if self.matchCount < 1.0 / elcs.parameters['beta']:
+        if self.matchCount < 1.0 / elcs.beta:
             self.aveMatchSetSize = (self.aveMatchSetSize * (self.matchCount - 1) + matchSetSize) / float(
                 self.matchCount)
         else:
-            self.aveMatchSetSize = self.aveMatchSetSize + elcs.parameters['beta'] * (matchSetSize - self.aveMatchSetSize)
+            self.aveMatchSetSize = self.aveMatchSetSize + elcs.beta * (matchSetSize - self.aveMatchSetSize)
 
     def updateAccuracy(self):
         """ Update the accuracy tracker """
@@ -156,16 +156,16 @@ class Classifier():
 
     def updateFitness(self,elcs):
         """ Update the fitness parameter. """
-        if elcs.parameters['env'].formatData.discretePhenotype or (self.phenotype[1] - self.phenotype[0]) / elcs.parameters['env'].formatData.phenotypeRange < 0.5:
-            self.fitness = pow(self.accuracy, elcs.parameters['nu'])
+        if elcs.env.formatData.discretePhenotype or (self.phenotype[1] - self.phenotype[0]) / elcs.env.formatData.phenotypeRange < 0.5:
+            self.fitness = pow(self.accuracy, elcs.nu)
         else:
-            if (self.phenotype[1] - self.phenotype[0]) >= elcs.parameters['env'].formatData.phenotypeRange:
+            if (self.phenotype[1] - self.phenotype[0]) >= elcs.env.formatData.phenotypeRange:
                 self.fitness = 0.0
             else:
-                self.fitness = math.fabs(pow(self.accuracy, elcs.parameters['nu']) - (self.phenotype[1] - self.phenotype[0]) / elcs.parameters['env'].formatData.phenotypeRange)
+                self.fitness = math.fabs(pow(self.accuracy, elcs.nu) - (self.phenotype[1] - self.phenotype[0]) / elcs.env.formatData.phenotypeRange)
 
     def isSubsumer(self,elcs):
-        if self.matchCount > elcs.parameters['theta_sub'] and self.accuracy > elcs.parameters['acc_sub']:
+        if self.matchCount > elcs.theta_sub and self.accuracy > elcs.acc_sub:
             return True
         return False
 
@@ -173,7 +173,7 @@ class Classifier():
         if self.specifiedAttList.size >= cl.specifiedAttList.size:
             return False
         for i in range(self.specifiedAttList.size):
-            attributeInfo = elcs.parameters['env'].formatData.attributeInfo[self.specifiedAttList[i]]
+            attributeInfo = elcs.env.formatData.attributeInfo[self.specifiedAttList[i]]
             if self.specifiedAttList[i] not in cl.specifiedAttList:
                 return False
 
@@ -191,20 +191,20 @@ class Classifier():
         self.timeStampGA = ts
 
     def uniformCrossover(self,elcs,cl):
-        if elcs.parameters['env'].formatData.discretePhenotype or random.random() < 0.5:
+        if elcs.env.formatData.discretePhenotype or random.random() < 0.5:
             p_self_specifiedAttList = copy.deepcopy(self.specifiedAttList)
             p_cl_specifiedAttList = copy.deepcopy(cl.specifiedAttList)
 
             # Make list of attribute references appearing in at least one of the parents.-----------------------------
             comboAttList = np.unique(np.concatenate((p_self_specifiedAttList,p_cl_specifiedAttList)))
             for i in comboAttList:
-                if not elcs.parameters['env'].formatData.attributeInfo[i].type:
+                if not elcs.env.formatData.attributeInfo[i].type:
                     index = np.where(comboAttList==i)[0][0]
                     comboAttList = np.delete(comboAttList,index)
 
             changed = False
             for attRef in comboAttList:
-                attributeInfo = elcs.parameters['env'].formatData.attributeInfo[attRef]
+                attributeInfo = elcs.env.formatData.attributeInfo[attRef]
                 probability = 0.5
                 ref = 0
                 p_self_specifiedAttList+=1
@@ -306,9 +306,9 @@ class Classifier():
     def Mutation(self,elcs,state,phenotype):
         changed = False
         #Mutate Condition
-        for attRef in range(elcs.parameters['env'].formatData.numAttributes):
-            attributeInfo = elcs.parameters['env'].formatData.attributeInfo[attRef]
-            if random.random() < elcs.parameters['upsilon'] and state[attRef].value != elcs.parameters['labelMissingData']:
+        for attRef in range(elcs.env.formatData.numAttributes):
+            attributeInfo = elcs.env.formatData.attributeInfo[attRef]
+            if random.random() < elcs.upsilon and state[attRef].value != elcs.labelMissingData:
                 #Mutation
                 if attRef not in self.specifiedAttList:
                     self.specifiedAttList = np.append(self.specifiedAttList,attRef)
@@ -340,7 +340,7 @@ class Classifier():
                     pass
 
         #Mutate Phenotype
-        if elcs.parameters['env'].formatData.discretePhenotype:
+        if elcs.env.formatData.discretePhenotype:
             nowChanged = self.discretePhenotypeMutation(elcs)
         else:
             nowChanged = self.continuousPhenotypeMutation(elcs,phenotype)
@@ -350,8 +350,8 @@ class Classifier():
 
     def discretePhenotypeMutation(self,elcs):
         changed = False
-        if random.random() < elcs.parameters['upsilon']:
-            phenotypeList = copy.deepcopy(elcs.parameters['env'].formatData.phenotypeList)
+        if random.random() < elcs.upsilon:
+            phenotypeList = copy.deepcopy(elcs.env.formatData.phenotypeList)
             index = np.where(phenotypeList == self.phenotype)
             phenotypeList = np.delete(phenotypeList,index)
             newPhenotype = np.random.choice(phenotypeList)
@@ -361,7 +361,7 @@ class Classifier():
 
     def continuousPhenotypeMutation(self,elcs,phenotype):
         changed = False
-        if random.random() < elcs.parameters['upsilon']:
+        if random.random() < elcs.upsilon:
             phenRange = self.phenotype[1] - self.phenotype[0]
             mutateRange = random.random() * 0.5 * phenRange
             tempKey = random.randint(0,2)  # Make random choice between 3 scenarios, mutate minimums, mutate maximums, mutate both
@@ -396,7 +396,7 @@ class Classifier():
 
     def subsumes(self,elcs,cl):
         #Discrete Phenotype
-        if elcs.parameters['env'].formatData.discretePhenotype:
+        if elcs.env.formatData.discretePhenotype:
             if cl.phenotype == self.phenotype:
                 if self.isSubsumer(elcs) and self.isMoreGeneral(cl,elcs):
                     return True
@@ -411,11 +411,11 @@ class Classifier():
 
     def getDelProp(self, elcs,meanFitness):
         """  Returns the vote for deletion of the classifier. """
-        if self.fitness / self.numerosity >= elcs.parameters['delta'] * meanFitness or self.matchCount < elcs.parameters['theta_del']:
+        if self.fitness / self.numerosity >= elcs.delta * meanFitness or self.matchCount < elcs.theta_del:
             self.deletionVote = self.aveMatchSetSize * self.numerosity
 
         elif self.fitness == 0.0:
-            self.deletionVote = self.aveMatchSetSize * self.numerosity * meanFitness / (elcs.parameters['init_fit'] / self.numerosity)
+            self.deletionVote = self.aveMatchSetSize * self.numerosity * meanFitness / (elcs.init_fit / self.numerosity)
         else:
             self.deletionVote = self.aveMatchSetSize * self.numerosity * meanFitness / (self.fitness / self.numerosity)
         return self.deletionVote

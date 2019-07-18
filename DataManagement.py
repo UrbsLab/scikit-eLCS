@@ -1,7 +1,6 @@
 import random
 import sys
 import numpy as np
-from Constants import *
 from eLCS import *
 
 class DataManagement:
@@ -31,17 +30,17 @@ class DataManagement:
     def discriminatePhenotype(self,phenotypes,elcs):#Determine if phenotype is discrete or continuous
         currentPhenotypeIndex = 0
         classDict = {}
-        while (self.discretePhenotype and len(list(classDict.keys()))<=elcs.parameters['discreteAttributeLimit'] and currentPhenotypeIndex < self.numTrainInstances):
+        while (self.discretePhenotype and len(list(classDict.keys()))<=elcs.discreteAttributeLimit and currentPhenotypeIndex < self.numTrainInstances):
             target = phenotypes[currentPhenotypeIndex]
             if (target in list(classDict.keys())):
                 classDict[target]+=1
-            elif (target == elcs.parameters['labelMissingData']):
+            elif (target == elcs.labelMissingData):
                 pass
             else:
                 classDict[target] = 1
             currentPhenotypeIndex+=1
 
-        if (len(list(classDict.keys())) > elcs.parameters['discreteAttributeLimit']):
+        if (len(list(classDict.keys())) > elcs.discreteAttributeLimit):
             self.discretePhenotype = False
             self.phenotypeList = np.array([float(target),float(target)])
 
@@ -59,7 +58,7 @@ class DataManagement:
 
     def characterizePhenotype(self,phenotypes,elcs):
         for target in phenotypes:
-            if target == elcs.parameters['labelMissingData']:
+            if target == elcs.labelMissingData:
                 pass
             elif float(target) > self.phenotypeList[1]:
                 self.phenotypeList[1] = float(target)
@@ -76,17 +75,17 @@ class DataManagement:
             attIsDiscrete = True
             currentInstanceIndex = 0
             stateDict = {}
-            while attIsDiscrete and len(list(stateDict.keys())) <= elcs.parameters['discreteAttributeLimit'] and currentInstanceIndex < self.numTrainInstances:
+            while attIsDiscrete and len(list(stateDict.keys())) <= elcs.discreteAttributeLimit and currentInstanceIndex < self.numTrainInstances:
                 target = features[currentInstanceIndex,att]
                 if target in list(stateDict.keys()):
                     stateDict[target] += 1
-                elif target == elcs.parameters['labelMissingData']:
+                elif target == elcs.labelMissingData:
                     pass
                 else:
                     stateDict[target] = 1
                 currentInstanceIndex+=1
 
-            if len(list(stateDict.keys())) > elcs.parameters['discreteAttributeLimit']:
+            if len(list(stateDict.keys())) > elcs.discreteAttributeLimit:
                 attIsDiscrete = False
             if attIsDiscrete:
                 self.attributeInfo = np.append(self.attributeInfo,AttributeInfoElement('discrete'))
@@ -100,12 +99,12 @@ class DataManagement:
             for currentInstanceIndex in range(self.numTrainInstances):
                 target = features[currentInstanceIndex,currentFeatureIndexInAttributeInfo]
                 if not self.attributeInfo[currentFeatureIndexInAttributeInfo].type:#if attribute is discrete
-                    if target in self.attributeInfo[currentFeatureIndexInAttributeInfo].info or target == elcs.parameters['labelMissingData']:
+                    if target in self.attributeInfo[currentFeatureIndexInAttributeInfo].info or target == elcs.labelMissingData:
                         pass
                     else:
                         self.attributeInfo[currentFeatureIndexInAttributeInfo].info = np.append(self.attributeInfo[currentFeatureIndexInAttributeInfo].info,target)
                 else: #if attribute is continuous
-                    if target == elcs.parameters['labelMissingData']:
+                    if target == elcs.labelMissingData:
                         pass
                     elif float(target) > self.attributeInfo[currentFeatureIndexInAttributeInfo].info[1]:
                         self.attributeInfo[currentFeatureIndexInAttributeInfo].info[1] = float(target)
@@ -124,7 +123,7 @@ class DataManagement:
                 target = features[instance][attribute]
 
                 if self.attributeInfo[attribute].type:#If attribute is continuous
-                    if target == elcs.parameters['labelMissingData']:
+                    if target == elcs.labelMissingData:
                         formatted[instance].attributeList = np.append(formatted[instance].attributeList,MultiStateValue(target))
                     else:
                         formatted[instance].attributeList = np.append(formatted[instance].attributeList,MultiStateValue(float(target)))

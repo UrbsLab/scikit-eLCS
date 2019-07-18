@@ -13,19 +13,35 @@ import sys
 from sklearn.base import BaseEstimator
 from sklearn.externals.joblib import Parallel, delayed
 import pandas as pd
-from Constants import Constants
 from OfflineEnvironment import OfflineEnvironment
 from ClassifierSet import *
 from Prediction import *
 
 class eLCS(BaseEstimator):
 
-    def __init__(self,parameterNames,parameterValues):
+    def __init__(self,learningIterations = 10000,N = 1000,p_spec=0.5,labelMissingData='NA',discreteAttributeLimit=10,nu=5,chi=0.8,upsilon=0.04,theta_GA=25,theta_del=20,theta_sub=20,acc_sub=0.99,beta=0.2,delta=0.1,init_fit=0.01,fitnessReduction=0.1,doSubsumption=1,selectionMethod='tournament',theta_sel='0.5'):
         """Sets up eLCS model with default parameters from configFile, and training data
         """
-        self.constantsEnvironment = Constants()
-        self.constantsEnvironment.setConstants(parameterNames,parameterValues)
-        self.parameters = self.constantsEnvironment.parameterDictionary
+
+        self.learningIterations = learningIterations
+        self.N = N
+        self.p_spec = p_spec
+        self.labelMissingData = labelMissingData
+        self.discreteAttributeLimit = discreteAttributeLimit
+        self.nu = nu
+        self.chi = chi
+        self.upsilon = upsilon
+        self.theta_GA = theta_GA
+        self.theta_del = theta_del
+        self.theta_sub = theta_sub
+        self.acc_sub = acc_sub
+        self.beta = beta
+        self.delta = delta
+        self.init_fit = init_fit
+        self.fitnessReduction = fitnessReduction
+        self.doSubsumption = doSubsumption
+        self.selectionMethod = selectionMethod
+        self.theta_sel = theta_sel
 
     def fit(self, X, y):
         """Scikit-learn required: Computes the feature importance scores from the training data.
@@ -43,9 +59,8 @@ class eLCS(BaseEstimator):
 
         """
 
-        env = OfflineEnvironment(X, y, self)
-        self.constantsEnvironment.referenceEnv(env)
-        for instance in self.parameters['env'].formatData.trainFormatted:
+        self.env = OfflineEnvironment(X, y, self)
+        for instance in self.env.formatData.trainFormatted:
             for element in instance.attributeList:
                 print(element.value,end=" ")
             print(instance.phenotype)
@@ -53,13 +68,13 @@ class eLCS(BaseEstimator):
 
         # self.population = ClassifierSet(self)
         # self.explorIter = 0
-        # self.correct = np.empty(self.parameters['learningIterations'])
+        # self.correct = np.empty(self.learningIterations)
         # self.correct.fill(0)
         #
-        # while self.explorIter < self.parameters['learningIterations']:
+        # while self.explorIter < self.learningIterations:
         #
         #     #Get New Instance and Run a learning algorithm
-        #     state_phenotype = self.parameters['env'].getTrainInstance()
+        #     state_phenotype = self.env.getTrainInstance()
         #     self.runIteration(state_phenotype,self.explorIter)
         #
         # return self
@@ -82,19 +97,19 @@ class eLCS(BaseEstimator):
         phenotypePrediction = prediction.getDecision()
 
         if phenotypePrediction == None or phenotypePrediction == 'Tie':
-            if self.parameters['env'].formatData.discretePhenotype:
-                phenotypePrediction = random.choice(self.parameters['env'].formatData.phenotypeList)
+            if self.env.formatData.discretePhenotype:
+                phenotypePrediction = random.choice(self.env.formatData.phenotypeList)
             else:
-                phenotypePrediction = random.randrange(self.parameters['env'].formatData.phenotypeList[0],self.parameters['env'].formatData.phenotypeList[1],(self.parameters['env'].formatData.phenotypeList[1]-self.parameters['env'].formatData.phenotypeList[0])/float(1000))
+                phenotypePrediction = random.randrange(self.env.formatData.phenotypeList[0],self.env.formatData.phenotypeList[1],(self.env.formatData.phenotypeList[1]-self.env.formatData.phenotypeList[0])/float(1000))
         else:
-            if self.parameters['env'].formatData.discretePhenotype:
+            if self.env.formatData.discretePhenotype:
                 if phenotypePrediction == state_phenotype.phenotype:
                     self.correct[exploreIter] = 1
                 else:
                     self.correct[exploreIter] = 0
             else:
                 predictionError = math.fabs(phenotypePrediction-float(state_phenotype.phenotype))
-                phenotypeRange = self.parameters['env'].formatData.phenotypeList[1] - self.parameters['env'].formatData.phenotypeList[0]
+                phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
                 accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
                 self.correct[exploreIter] = accuracyEstimate
 
@@ -105,7 +120,7 @@ class eLCS(BaseEstimator):
         self.population.updateSets(self,exploreIter)
 
         #Perform Subsumption
-        if self.parameters['doSubsumption']:
+        if self.doSubsumption:
             self.population.doCorrectSetSubsumption(self)
 
         #Perform GA

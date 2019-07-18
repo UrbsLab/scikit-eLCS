@@ -7,12 +7,12 @@ class Prediction():
         self.decision = None
 
         #Discrete Phenotypes
-        if elcs.parameters['env'].formatData.discretePhenotype:
+        if elcs.env.formatData.discretePhenotype:
             self.vote = {}
             self.tieBreak_Numerosity = {}
             self.tieBreak_TimeStamp = {}
 
-            for eachClass in elcs.parameters['env'].formatData.phenotypeList:
+            for eachClass in elcs.env.formatData.phenotypeList:
                 self.vote[eachClass] = 0.0
                 self.tieBreak_Numerosity[eachClass] = 0.0
                 self.tieBreak_TimeStamp[eachClass] = 0.0
@@ -25,11 +25,11 @@ class Prediction():
 
             highVal = 0.0
             bestClass = np.array([])
-            for thisClass in elcs.parameters['env'].formatData.phenotypeList:
+            for thisClass in elcs.env.formatData.phenotypeList:
                 if self.vote[thisClass] >= highVal:
                     highVal = self.vote[thisClass]
 
-            for thisClass in elcs.parameters['env'].formatData.phenotypeList:
+            for thisClass in elcs.env.formatData.phenotypeList:
                 if self.vote[thisClass] == highVal:  # Tie for best class
                     bestClass = np.append(bestClass,thisClass)
 
@@ -70,7 +70,7 @@ class Prediction():
             if population.matchSet.size < 1:
                 self.decision = None
             else:
-                phenotypeRange = elcs.parameters['env'].formatData.phenotypeList[1]
+                phenotypeRange = elcs.env.formatData.phenotypeList[1]
                 predictionValue = 0
                 valueWeightSum = 0
                 for ref in population.matchSet:
