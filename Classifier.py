@@ -7,7 +7,7 @@ import numpy as np
 class Classifier():
     def __init__(self,elcs,a=None,b=None,c=None,d=None):
         #Major Parameters
-        self.specifiedAttList = np.array([])
+        self.specifiedAttList = np.array([],dtype='int64')
         self.condition = np.array([]) #array of ClassifierConditionElements
         self.phenotype = None #Can be either np_array of min and max or a discrete phenotype
 

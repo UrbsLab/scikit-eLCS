@@ -20,12 +20,12 @@ from Prediction import *
 
 class eLCS(BaseEstimator):
 
-    def __init__(self,trainingFeatures,trainingPhenotypes,parameterNames,parameterValues):
+    def __init__(self,parameterNames,parameterValues):
         """Sets up eLCS model with default parameters from configFile, and training data
         """
-        self.parameters = Constants()
-        self.parameters = self.parameters.setConstants(parameterNames,parameterValues)
-
+        self.constantsEnvironment = Constants()
+        self.constantsEnvironment.setConstants(parameterNames,parameterValues)
+        self.parameters = self.constantsEnvironment.parameterDictionary
 
     def fit(self, X, y):
         """Scikit-learn required: Computes the feature importance scores from the training data.
@@ -44,18 +44,25 @@ class eLCS(BaseEstimator):
         """
 
         env = OfflineEnvironment(X, y, self)
-        self.parameters.referenceEnv(env)
+        self.constantsEnvironment.referenceEnv(env)
+        for instance in self.parameters['env'].formatData.trainFormatted:
+            for element in instance.attributeList:
+                print(element.value,end=" ")
+            print(instance.phenotype)
+            print()
 
-        self.population = ClassifierSet()
-        self.explorIter = 0
-        self.correct = np.empty(self.parameters['learningIterations'])
-        self.correct.fill(0)
-
-        while self.explorIter < self.parameters['learningIterations']:
-
-            #Get New Instance and Run a learning algorithm
-            state_phenotype = self.parameters['env'].getTrainInstance()
-            self.runIteration(state_phenotype,self.explorIter)
+        # self.population = ClassifierSet(self)
+        # self.explorIter = 0
+        # self.correct = np.empty(self.parameters['learningIterations'])
+        # self.correct.fill(0)
+        #
+        # while self.explorIter < self.parameters['learningIterations']:
+        #
+        #     #Get New Instance and Run a learning algorithm
+        #     state_phenotype = self.parameters['env'].getTrainInstance()
+        #     self.runIteration(state_phenotype,self.explorIter)
+        #
+        # return self
 
     def transform(self, X):
         """Not needed for eLCS"""
@@ -92,7 +99,7 @@ class eLCS(BaseEstimator):
                 self.correct[exploreIter] = accuracyEstimate
 
         #Form [C]
-        self.population.makeCorrectSet(state_phenotype.phenotype)
+        self.population.makeCorrectSet(self,state_phenotype.phenotype)
 
         #Update Parameters
         self.population.updateSets(self,exploreIter)

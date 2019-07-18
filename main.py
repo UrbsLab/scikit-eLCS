@@ -13,6 +13,7 @@ dataFeatures, dataPhenotypes = data.drop('class', axis=1).values, data['class'].
 parameters = pd.read_csv('ConfigFile.csv',sep=',')
 parameterNames, parameterValues = parameters["ParameterNames"].values, parameters["ParameterValues"].values
 clf = eLCS(parameterNames,parameterValues)
-eLCS.fit(dataFeatures,dataPhenotypes)
+clf = clf.fit(dataFeatures,dataPhenotypes)
 
 #print(np.mean(cross_val_score(clf, features, labels)))
+print("hi")

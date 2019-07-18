@@ -1,11 +1,11 @@
 import random
 import sys
 import numpy as np
-from Constants import Constants
-from eLCS import eLCS
+from Constants import *
+from eLCS import *
 
 class DataManagement:
-    def __init__(self,dataFeatures,dataPhenotypes,elcs,infoList = None):
+    def __init__(self,dataFeatures,dataPhenotypes,elcs):
         #About Attributes
         self.numAttributes = dataFeatures.shape[1]  # The number of attributes in the input file.
         self.attributeInfo = np.array([])  # Stores Discrete (0) or Continuous (1) for each attribute
@@ -17,7 +17,7 @@ class DataManagement:
 
         #About Dataset
         self.numTrainInstances = dataFeatures.shape[0]  # The number of instances in the training data
-        self.discretePhenotype(dataPhenotypes,elcs)
+        self.discriminatePhenotype(dataPhenotypes,elcs)
         if (self.discretePhenotype == True):
             self.discriminateClasses(dataPhenotypes)
         else:
@@ -31,7 +31,7 @@ class DataManagement:
     def discriminatePhenotype(self,phenotypes,elcs):#Determine if phenotype is discrete or continuous
         currentPhenotypeIndex = 0
         classDict = {}
-        while (self.discretePhenotype and len(list(classDict.keys())<=elcs.parameters['discreteAttributeLimit'] and currentPhenotypeIndex < self.numTrainInstances)):
+        while (self.discretePhenotype and len(list(classDict.keys()))<=elcs.parameters['discreteAttributeLimit'] and currentPhenotypeIndex < self.numTrainInstances):
             target = phenotypes[currentPhenotypeIndex]
             if (target in list(classDict.keys())):
                 classDict[target]+=1
@@ -41,7 +41,7 @@ class DataManagement:
                 classDict[target] = 1
             currentPhenotypeIndex+=1
 
-        if (len(list(classDict.keys()) > elcs.parameters['discreteAtrributeLimit'])):
+        if (len(list(classDict.keys())) > elcs.parameters['discreteAttributeLimit']):
             self.discretePhenotype = False
             self.phenotypeList = np.array([float(target),float(target)])
 
@@ -55,6 +55,7 @@ class DataManagement:
             else:
                 self.phenotypeList = np.append(self.phenotypeList,target)
                 classCount[target] = 1
+            currentPhenotypeIndex+=1
 
     def characterizePhenotype(self,phenotypes,elcs):
         for target in phenotypes:
@@ -75,7 +76,7 @@ class DataManagement:
             attIsDiscrete = True
             currentInstanceIndex = 0
             stateDict = {}
-            while attIsDiscrete and len(list(stateDict.keys()) <= elcs.parameters['discreteAttributeLimit'] and currentInstanceIndex < self.numTrainInstances):
+            while attIsDiscrete and len(list(stateDict.keys())) <= elcs.parameters['discreteAttributeLimit'] and currentInstanceIndex < self.numTrainInstances:
                 target = features[currentInstanceIndex,att]
                 if target in list(stateDict.keys()):
                     stateDict[target] += 1
@@ -116,7 +117,7 @@ class DataManagement:
     def formatData(self,features,phenotypes,elcs):
         formatted = np.array([])
         for i in range(self.numTrainInstances):
-            formatted.append(DataInstance())
+            formatted = np.append(formatted,DataInstance())
 
         for instance in range(self.numTrainInstances):
             for attribute in range(self.numAttributes):

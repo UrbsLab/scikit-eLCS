@@ -10,8 +10,8 @@ class ClassifierSet:
     def __init__(self,elcs):
         #Major Parameters
         self.popSet = np.array([])
-        self.matchSet = np.array([])
-        self.correctSet = np.array([])
+        self.matchSet = np.array([],dtype='int64')
+        self.correctSet = np.array([],dtype='int64')
         self.microPopSize = 0
 
         #Evaluation Parameters
@@ -96,7 +96,7 @@ class ClassifierSet:
                 self.popSet[ref].updateCorrect()
 
             self.popSet[ref].updateAccuracy()
-            self.popSet[ref].updateFitness()
+            self.popSet[ref].updateFitness(elcs)
 
 
 
@@ -338,5 +338,5 @@ class ClassifierSet:
 
     def clearSets(self):
         """ Clears out references in the match and correct sets for the next learning iteration. """
-        self.matchSet = np.array([])
-        self.correctSet = np.array([])
+        self.matchSet = np.array([],dtype="int64")
+        self.correctSet = np.array([],dtype="int64")
