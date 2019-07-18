@@ -20,9 +20,8 @@ from Prediction import *
 class eLCS(BaseEstimator):
 
     def __init__(self,learningIterations = 10000,N = 1000,p_spec=0.5,labelMissingData='NA',discreteAttributeLimit=10,nu=5,chi=0.8,upsilon=0.04,theta_GA=25,theta_del=20,theta_sub=20,acc_sub=0.99,beta=0.2,delta=0.1,init_fit=0.01,fitnessReduction=0.1,doSubsumption=1,selectionMethod='tournament',theta_sel='0.5'):
-        """Sets up eLCS model with default parameters from configFile, and training data
+        """Sets up eLCS model with given parameters
         """
-
         self.learningIterations = learningIterations
         self.N = N
         self.p_spec = p_spec
@@ -60,22 +59,22 @@ class eLCS(BaseEstimator):
         """
 
         self.env = OfflineEnvironment(X, y, self)
-        for instance in self.env.formatData.trainFormatted:
-            for element in instance.attributeList:
-                print(element.value,end=" ")
-            print(instance.phenotype)
-            print()
 
-        # self.population = ClassifierSet(self)
-        # self.explorIter = 0
-        # self.correct = np.empty(self.learningIterations)
-        # self.correct.fill(0)
-        #
-        # while self.explorIter < self.learningIterations:
-        #
-        #     #Get New Instance and Run a learning algorithm
-        #     state_phenotype = self.env.getTrainInstance()
-        #     self.runIteration(state_phenotype,self.explorIter)
+        self.population = ClassifierSet(self)
+        self.explorIter = 0
+        self.correct = np.empty(self.learningIterations)
+        self.correct.fill(0)
+
+        while self.explorIter < self.learningIterations:
+
+            #Get New Instance and Run a learning algorithm
+            state_phenotype = self.env.getTrainInstance()
+
+            self.runIteration(state_phenotype,self.explorIter)
+
+            #Incremenet Instance & Iteration
+            self.explorIter+=1
+            self.env.newInstance()
         #
         # return self
 
@@ -92,42 +91,80 @@ class eLCS(BaseEstimator):
         #Form [M]
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
 
-        #Make a Prediction
-        prediction = Prediction(self,self.population)
-        phenotypePrediction = prediction.getDecision()
+        #Print Current State & Phenotype
 
-        if phenotypePrediction == None or phenotypePrediction == 'Tie':
-            if self.env.formatData.discretePhenotype:
-                phenotypePrediction = random.choice(self.env.formatData.phenotypeList)
-            else:
-                phenotypePrediction = random.randrange(self.env.formatData.phenotypeList[0],self.env.formatData.phenotypeList[1],(self.env.formatData.phenotypeList[1]-self.env.formatData.phenotypeList[0])/float(1000))
-        else:
-            if self.env.formatData.discretePhenotype:
-                if phenotypePrediction == state_phenotype.phenotype:
-                    self.correct[exploreIter] = 1
-                else:
-                    self.correct[exploreIter] = 0
-            else:
-                predictionError = math.fabs(phenotypePrediction-float(state_phenotype.phenotype))
-                phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
-                accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
-                self.correct[exploreIter] = accuracyEstimate
+        #Print [M]
+        self.printMatchSet()
 
-        #Form [C]
-        self.population.makeCorrectSet(self,state_phenotype.phenotype)
-
-        #Update Parameters
-        self.population.updateSets(self,exploreIter)
-
-        #Perform Subsumption
-        if self.doSubsumption:
-            self.population.doCorrectSetSubsumption(self)
-
-        #Perform GA
-        self.population.runGA(self,exploreIter,state_phenotype.attributeList,state_phenotype.phenotype)
-
-        #Run Deletion
-        self.population.deletion(self,exploreIter)
+        # #Make a Prediction
+        # prediction = Prediction(self,self.population)
+        # phenotypePrediction = prediction.getDecision()
+        #
+        # if phenotypePrediction == None or phenotypePrediction == 'Tie':
+        #     if self.env.formatData.discretePhenotype:
+        #         phenotypePrediction = random.choice(self.env.formatData.phenotypeList)
+        #     else:
+        #         phenotypePrediction = random.randrange(self.env.formatData.phenotypeList[0],self.env.formatData.phenotypeList[1],(self.env.formatData.phenotypeList[1]-self.env.formatData.phenotypeList[0])/float(1000))
+        # else:
+        #     if self.env.formatData.discretePhenotype:
+        #         if phenotypePrediction == state_phenotype.phenotype:
+        #             self.correct[exploreIter] = 1
+        #         else:
+        #             self.correct[exploreIter] = 0
+        #     else:
+        #         predictionError = math.fabs(phenotypePrediction-float(state_phenotype.phenotype))
+        #         phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
+        #         accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
+        #         self.correct[exploreIter] = accuracyEstimate
+        #
+        # #Form [C]
+        # self.population.makeCorrectSet(self,state_phenotype.phenotype)
+        #
+        # #Update Parameters
+        # self.population.updateSets(self,exploreIter)
+        #
+        # #Perform Subsumption
+        # if self.doSubsumption:
+        #     self.population.doCorrectSetSubsumption(self)
+        #
+        # #Perform GA
+        # self.population.runGA(self,exploreIter,state_phenotype.attributeList,state_phenotype.phenotype)
+        #
+        # #Run Deletion
+        # self.population.deletion(self,exploreIter)
 
         #Clear [M] and [C]
         self.population.clearSets()
+
+    def printMatchSet(self):
+        print(self.population.matchSet.size)
+        for classifierRef in self.population.matchSet:
+            specifiedCounter = 0
+            attributeCounter = 0
+
+            for attribute in range(self.env.formatData.numAttributes):
+                if attribute in self.population.popSet[classifierRef].specifiedAttList:
+                    if self.env.formatData.attributeInfo[attributeCounter].type == 0:  # isDiscrete
+                        print(self.population.popSet[classifierRef].condition[specifiedCounter].value, end="\t\t\t\t")
+                    else:
+                        print("[", end="")
+                        print(
+                            round(self.population.popSet[classifierRef].condition[specifiedCounter].list[0] * 10) / 10,
+                            end=", ")
+                        print(
+                            round(self.population.popSet[classifierRef].condition[specifiedCounter].list[1] * 10) / 10,
+                            end="")
+                        print("]", end="\t\t")
+                    specifiedCounter += 1
+                else:
+                    print("#", end="\t\t\t\t")
+                attributeCounter += 1
+            if self.env.formatData.discretePhenotype:
+                print(self.population.popSet[classifierRef].phenotype)
+            else:
+                print("[", end="")
+                print(round(self.population.popSet[classifierRef].phenotype[0] * 10) / 10, end=", ")
+                print(round(self.population.popSet[classifierRef].phenotype[0] * 10) / 10, end="")
+                print("]")
+            print()
+        print("________________________________________")

@@ -43,9 +43,9 @@ class ClassifierSet:
                 if elcs.env.formatData.discretePhenotype:
                     if cl.phenotype == phenotype:
                         doCovering = False
-                    else:
-                        if float(cl.phenotype[0]) <= float(phenotype) <= float(cl.phenotype[1]):
-                            doCovering = False
+                else:
+                    if float(cl.phenotype[0]) <= float(phenotype) <= float(cl.phenotype[1]):
+                        doCovering = False
 
         #Covering
         while doCovering:

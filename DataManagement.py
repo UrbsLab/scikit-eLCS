@@ -7,7 +7,7 @@ class DataManagement:
     def __init__(self,dataFeatures,dataPhenotypes,elcs):
         #About Attributes
         self.numAttributes = dataFeatures.shape[1]  # The number of attributes in the input file.
-        self.attributeInfo = np.array([])  # Stores Discrete (0) or Continuous (1) for each attribute
+        self.attributeInfo = np.array([])  # Stores AttributeInfo type element for each attribute with continuous/discrete
 
         #About Phenotypes
         self.discretePhenotype = True  # Is the Class/Phenotype Discrete? (False = Continuous)
@@ -135,7 +135,7 @@ class DataManagement:
             else:
                 formatted[instance].phenotype = float(phenotypes[instance])
 
-        np.random.shuffle(formatted)
+        #np.random.shuffle(formatted) #Disable shuffling for now
         return formatted
 
 
