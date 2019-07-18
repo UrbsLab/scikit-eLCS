@@ -91,8 +91,6 @@ class eLCS(BaseEstimator):
         #Form [M]
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
 
-        #Print Current State & Phenotype
-
         #Print [M]
         self.printMatchSet()
 
@@ -137,6 +135,7 @@ class eLCS(BaseEstimator):
         self.population.clearSets()
 
     def printMatchSet(self):
+        print("ITERATION:"+str(self.explorIter))
         print(self.population.matchSet.size)
         for classifierRef in self.population.matchSet:
             specifiedCounter = 0
@@ -164,7 +163,7 @@ class eLCS(BaseEstimator):
             else:
                 print("[", end="")
                 print(round(self.population.popSet[classifierRef].phenotype[0] * 10) / 10, end=", ")
-                print(round(self.population.popSet[classifierRef].phenotype[0] * 10) / 10, end="")
+                print(round(self.population.popSet[classifierRef].phenotype[1] * 10) / 10, end="")
                 print("]")
             print()
         print("________________________________________")
