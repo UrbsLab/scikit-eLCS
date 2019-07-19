@@ -88,6 +88,8 @@ class eLCS(BaseEstimator):
 
     ##Helper Functions
     def runIteration(self,state_phenotype,exploreIter):
+        print("ITERATION:"+str(self.explorIter))
+
         #Form [M]
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
 
@@ -115,9 +117,12 @@ class eLCS(BaseEstimator):
         #         accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
         #         self.correct[exploreIter] = accuracyEstimate
         #
-        # #Form [C]
-        # self.population.makeCorrectSet(self,state_phenotype.phenotype)
-        #
+        #Form [C]
+        self.population.makeCorrectSet(self,state_phenotype.phenotype)
+
+        #Print [C]
+        self.printCorrectSet()
+
         # #Update Parameters
         # self.population.updateSets(self,exploreIter)
         #
@@ -135,8 +140,7 @@ class eLCS(BaseEstimator):
         self.population.clearSets()
 
     def printMatchSet(self):
-        print("ITERATION:"+str(self.explorIter))
-        print(self.population.matchSet.size)
+        print("Match Set Size: "+str(self.population.matchSet.size))
         for classifierRef in self.population.matchSet:
             specifiedCounter = 0
             attributeCounter = 0
@@ -165,5 +169,37 @@ class eLCS(BaseEstimator):
                 print(round(self.population.popSet[classifierRef].phenotype[0] * 10) / 10, end=", ")
                 print(round(self.population.popSet[classifierRef].phenotype[1] * 10) / 10, end="")
                 print("]")
-            print()
+        print()
+
+    def printCorrectSet(self):
+        print("Correct Set Size: " + str(self.population.correctSet.size))
+        for classifierRef in self.population.correctSet:
+            specifiedCounter = 0
+            attributeCounter = 0
+
+            for attribute in range(self.env.formatData.numAttributes):
+                if attribute in self.population.popSet[classifierRef].specifiedAttList:
+                    if self.env.formatData.attributeInfo[attributeCounter].type == 0:  # isDiscrete
+                        print(self.population.popSet[classifierRef].condition[specifiedCounter].value, end="\t\t\t\t")
+                    else:
+                        print("[", end="")
+                        print(
+                            round(self.population.popSet[classifierRef].condition[specifiedCounter].list[0] * 10) / 10,
+                            end=", ")
+                        print(
+                            round(self.population.popSet[classifierRef].condition[specifiedCounter].list[1] * 10) / 10,
+                            end="")
+                        print("]", end="\t\t")
+                    specifiedCounter += 1
+                else:
+                    print("#", end="\t\t\t\t")
+                attributeCounter += 1
+            if self.env.formatData.discretePhenotype:
+                print(self.population.popSet[classifierRef].phenotype)
+            else:
+                print("[", end="")
+                print(round(self.population.popSet[classifierRef].phenotype[0] * 10) / 10, end=", ")
+                print(round(self.population.popSet[classifierRef].phenotype[1] * 10) / 10, end="")
+                print("]")
+        print()
         print("________________________________________")
