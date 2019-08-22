@@ -26,3 +26,11 @@ class OfflineEnvironment:
         self.dataRef = 0
         self.currentTrainState = self.formatData.trainFormatted[self.dataRef].attributeList
         self.currentTrainPhenotype = self.formatData.trainFormatted[self.dataRef].phenotype
+
+    def startEvaluationMode(self):
+        """ Turns on evaluation mode.  Saves the instance we left off in the training data. """
+        self.storeDataRef = self.dataRef
+
+    def stopEvaluationMode(self):
+        """ Turns off evaluation mode.  Re-establishes place in dataset."""
+        self.dataRef = self.storeDataRef

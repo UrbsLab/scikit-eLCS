@@ -8,7 +8,7 @@ class Classifier():
     def __init__(self,elcs,a=None,b=None,c=None,d=None):
         #Major Parameters
         self.specifiedAttList = np.array([],dtype='int64')
-        self.condition = np.array([]) #array of ClassifierConditionElements
+        self.condition = np.array([],dtype=object) #array of ClassifierConditionElements
         self.phenotype = None #Can be either np_array of min and max or a discrete phenotype
 
         self.fitness = elcs.init_fit
@@ -61,7 +61,8 @@ class Classifier():
 
     def classifierCopy(self,toCopy, exploreIter):
         self.specifiedAttList = copy.deepcopy(toCopy.specifiedAttList)
-        self.condition = ClassifierConditionElement(copy.deepcopy(toCopy.condition.type),copy.deepcopy(toCopy.condition.value),copy.deepcopy(toCopy.condition.list))
+        for attributeIndex in range(toCopy.condition.size):
+            self.condition = np.append(self.condition,ClassifierConditionElement(copy.deepcopy(toCopy.condition[attributeIndex].type),value=copy.deepcopy(toCopy.condition[attributeIndex].value),r=copy.deepcopy(toCopy.condition[attributeIndex].list)))
         self.phenotype = copy.deepcopy(toCopy.phenotype)
         self.timeStampGA = exploreIter
         self.initTimeStamp = exploreIter
@@ -79,7 +80,7 @@ class Classifier():
             Low = state[attRef].value - rangeRadius
             High = state[attRef].value + rangeRadius
             condList = np.array([Low,High])
-            return ClassifierConditionElement(1,range=condList)
+            return ClassifierConditionElement(1,r=condList)
 
         #Discrete attribute
         else:
@@ -109,25 +110,26 @@ class Classifier():
         return True
 
     def equals(self,cl):
-        phenotypesMatch = False
-        if isinstance(cl.phenotype,np.ndarray) and isinstance(self.phenotype,np.ndarray):
-            if (cl.phenotype == self.phenotype).all():
-                phenotypesMatch = True
-        else:
-            if cl.phenotype == self.phenotype:
-                phenotypesMatch = True
+        if cl.condition.size > 0 and self.condition.size > 0:
+            phenotypesMatch = False
+            if isinstance(cl.phenotype,np.ndarray) and isinstance(self.phenotype,np.ndarray):
+                if (cl.phenotype == self.phenotype).all():
+                    phenotypesMatch = True
+            else:
+                if cl.phenotype == self.phenotype:
+                    phenotypesMatch = True
 
-        if phenotypesMatch and cl.specifiedAttList.size == self.specifiedAttList.size:
-            clRefs = np.sort(cl.specifiedAttList)
-            selfRefs = np.sort(self.specifiedAttList)
-            if (clRefs == selfRefs).all():
-                for i in range(cl.specifiedAttList.size):
-                    tempIndex = np.where(self.specifiedAttList == cl.specifiedAttList[i])[0][0]
-                    if (cl.condition[i].type == 1 and self.condition[i].type == 1 and cl.condition[i].list[0] == self.condition[i].list[0] and cl.condition[i].list[1] == self.condition[i].list[1]) or (cl.condition[i].type == 0 and self.condition[i].type == 0 and cl.condition[i].value == self.condition[i].value):
-                        pass
-                    else:
-                        return False
-                return True
+            if phenotypesMatch and cl.specifiedAttList.size == self.specifiedAttList.size:
+                clRefs = np.sort(cl.specifiedAttList)
+                selfRefs = np.sort(self.specifiedAttList)
+                if (clRefs == selfRefs).all():
+                    for i in range(cl.specifiedAttList.size):
+                        tempIndex = np.where(self.specifiedAttList == cl.specifiedAttList[i])[0][0]
+                        if (cl.condition[i].type == 1 and self.condition[i].type == 1 and cl.condition[i].list[0] == self.condition[i].list[0] and cl.condition[i].list[1] == self.condition[i].list[1]) or (cl.condition[i].type == 0 and self.condition[i].type == 0 and cl.condition[i].value == self.condition[i].value):
+                            pass
+                        else:
+                            return False
+                    return True
         return False
 
     def updateNumerosity(self, num):
@@ -182,7 +184,7 @@ class Classifier():
                 otherRef = np.where(cl.specifiedAttList == self.specifiedAttList[i])[0][0]
                 if self.condition[i].list[0] < cl.condition[otherRef].list[0]:
                     return False
-                if self.condition[i].list[1] < cl.condition[i].list[1]:
+                if self.condition[i].list[1] < cl.condition[otherRef].list[1]:
                     return False
         return True
 
@@ -312,11 +314,11 @@ class Classifier():
                 #Mutation
                 if attRef not in self.specifiedAttList:
                     self.specifiedAttList = np.append(self.specifiedAttList,attRef)
-                    self.condition = np.append(self.condition,self.buildMatch(attRef,state))
+                    self.condition = np.append(self.condition,self.buildMatch(elcs,attRef,state))
                     changed = True
                 elif attRef in self.specifiedAttList:
-                    i = np.where(self.specifiedAttList == attRef)
-                    if not attributeInfo.type or random.random > 0.5:
+                    i = np.where(self.specifiedAttList == attRef)[0][0]
+                    if not attributeInfo.type or random.random() > 0.5:
                         self.specifiedAttList = np.delete(self.specifiedAttList,i)
                         self.condition = np.delete(self.condition,i)
                         changed = True
@@ -421,10 +423,7 @@ class Classifier():
         return self.deletionVote
 
 class ClassifierConditionElement():
-    def __init__(self,type,value=0,range=np.array([])):
-        if type == 0:
-            self.type = 0
-            self.value = value
-        else:
-            self.type = 1
-            self.list = range
+    def __init__(self,t,value=0,r=np.array([])):
+        self.type = t
+        self.value = value
+        self.list = r
