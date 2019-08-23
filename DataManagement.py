@@ -135,7 +135,7 @@ class DataManagement:
             else:
                 formatted[instance].phenotype = float(phenotypes[instance])
 
-        #np.random.shuffle(formatted) #Disable shuffling for now
+        np.random.shuffle(formatted) #Disable shuffling for now
         return formatted
 
 

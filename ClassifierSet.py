@@ -34,7 +34,7 @@ class ClassifierSet:
 
         elcs.timer.startTimeMatching()
         #Matching
-        for i in range(len(self.popSet)):
+        for i in range(self.popSet.size):
             cl = self.popSet[i]
             if cl.match(state,elcs):
                 self.matchSet = np.append(self.matchSet,i)
@@ -53,20 +53,20 @@ class ClassifierSet:
         while doCovering:
             print("Covering")
             newCl = Classifier(elcs,setNumerositySum+1,exploreIter,state,phenotype)
-            self.addClassifierToPopulation(newCl,True)
+            self.addClassifierToPopulation(elcs,newCl,True)
             self.matchSet = np.append(self.matchSet,self.popSet.size - 1)
             doCovering = False
 
-    def getIdenticalClassifier(self,newCl):
+    def getIdenticalClassifier(self,elcs,newCl):
         for cl in self.popSet:
-            if newCl.equals(cl):
+            if newCl.equals(elcs,cl):
                 return cl
         return None
 
-    def addClassifierToPopulation(self,cl,covering):
+    def addClassifierToPopulation(self,elcs,cl,covering):
         oldCl = None
         if not covering:
-            oldCl = self.getIdenticalClassifier(cl)
+            oldCl = self.getIdenticalClassifier(elcs,cl)
         if oldCl != None:
             oldCl.updateNumerosity(1)
             self.microPopSize += 1
@@ -116,6 +116,10 @@ class ClassifierSet:
             while i < self.correctSet.size:
                 ref = self.correctSet[i]
                 if subsumer.isMoreGeneral(self.popSet[ref],elcs):
+                    print("Subsumption Done:")
+                    elcs.printClassifier(self.popSet[ref])
+                    print("Subsumed by")
+                    elcs.printClassifier(subsumer)
                     subsumer.updateNumerosity(self.popSet[ref].numerosity)
                     self.removeMacroClassifier(ref)
                     self.deleteFromMatchSet(ref)
@@ -179,8 +183,11 @@ class ClassifierSet:
             cl2 = Classifier(elcs,clP2, exploreIter)
 
         #Crossover Operator (uniform crossover)
-        if not cl1.equals(cl2) and random.random() < elcs.chi:
+        if not cl1.equals(elcs,cl2) and random.random() < elcs.chi:
+            print("Crossover Invoked")
             changed = cl1.uniformCrossover(elcs,cl2)
+            elcs.printClassifier(cl1)
+            elcs.printClassifier(cl2)
 
         #Initialize Key Offspring Parameters
         if changed:
@@ -198,6 +205,13 @@ class ClassifierSet:
 
         #Add offspring to population
         if changed or nowchanged or howaboutnow:
+            if nowchanged:
+                print("Mutation Cl1")
+            if howaboutnow:
+                print("Mutation Cl2")
+            if changed:
+                print("Crossover")
+
             self.insertDiscoveredClassifiers(elcs,cl1, cl2, clP1, clP2, exploreIter)  # Subsumption
 
 
@@ -208,6 +222,7 @@ class ClassifierSet:
             ref = self.correctSet[i]
             sumCl += self.popSet[ref].timeStampGA * self.popSet[ref].numerosity
             numSum += self.popSet[ref].numerosity
+        print("ITERSTAMP AVG: ",sumCl/float(numSum))
         return sumCl/float(numSum)
 
     def setIterStamps(self,exploreIter):
@@ -244,6 +259,14 @@ class ClassifierSet:
 
         return selectList
 
+    def getFitnessSum(self, setList):
+        """ Returns the sum of the fitnesses of all classifiers in the set. """
+        sumCl = 0.0
+        for i in range(setList.size):
+            ref = setList[i]
+            sumCl += self.popSet[ref].fitness
+        return sumCl
+
     def selectClassifierT(self,elcs):
         selectList = np.array([None, None])
         currentCount = 0
@@ -260,6 +283,7 @@ class ClassifierSet:
                 index = np.where(copyList==choice)[0][0]
                 posList = np.append(posList,choice)
                 copyList = np.delete(copyList,index)
+
 
             bestF = 0
             bestC = self.correctSet[0]
@@ -283,21 +307,25 @@ class ClassifierSet:
             elcs.timer.stopTimeSubsumption()
         else:
             if cl1.specifiedAttList.size > 0:
-                self.addClassifierToPopulation(cl1,False)
+                self.addClassifierToPopulation(elcs,cl1,False)
             if cl2.specifiedAttList.size > 0:
-                self.addClassifierToPopulation(cl2, False)
+                self.addClassifierToPopulation(elcs,cl2, False)
             print("Offspring Classifier:")
             elcs.printClassifier(cl1)
             print("Offspring Classifier:")
-            elcs.printClassifier("Offspring Classifier: ",cl2)
+            elcs.printClassifier(cl2)
 
     def subsumeClassifier(self,elcs,cl=None,cl1P=None,cl2P=None):
         if cl1P != None and cl1P.subsumes(elcs,cl):
             self.microPopSize += 1
             cl1P.updateNumerosity(1)
+            print("Parent 1 Subsumes:")
+            elcs.printClassifier(cl)
         elif cl2P != None and cl2P.subsumes(elcs,cl):
             self.microPopSize += 1
             cl2P.updateNumerosity(1)
+            print("Parent 2 Subsumes:")
+            elcs.printClassifier(cl)
         else:
             self.subsumeClassifier2(elcs,cl)  # Try to subsume in the correct set.
 
@@ -311,8 +339,12 @@ class ClassifierSet:
             choice = int(random.random()*choices.size)
             self.popSet[int(choices[choice])].updateNumerosity(1)
             self.microPopSize += 1
+            print("Subsumption Done in Correct Set:")
+            elcs.printClassifier(cl)
+            print("Subsumed by")
+            elcs.printClassifier(self.popSet[int(choices[choice])])
             return
-        self.addClassifierToPopulation(cl,False)
+        self.addClassifierToPopulation(elcs,cl,False)
         print("Offspring Classifier:")
         elcs.printClassifier(cl)
 
@@ -365,7 +397,7 @@ class ClassifierSet:
         genSum = 0
         agedCount = 0
         for cl in self.popSet:
-            genSum += ((elcs.env.formatData.numAttributes - cl.condition.size)/float(elcs.env.formatData.numAttributes))
+            genSum += ((elcs.env.formatData.numAttributes - cl.condition.size)/float(elcs.env.formatData.numAttributes))*cl.numerosity
         if self.microPopSize == 0:
             self.aveGenerality = 'NA'
         else:

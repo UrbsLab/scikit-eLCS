@@ -16,7 +16,7 @@ class Prediction():
                 self.vote[eachClass] = 0.0
                 self.tieBreak_Numerosity[eachClass] = 0.0
                 self.tieBreak_TimeStamp[eachClass] = 0.0
-            print(population.matchSet)
+            #print(population.matchSet)
             for ref in population.matchSet:
                 cl = population.popSet[ref]
                 self.vote[cl.phenotype] += cl.fitness * cl.numerosity
@@ -70,7 +70,7 @@ class Prediction():
             if population.matchSet.size < 1:
                 self.decision = None
             else:
-                phenotypeRange = elcs.env.formatData.phenotypeList[1]
+                phenotypeRange = elcs.env.formatData.phenotypeList[1] - elcs.env.formatData.phenotypeList[0]
                 predictionValue = 0
                 valueWeightSum = 0
                 for ref in population.matchSet:

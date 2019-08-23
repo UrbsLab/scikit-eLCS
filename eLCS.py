@@ -23,7 +23,7 @@ import copy
 
 class eLCS(BaseEstimator):
 
-    def __init__(self,learningIterations = 10000,trackingFrequency = 0, learningEvalCheckpoints = np.array([5000]),N = 1000,p_spec=0.5,labelMissingData='NA',discreteAttributeLimit=10,nu=5,chi=0.8,upsilon=0.04,theta_GA=25,theta_del=20,theta_sub=20,acc_sub=0.99,beta=0.2,delta=0.1,init_fit=0.01,fitnessReduction=0.1,doSubsumption=1,selectionMethod='tournament',theta_sel=0.5):
+    def __init__(self,learningIterations = 10000,trackingFrequency = 0, learningEvalCheckpoints = np.array([10000]),N = 1000,p_spec=0.5,labelMissingData='NA',discreteAttributeLimit=10,nu=5,chi=0.8,upsilon=0.04,theta_GA=25,theta_del=20,theta_sub=20,acc_sub=0.99,beta=0.2,delta=0.1,init_fit=0.01,fitnessReduction=0.1,doSubsumption=1,selectionMethod='tournament',theta_sel=0.5):
         """Sets up eLCS model with given parameters
         """
         self.learningIterations = learningIterations
@@ -46,7 +46,7 @@ class eLCS(BaseEstimator):
         self.selectionMethod = selectionMethod
         self.theta_sel = theta_sel
         self.trackingFrequency = trackingFrequency
-        self.learningCheckpoints = learningEvalCheckpoints
+        self.learningCheckpoints = np.array([1,5,10,20,100,200,500,600,1000,2000,3000,5000,8000,10000])
         self.timer = Timer()
         self.trackingObjs = np.array([])
         self.popStatObjs = np.array([])
@@ -95,8 +95,8 @@ class eLCS(BaseEstimator):
                 self.trackingObjs = np.append(self.trackingObjs,newObj)
             self.timer.stopTimeEvaluation()
 
-            #if (self.explorIter + 1) in self.learningCheckpoints:
-            if (self.explorIter + 1) == self.learningIterations:
+            if (self.explorIter + 1) in self.learningCheckpoints:
+            #if (self.explorIter + 1) == self.learningIterations:
                 self.timer.startTimeEvaluation()
                 self.population.runPopAveEval(self.explorIter,self)
                 self.population.runAttGeneralitySum(True,self)
@@ -135,6 +135,10 @@ class eLCS(BaseEstimator):
     ##Helper Functions
     def runIteration(self,state_phenotype,exploreIter):
         print("ITERATION:"+str(self.explorIter))
+        print("Data Instance:" ,end=" ")
+        for i in range(state_phenotype.attributeList.size):
+            print(state_phenotype.attributeList[i].value,end=" ")
+        print(" w/ Phenotype: ",state_phenotype.phenotype)
         print("Population Set Size: "+str(self.population.popSet.size))
 
         #Form [M]
@@ -178,7 +182,9 @@ class eLCS(BaseEstimator):
 
         #Perform Subsumption
         if self.doSubsumption:
+            self.timer.startTimeSubsumption()
             self.population.doCorrectSetSubsumption(self)
+            self.timer.stopTimeSubsumption()
 
         #Perform GA
         self.population.runGA(self,exploreIter,state_phenotype.attributeList,state_phenotype.phenotype)
@@ -356,5 +362,3 @@ class PopStatObj():
         self.attributeAccList = copy.deepcopy(pop.attributeAccList)
         self.times = copy.deepcopy(elcs.timer.reportTimes())
         self.correct = copy.deepcopy(correct)
-
-

@@ -19,7 +19,7 @@ class Classifier():
 
         #Experience Management
         self.timeStampGA = None
-        self.initTimeStamp = 0
+        self.initTimeStamp = None
 
         # Classifier Accuracy Tracking --------------------------------------
         self.matchCount = 0  # Known in many LCS implementations as experience i.e. the total number of times this classifier was in a match set
@@ -56,8 +56,10 @@ class Classifier():
         while self.specifiedAttList.size < 1:
             for attRef in range(state.size):
                 if random.random() < elcs.p_spec and state[attRef].value != elcs.labelMissingData:
+                    print("B",end="")
                     self.specifiedAttList = np.append(self.specifiedAttList,attRef)
                     self.condition = np.append(self.condition,self.buildMatch(elcs,attRef,state))#Add classifierConditionElement
+        print()
 
     def classifierCopy(self,toCopy, exploreIter):
         self.specifiedAttList = copy.deepcopy(toCopy.specifiedAttList)
@@ -109,27 +111,24 @@ class Classifier():
                     return False
         return True
 
-    def equals(self,cl):
-        if cl.condition.size > 0 and self.condition.size > 0:
-            phenotypesMatch = False
-            if isinstance(cl.phenotype,np.ndarray) and isinstance(self.phenotype,np.ndarray):
-                if (cl.phenotype == self.phenotype).all():
-                    phenotypesMatch = True
-            else:
-                if cl.phenotype == self.phenotype:
-                    phenotypesMatch = True
+    def equals(self,elcs,cl):
+        phenotypesMatch = False
+        if not elcs.env.formatData.discretePhenotype:
+            if (cl.phenotype == self.phenotype).all():
+                phenotypesMatch = True
+        else:
+            if cl.phenotype == self.phenotype:
+                phenotypesMatch = True
 
-            if phenotypesMatch and cl.specifiedAttList.size == self.specifiedAttList.size:
-                clRefs = np.sort(cl.specifiedAttList)
-                selfRefs = np.sort(self.specifiedAttList)
-                if (clRefs == selfRefs).all():
-                    for i in range(cl.specifiedAttList.size):
-                        tempIndex = np.where(self.specifiedAttList == cl.specifiedAttList[i])[0][0]
-                        if (cl.condition[i].type == 1 and self.condition[i].type == 1 and cl.condition[i].list[0] == self.condition[i].list[0] and cl.condition[i].list[1] == self.condition[i].list[1]) or (cl.condition[i].type == 0 and self.condition[i].type == 0 and cl.condition[i].value == self.condition[i].value):
-                            pass
-                        else:
-                            return False
-                    return True
+        if phenotypesMatch and cl.specifiedAttList.size == self.specifiedAttList.size:
+            clRefs = np.sort(cl.specifiedAttList)
+            selfRefs = np.sort(self.specifiedAttList)
+            if (clRefs == selfRefs).all():
+                for i in range(cl.specifiedAttList.size):
+                    tempIndex = np.where(self.specifiedAttList == cl.specifiedAttList[i])[0][0]
+                    if not((cl.condition[i].type == 1 and self.condition[tempIndex].type == 1 and cl.condition[i].list[0] == self.condition[tempIndex].list[0] and cl.condition[i].list[1] == self.condition[tempIndex].list[1]) or (cl.condition[i].type == 0 and self.condition[tempIndex].type == 0 and cl.condition[i].value == self.condition[tempIndex].value)):
+                        return False
+                return True
         return False
 
     def updateNumerosity(self, num):
@@ -184,7 +183,7 @@ class Classifier():
                 otherRef = np.where(cl.specifiedAttList == self.specifiedAttList[i])[0][0]
                 if self.condition[i].list[0] < cl.condition[otherRef].list[0]:
                     return False
-                if self.condition[i].list[1] < cl.condition[otherRef].list[1]:
+                if self.condition[i].list[1] > cl.condition[otherRef].list[1]:
                     return False
         return True
 
@@ -198,19 +197,26 @@ class Classifier():
             p_cl_specifiedAttList = copy.deepcopy(cl.specifiedAttList)
 
             # Make list of attribute references appearing in at least one of the parents.-----------------------------
-            comboAttList = np.unique(np.concatenate((p_self_specifiedAttList,p_cl_specifiedAttList)))
-            for i in comboAttList:
-                if not elcs.env.formatData.attributeInfo[i].type:
-                    index = np.where(comboAttList==i)[0][0]
-                    comboAttList = np.delete(comboAttList,index)
+            comboAttList = np.array([],dtype="int64")
+            for i in p_self_specifiedAttList:
+                comboAttList = np.append(comboAttList,i)
+            for i in p_cl_specifiedAttList:
+                if i not in comboAttList:
+                    comboAttList = np.append(comboAttList,i)
+                elif not elcs.env.formatData.attributeInfo[i].type:
+                    index = np.where(comboAttList == i)[0][0]
+                    comboAttList = np.delete(comboAttList, index)
+            comboAttList = np.sort(comboAttList)
 
             changed = False
             for attRef in comboAttList:
                 attributeInfo = elcs.env.formatData.attributeInfo[attRef]
                 probability = 0.5
                 ref = 0
-                p_self_specifiedAttList+=1
-                p_cl_specifiedAttList+=1
+                if attRef in p_self_specifiedAttList:
+                    ref += 1
+                if attRef in p_cl_specifiedAttList:
+                    ref += 1
 
                 if ref == 0:
                     pass
@@ -270,7 +276,13 @@ class Classifier():
             tempList1 = np.sort(tempList1)
             tempList2 = np.sort(tempList2)
 
-            if changed and (tempList1 == tempList2):
+            if changed:
+                print("CHANGED")
+                print(tempList1)
+                print(tempList2)
+
+            if changed and len(set(tempList1) & set(tempList2)) == tempList2.size:
+                print("PASS")
                 changed = False
 
             return changed
@@ -318,6 +330,7 @@ class Classifier():
                     changed = True
                 elif attRef in self.specifiedAttList:
                     i = np.where(self.specifiedAttList == attRef)[0][0]
+
                     if not attributeInfo.type or random.random() > 0.5:
                         self.specifiedAttList = np.delete(self.specifiedAttList,i)
                         self.condition = np.delete(self.condition,i)
