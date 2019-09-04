@@ -96,7 +96,6 @@ class eLCS(BaseEstimator):
             self.timer.stopTimeEvaluation()
 
             if (self.explorIter + 1) in self.learningCheckpoints:
-            #if (self.explorIter + 1) == self.learningIterations:
                 self.timer.startTimeEvaluation()
                 self.population.runPopAveEval(self.explorIter,self)
                 self.population.runAttGeneralitySum(True,self)
