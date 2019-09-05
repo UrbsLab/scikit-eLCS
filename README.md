@@ -14,7 +14,7 @@ While Learning Classifier Systems are commonly applied to genetic analyses, wher
 
 Built into this code, is a strategy to 'automatically' detect from the loaded data, these relevant characteristics so that they don't need to be parameterized at initialization.
 
-##License##
+## License
 Please see the repository [license](https://github.com/UrbsLab/scikit-eLCS/blob/master/LICENSE) for the licensing and usage information for scikit-rebate.
 
 Generally, we have licensed scikit-eLCS to make it as widely usable as possible.
