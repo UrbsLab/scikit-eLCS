@@ -19,7 +19,9 @@ Please see the repository [license](https://github.com/UrbsLab/scikit-eLCS/blob/
 
 Generally, we have licensed scikit-eLCS to make it as widely usable as possible.
 
-##Usage
+## Usage
+We have designed the eLCS algorithm to be integrated directly into scikit-learn machine learning workflows. For example, below is an example of a 3-fold cross-validation being run on a complete dataset of the 6-bit Multiplexer problem.
+
 ```python
 from sklearn.model_selection import cross_val_score
 from eLCS import eLCS
@@ -32,6 +34,7 @@ print(np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes)))
 >>>0.9922480620155039
 
 ```
+For more information on the eLCS algorithm and how to use it, please refer to our [usage documentation](https://urbslab.github.io/scikit-eLCS/).
 
-##Contributing to scikit-eLCS
+## Contributing to scikit-eLCS
 Scikit eLCS is still under active development and we will announced when we are set up for 3rd party contributions!
