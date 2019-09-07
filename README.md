@@ -30,8 +30,9 @@ data = pd.read_csv('Multiplexer6.csv',sep=',') #Puts data from csv into indexabl
 dataFeatures, dataPhenotypes = data.drop('class', axis=1).values, data['class'].values
 
 clf = eLCS(learningIterations=5000) #You can add parameters if you want, but default values are preprogrammed
+
 print(np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes)))
->>>0.9922480620155039
+>>> 0.9922480620155039
 
 ```
 For more information on the eLCS algorithm and how to use it, please refer to our [usage documentation](https://urbslab.github.io/scikit-eLCS/).
