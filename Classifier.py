@@ -56,10 +56,10 @@ class Classifier():
         while self.specifiedAttList.size < 1:
             for attRef in range(state.size):
                 if random.random() < elcs.p_spec and state[attRef].value != elcs.labelMissingData:
-                    print("B",end="")
+                    #print("B",end="")
                     self.specifiedAttList = np.append(self.specifiedAttList,attRef)
                     self.condition = np.append(self.condition,self.buildMatch(elcs,attRef,state))#Add classifierConditionElement
-        print()
+        #print()
 
     def classifierCopy(self,toCopy, exploreIter):
         self.specifiedAttList = copy.deepcopy(toCopy.specifiedAttList)
@@ -97,7 +97,9 @@ class Classifier():
             #Continuous
             if attributeInfo.type:
                 instanceValue = state[self.specifiedAttList[i]].value
-                if self.condition[i].list[0] < instanceValue < self.condition[i].list[1] or instanceValue == elcs.labelMissingData:
+                if instanceValue == elcs.labelMissingData:
+                    pass
+                elif self.condition[i].list[0] < instanceValue < self.condition[i].list[1]:
                     pass
                 else:
                     return False
@@ -241,8 +243,8 @@ class Classifier():
                 else:
                     #Continuous Attribute
                     if attributeInfo.type:
-                        i_cl1 = np.where(self.specifiedAttList == attRef)
-                        i_cl2 = np.where(cl.specifiedAttList == attRef)
+                        i_cl1 = np.where(self.specifiedAttList == attRef)[0][0]
+                        i_cl2 = np.where(cl.specifiedAttList == attRef)[0][0]
                         tempKey = random.randint(0,3)
                         if tempKey == 0:
                             temp = self.condition[i_cl1].list[0]
@@ -253,16 +255,16 @@ class Classifier():
                             self.condition[i_cl1].list[1] = cl.condition[i_cl2].list[1]
                             cl.condition[i_cl2].list[1] = temp
                         else:
-                            allList = np.concatenate((self.condition[i_cl1],cl.condition[i_cl2]))
+                            allList = np.concatenate((self.condition[i_cl1].list,cl.condition[i_cl2].list))
                             newMin = np.amin(allList)
                             newMax = np.amax(allList)
                             if tempKey == 2:
-                                self.condition[i_cl1] = ClassifierConditionElement(1,np.array([newMin,newMax]))
+                                self.condition[i_cl1] = ClassifierConditionElement(1,r=np.array([newMin,newMax]))
                                 cl.condition = np.delete(cl.condition,i_cl2)
                                 a = np.where(cl.specifiedAttList == attRef)[0][0]
                                 cl.specifiedAttList = np.delete(cl.specifiedAttList,a)
                             else:
-                                cl.condition[i_cl2] = ClassifierConditionElement(1, np.array([newMin, newMax]))
+                                cl.condition[i_cl2] = ClassifierConditionElement(1, r=np.array([newMin, newMax]))
                                 self.condition = np.delete(self.condition, i_cl1)
                                 a = np.where(self.specifiedAttList == attRef)[0][0]
                                 self.specifiedAttList = np.delete(self.specifiedAttList, a)
@@ -276,13 +278,13 @@ class Classifier():
             tempList1 = np.sort(tempList1)
             tempList2 = np.sort(tempList2)
 
-            if changed:
-                print("CHANGED")
-                print(tempList1)
-                print(tempList2)
+            #if changed:
+                #print("CHANGED")
+                #print(tempList1)
+                #print(tempList2)
 
             if changed and len(set(tempList1) & set(tempList2)) == tempList2.size:
-                print("PASS")
+                #print("PASS")
                 changed = False
 
             return changed

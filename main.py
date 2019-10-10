@@ -10,18 +10,29 @@ from Classifier import *
 
 '''Separates out features into np_array of shape [number of items, number of features per item] 
 and labels into np_array of shape [number of items]'''
+#clf = eLCS(learningIterations=5000,discreteAttributeLimit=3) #Can add parameters if you want, but default values are preprogrammed
 
-data = pd.read_csv('Multiplexer6.csv',sep=',') #Puts data from csv into indexable np arrays
-dataFeatures, dataPhenotypes = data.drop('class', axis=1).values, data['class'].values
-clf = eLCS(learningIterations=1000) #Can add parameters if you want, but default values are preprogrammed
-print(np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes)))
+#clf = make_pipeline(ReliefF(n_features_to_select=4, n_neighbors=30),eLCS(learningIterations=400, discreteAttributeLimit=3))
+clf = eLCS(learningIterations=2000, discreteAttributeLimit=10)
+#dataFeatures, dataPhenotypes = clf.preFit("FakeMissingData3.csv","NA","class",np.array(["N4"]),np.array(['N1']),"d")
+dataFeatures, dataPhenotypes = clf.preFit("FakeMissingData3.csv","NA","class",np.array(["N4"]))
 
 
+#clf = ReliefF(n_features_to_select=4, n_neighbors=30)
 #clf = clf.fit(dataFeatures,dataPhenotypes)
-for i in range(clf.popStatObjs.size):
-    print(clf.popStatObjs[i].trainingAccuracy)
-print()
-for i in range(clf.trackingObjs.size):
-    print(clf.trackingObjs[i].aveGenerality)
-#print(clf.score(dataFeatures,dataPhenotypes))
+#print(clf.feature_importances_)
+#print(np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes,cv=2)))
+
+
+clf = clf.fit(dataFeatures,dataPhenotypes)
+# print(clf.population.popSet.size);
+clf.printAccuratePopSet(1,1)
+# print()
+#
+# for i in range(clf.popStatObjs.size):
+#     print(clf.popStatObjs[i].trainingAccuracy)
+# print()
+# for i in range(clf.trackingObjs.size):
+#    print(clf.trackingObjs[i].aveGenerality)
+# print(clf.score(dataFeatures,dataPhenotypes))
 

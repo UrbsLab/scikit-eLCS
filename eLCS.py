@@ -10,6 +10,7 @@ import numpy as np
 import time
 import warnings
 import sys
+import math
 from sklearn.base import BaseEstimator
 from sklearn.externals.joblib import Parallel, delayed
 import pandas as pd
@@ -19,7 +20,7 @@ from Prediction import *
 from Timer import *
 from ClassAccuracy import *
 import copy
-
+from enum import Enum,auto
 
 class eLCS(BaseEstimator):
 
@@ -50,7 +51,10 @@ class eLCS(BaseEstimator):
         self.timer = Timer()
         self.trackingObjs = np.array([])
         self.popStatObjs = np.array([])
-
+        self.dataHeaders = np.array([])
+        self.explicitlyDiscreteAttributeIndexes = np.array([])
+        self.explicitlyContinuousAttributeIndexes = np.array([])
+        self.explicitPhenotype = ""
 
     def fit(self, X, y):
         """Scikit-learn required: Computes the feature importance scores from the training data.
@@ -68,6 +72,16 @@ class eLCS(BaseEstimator):
 
         """
 
+        # for i in range(X.shape[0]):
+        #     for j in range(X.shape[1]):
+        #         if (math.isnan(X[i,j])):
+        #             X[i,j] = self.labelMissingData
+        #
+        # for i in range(y.shape[0]):
+        #     if (math.isnan(y[i])):
+        #         y[i] = self.labelMissingData
+
+
         self.env = OfflineEnvironment(X, y, self)
 
         if self.trackingFrequency == 0:
@@ -79,7 +93,6 @@ class eLCS(BaseEstimator):
         self.correct.fill(0)
 
         while self.explorIter < self.learningIterations:
-
             #Get New Instance and Run a learning algorithm
             state_phenotype = self.env.getTrainInstance()
 
@@ -133,18 +146,18 @@ class eLCS(BaseEstimator):
 
     ##Helper Functions
     def runIteration(self,state_phenotype,exploreIter):
-        print("ITERATION:"+str(self.explorIter))
-        print("Data Instance:" ,end=" ")
-        for i in range(state_phenotype.attributeList.size):
-            print(state_phenotype.attributeList[i].value,end=" ")
-        print(" w/ Phenotype: ",state_phenotype.phenotype)
-        print("Population Set Size: "+str(self.population.popSet.size))
+        #print("ITERATION:"+str(self.explorIter))
+        #print("Data Instance:" ,end=" ")
+       # for i in range(state_phenotype.attributeList.size):
+       #     print(state_phenotype.attributeList[i].value,end=" ")
+       # print(" w/ Phenotype: ",state_phenotype.phenotype)
+        #print("Population Set Size: "+str(self.population.popSet.size))
 
         #Form [M]
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
 
         #Print [M]
-        self.printMatchSet()
+        #self.printMatchSet()
 
         #Make a Prediction
         self.timer.startTimeEvaluation()
@@ -174,7 +187,7 @@ class eLCS(BaseEstimator):
         self.population.makeCorrectSet(self,state_phenotype.phenotype)
 
         #Print [C]
-        self.printCorrectSet()
+        #self.printCorrectSet()
 
         #Update Parameters
         self.population.updateSets(self,exploreIter)
@@ -194,7 +207,7 @@ class eLCS(BaseEstimator):
         #Clear [M] and [C]
         self.population.clearSets()
 
-        print("________________________________________")
+        #print("________________________________________")
 
     def printClassifier(self,classifier):
         attributeCounter = 0
@@ -235,6 +248,20 @@ class eLCS(BaseEstimator):
         print("Correct Set Size: " + str(self.population.correctSet.size))
         for classifierRef in self.population.correctSet:
             self.printClassifier(self.population.popSet[classifierRef])
+        print()
+
+    def printPopSet(self):
+        print("Population Set Size: " + str(self.population.popSet.size))
+        for classifier in self.population.popSet:
+            self.printClassifier(classifier)
+        print()
+
+    def printAccuratePopSet(self,threshold,exp):
+        print("Population Set Size: " + str(self.population.popSet.size))
+        for classifier in self.population.popSet:
+            if classifier.fitness >= threshold and classifier.correctCount >= exp:
+                self.printClassifier(classifier)
+
         print()
 
     def doPopEvaluation(self):
@@ -340,6 +367,26 @@ class eLCS(BaseEstimator):
 
         resultList = np.array([adjustedAccuracyEstimate, instanceCoverage])
         return resultList
+
+    def preFit(self,csvFileName,missingDataLabel,classLabel,explicitlyDiscrete=np.array([]),explicitlyContinuous=np.array([]),explicitPhenotype = "n"):
+        data = pd.read_csv(csvFileName, sep=',')  # Puts data from csv into indexable np arrays
+        data = data.fillna(missingDataLabel)
+        dataFeatures, dataPhenotypes, dataHeaders = data.drop(classLabel, axis=1).values, data[classLabel].values, data.drop(classLabel, axis=1).columns.values
+        for d in explicitlyDiscrete:
+            i = np.where(dataHeaders == d)
+            self.explicitlyDiscreteAttributeIndexes = np.append(self.explicitlyDiscreteAttributeIndexes,i)
+        for c in explicitlyContinuous:
+            i = np.where(dataHeaders == c)
+            self.explicitlyContinuousAttributeIndexes = np.append(self.explicitlyContinuousAttributeIndexes,i)
+        self.dataHeaders = dataHeaders
+
+        if explicitPhenotype == "c" or explicitPhenotype == "continuous":
+            self.explicitPhenotype = "c"
+        elif explicitPhenotype == "d" or explicitPhenotype == "discrete":
+            self.explicitPhenotype = "d"
+        else:
+            self.explicitPhenotype = ""
+        return dataFeatures,dataPhenotypes
 
 class TrackingEvalObj():
     def __init__(self,accuracy,exploreIter,trackingFrequency,elcs):

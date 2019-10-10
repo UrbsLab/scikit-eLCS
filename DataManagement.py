@@ -28,21 +28,25 @@ class DataManagement:
         self.trainFormatted = self.formatData(dataFeatures,dataPhenotypes,elcs)
 
     def discriminatePhenotype(self,phenotypes,elcs):#Determine if phenotype is discrete or continuous
-        currentPhenotypeIndex = 0
-        classDict = {}
-        while (self.discretePhenotype and len(list(classDict.keys()))<=elcs.discreteAttributeLimit and currentPhenotypeIndex < self.numTrainInstances):
-            target = phenotypes[currentPhenotypeIndex]
-            if (target in list(classDict.keys())):
-                classDict[target]+=1
-            elif (target == elcs.labelMissingData):
-                pass
-            else:
-                classDict[target] = 1
-            currentPhenotypeIndex+=1
+        if (elcs.explicitPhenotype == "n"):
+            currentPhenotypeIndex = 0
+            classDict = {}
+            while (self.discretePhenotype and len(list(classDict.keys()))<=elcs.discreteAttributeLimit and currentPhenotypeIndex < self.numTrainInstances):
+                target = phenotypes[currentPhenotypeIndex]
+                if (target in list(classDict.keys())):
+                    classDict[target]+=1
+                elif (target == elcs.labelMissingData):
+                    pass
+                else:
+                    classDict[target] = 1
+                currentPhenotypeIndex+=1
 
-        if (len(list(classDict.keys())) > elcs.discreteAttributeLimit):
+            if (len(list(classDict.keys())) > elcs.discreteAttributeLimit):
+                self.discretePhenotype = False
+                self.phenotypeList = np.array([float(target),float(target)])
+        elif elcs.explicitPhenotype == "c":
             self.discretePhenotype = False
-            self.phenotypeList = np.array([float(target),float(target)])
+            self.phenotypeList = np.array([float(phenotypes[0]),float(phenotypes[0])])
 
     def discriminateClasses(self,phenotypes):
         currentPhenotypeIndex = 0
@@ -87,6 +91,12 @@ class DataManagement:
 
             if len(list(stateDict.keys())) > elcs.discreteAttributeLimit:
                 attIsDiscrete = False
+
+            if att in elcs.explicitlyDiscreteAttributeIndexes:
+                attIsDiscrete = True
+            if att in elcs.explicitlyContinuousAttributeIndexes:
+                attIsDiscrete = False
+
             if attIsDiscrete:
                 self.attributeInfo = np.append(self.attributeInfo,AttributeInfoElement('discrete'))
                 self.discreteCount += 1
