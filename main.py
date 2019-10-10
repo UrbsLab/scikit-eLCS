@@ -15,7 +15,8 @@ and labels into np_array of shape [number of items]'''
 #clf = make_pipeline(ReliefF(n_features_to_select=4, n_neighbors=30),eLCS(learningIterations=400, discreteAttributeLimit=3))
 clf = eLCS(learningIterations=2000, discreteAttributeLimit=10)
 #dataFeatures, dataPhenotypes = clf.preFit("FakeMissingData3.csv","NA","class",np.array(["N4"]),np.array(['N1']),"d")
-dataFeatures, dataPhenotypes = clf.preFit("FakeMissingData3.csv","NA","class",np.array(["N4"]))
+#dataFeatures, dataPhenotypes = clf.preFit("FakeMissingData3.csv","NA","class",np.array(["N4"]))
+dataFeatures, dataPhenotypes = clf.preFit("Multiplexer20.csv","NA","class")
 
 
 #clf = ReliefF(n_features_to_select=4, n_neighbors=30)
@@ -25,13 +26,19 @@ dataFeatures, dataPhenotypes = clf.preFit("FakeMissingData3.csv","NA","class",np
 
 
 clf = clf.fit(dataFeatures,dataPhenotypes)
+print(clf.timer.globalDeletion)
+print(clf.timer.globalEvaluation)
+print(clf.timer.globalMatching)
+print(clf.timer.globalSelection)
+print(clf.timer.globalSubsumption)
+print(clf.timer.globalTime)
 # print(clf.population.popSet.size);
-clf.printAccuratePopSet(1,1)
+#clf.printAccuratePopSet(1,1)
 # print()
 #
-# for i in range(clf.popStatObjs.size):
-#     print(clf.popStatObjs[i].trainingAccuracy)
-# print()
+for i in range(clf.popStatObjs.size):
+    print(clf.popStatObjs[i].trainingAccuracy)
+print()
 # for i in range(clf.trackingObjs.size):
 #    print(clf.trackingObjs[i].aveGenerality)
 # print(clf.score(dataFeatures,dataPhenotypes))

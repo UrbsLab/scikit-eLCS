@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module Classifier</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>Classifier</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/robert/Google_Drive/1%20Academics/Penn/Freshman/FreshmanSummer/PURM/Scikit/Classifier.py">/Users/robert/Google_Drive/1 Academics/Penn/Freshman/FreshmanSummer/PURM/Scikit/Classifier.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="copy.html">copy</a><br>
+<a href="math.html">math</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top><a href="random.html">random</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+<a href="warnings.html">warnings</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="Classifier.html#Classifier">Classifier</a>
+</font></dt><dt><font face="helvetica, arial"><a href="Classifier.html#ClassifierConditionElement">ClassifierConditionElement</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Classifier">class <strong>Classifier</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Classifier">Classifier</a>(elcs,&nbsp;a=None,&nbsp;b=None,&nbsp;c=None,&nbsp;d=None)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Classifier-Mutation"><strong>Mutation</strong></a>(self, elcs, state, phenotype)</dt></dl>
+
+<dl><dt><a name="Classifier-__init__"><strong>__init__</strong></a>(self, elcs, a=None, b=None, c=None, d=None)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Classifier-buildMatch"><strong>buildMatch</strong></a>(self, elcs, attRef, state)</dt></dl>
+
+<dl><dt><a name="Classifier-classifierCopy"><strong>classifierCopy</strong></a>(self, toCopy, exploreIter)</dt></dl>
+
+<dl><dt><a name="Classifier-classifierCovering"><strong>classifierCovering</strong></a>(self, elcs, setSize, exploreIter, state, phenotype)</dt><dd><tt>#<a href="#Classifier">Classifier</a>&nbsp;Construction&nbsp;Methods</tt></dd></dl>
+
+<dl><dt><a name="Classifier-continuousPhenotypeMutation"><strong>continuousPhenotypeMutation</strong></a>(self, elcs, phenotype)</dt></dl>
+
+<dl><dt><a name="Classifier-discretePhenotypeMutation"><strong>discretePhenotypeMutation</strong></a>(self, elcs)</dt></dl>
+
+<dl><dt><a name="Classifier-equals"><strong>equals</strong></a>(self, elcs, cl)</dt></dl>
+
+<dl><dt><a name="Classifier-getDelProp"><strong>getDelProp</strong></a>(self, elcs, meanFitness)</dt><dd><tt>Returns&nbsp;the&nbsp;vote&nbsp;for&nbsp;deletion&nbsp;of&nbsp;the&nbsp;classifier.</tt></dd></dl>
+
+<dl><dt><a name="Classifier-isMoreGeneral"><strong>isMoreGeneral</strong></a>(self, cl, elcs)</dt></dl>
+
+<dl><dt><a name="Classifier-isSubsumer"><strong>isSubsumer</strong></a>(self, elcs)</dt></dl>
+
+<dl><dt><a name="Classifier-match"><strong>match</strong></a>(self, state, elcs)</dt><dd><tt>#Matching</tt></dd></dl>
+
+<dl><dt><a name="Classifier-phenotypeCrossover"><strong>phenotypeCrossover</strong></a>(self, cl)</dt></dl>
+
+<dl><dt><a name="Classifier-setAccuracy"><strong>setAccuracy</strong></a>(self, acc)</dt><dd><tt>Sets&nbsp;the&nbsp;accuracy&nbsp;of&nbsp;the&nbsp;classifier</tt></dd></dl>
+
+<dl><dt><a name="Classifier-setFitness"><strong>setFitness</strong></a>(self, fit)</dt><dd><tt>Sets&nbsp;the&nbsp;fitness&nbsp;of&nbsp;the&nbsp;classifier.</tt></dd></dl>
+
+<dl><dt><a name="Classifier-subsumes"><strong>subsumes</strong></a>(self, elcs, cl)</dt></dl>
+
+<dl><dt><a name="Classifier-uniformCrossover"><strong>uniformCrossover</strong></a>(self, elcs, cl)</dt></dl>
+
+<dl><dt><a name="Classifier-updateAccuracy"><strong>updateAccuracy</strong></a>(self)</dt><dd><tt>Update&nbsp;the&nbsp;accuracy&nbsp;tracker</tt></dd></dl>
+
+<dl><dt><a name="Classifier-updateCorrect"><strong>updateCorrect</strong></a>(self)</dt><dd><tt>Increases&nbsp;the&nbsp;correct&nbsp;phenotype&nbsp;tracking&nbsp;by&nbsp;one.&nbsp;Once&nbsp;an&nbsp;epoch&nbsp;has&nbsp;completed,&nbsp;rule&nbsp;accuracy&nbsp;can't&nbsp;change.</tt></dd></dl>
+
+<dl><dt><a name="Classifier-updateExperience"><strong>updateExperience</strong></a>(self)</dt><dd><tt>Increases&nbsp;the&nbsp;experience&nbsp;of&nbsp;the&nbsp;classifier&nbsp;by&nbsp;one.&nbsp;Once&nbsp;an&nbsp;epoch&nbsp;has&nbsp;completed,&nbsp;rule&nbsp;accuracy&nbsp;can't&nbsp;change.</tt></dd></dl>
+
+<dl><dt><a name="Classifier-updateFitness"><strong>updateFitness</strong></a>(self, elcs)</dt><dd><tt>Update&nbsp;the&nbsp;fitness&nbsp;parameter.</tt></dd></dl>
+
+<dl><dt><a name="Classifier-updateMatchSetSize"><strong>updateMatchSetSize</strong></a>(self, elcs, matchSetSize)</dt><dd><tt>Updates&nbsp;the&nbsp;average&nbsp;match&nbsp;set&nbsp;size.</tt></dd></dl>
+
+<dl><dt><a name="Classifier-updateNumerosity"><strong>updateNumerosity</strong></a>(self, num)</dt><dd><tt>Updates&nbsp;the&nbsp;numberosity&nbsp;of&nbsp;the&nbsp;classifier.&nbsp;&nbsp;Notice&nbsp;that&nbsp;'num'&nbsp;can&nbsp;be&nbsp;negative!</tt></dd></dl>
+
+<dl><dt><a name="Classifier-updateTimeStamp"><strong>updateTimeStamp</strong></a>(self, ts)</dt><dd><tt>Sets&nbsp;the&nbsp;time&nbsp;stamp&nbsp;of&nbsp;the&nbsp;classifier.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ClassifierConditionElement">class <strong>ClassifierConditionElement</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#ClassifierConditionElement">ClassifierConditionElement</a>(t,&nbsp;value=0,&nbsp;r=array([],&nbsp;dtype=float64))<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ClassifierConditionElement-__init__"><strong>__init__</strong></a>(self, t, value=0, r=array([], dtype=float64))</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

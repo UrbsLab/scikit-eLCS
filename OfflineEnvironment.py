@@ -4,6 +4,7 @@ import numpy as np
 
 class OfflineEnvironment:
     def __init__(self,features,phenotypes,eLCS):
+        """Initialize Offline Environment"""
         self.dataRef = 0
         self.storeDataRef = 0
         self.formatData = DataManagement(features,phenotypes,eLCS)
