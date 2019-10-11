@@ -166,4 +166,3 @@ class DataInstance():
     def __init__(self,attributeList = np.array([]),phenotype = 0):
         self.attributeList = attributeList#np array of multistate values
         self.phenotype = phenotype
-

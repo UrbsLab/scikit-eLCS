@@ -23,7 +23,6 @@ import copy
 from enum import Enum,auto
 
 class eLCS(BaseEstimator):
-
     def __init__(self,learningIterations = 10000,trackingFrequency = 0, learningEvalCheckpoints = np.array([10000]),N = 1000,p_spec=0.5,labelMissingData='NA',discreteAttributeLimit=10,nu=5,chi=0.8,upsilon=0.04,theta_GA=25,theta_del=20,theta_sub=20,acc_sub=0.99,beta=0.2,delta=0.1,init_fit=0.01,fitnessReduction=0.1,doSubsumption=1,selectionMethod='tournament',theta_sel=0.5):
         """Sets up eLCS model with given parameters
         """
