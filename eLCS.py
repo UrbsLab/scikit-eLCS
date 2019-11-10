@@ -46,7 +46,7 @@ class eLCS(BaseEstimator):
         self.selectionMethod = selectionMethod
         self.theta_sel = theta_sel
         self.trackingFrequency = trackingFrequency
-        self.learningCheckpoints = np.array([learningIterations])
+        self.learningCheckpoints = np.array([learningIterations]) #This is a problem
         self.timer = Timer()
         self.trackingObjs = np.array([])
         self.popStatObjs = np.array([])
