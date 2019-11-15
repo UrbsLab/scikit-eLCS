@@ -1,5 +1,3 @@
 language: python
-
-install: source ./ci/.travis_install.sh
 script: python -m unittest Test_DataCleanup.py
 
