@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Test_DataCleanup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Scikit.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Scikit.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataCleanup.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataCleanup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FakeDataCSV.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Multiplexer11.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Multiplexer20.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Multiplexer6.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SampleData.csv" beforeDir="false" />
-    </list>
+    <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,8 +16,8 @@
             <file pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/Test_DataCleanup.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="641">
-                    <caret line="216" column="81" selection-start-line="216" selection-start-column="81" selection-end-line="216" selection-end-column="81" />
+                  <state relative-caret-position="285">
+                    <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
                     <folding>
                       <element signature="e#0#15#0" expanded="true" />
                     </folding>
@@ -57,8 +47,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DataCleanup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="53" column="38" lean-forward="true" selection-start-line="53" selection-start-column="38" selection-end-line="53" selection-end-column="38" />
+            <state relative-caret-position="273">
+              <caret line="62" column="38" lean-forward="true" selection-start-line="62" selection-start-column="38" selection-end-line="62" selection-end-column="38" />
               <folding>
                 <element signature="e#241#259#0" expanded="true" />
               </folding>
@@ -182,7 +172,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="1690" />
+    <option name="x" value="1717" />
     <option name="y" value="23" />
     <option name="width" value="1705" />
     <option name="height" value="961" />
@@ -325,14 +315,11 @@
       <workItem from="1570737738478" duration="18467000" />
       <workItem from="1571961148749" duration="5335000" />
       <workItem from="1573179986741" duration="1863000" />
-      <workItem from="1573704474036" duration="18932000" />
+      <workItem from="1573704474036" duration="19547000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_Test_DataCleanup_TestDataCleanup - 2019.11.15 at 08h 42m 41s.xml">
-      <configuration name="Unittests for Test_DataCleanup.TestDataCleanup" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_for_Test_DataCleanup_TestDataCleanup - 2019.11.15 at 08h 48m 24s.xml">
       <configuration name="Unittests for Test_DataCleanup.TestDataCleanup" configurationId="tests" />
     </history-entry>
@@ -360,12 +347,15 @@
     <history-entry file="Unittests_for_Test_DataCleanup_TestDataCleanup - 2019.11.15 at 09h 08m 51s.xml">
       <configuration name="Unittests for Test_DataCleanup.TestDataCleanup" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_for_Test_DataCleanup_TestDataCleanup - 2019.11.15 at 09h 09m 47s.xml">
+      <configuration name="Unittests for Test_DataCleanup.TestDataCleanup" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="184437000" />
+    <option name="totallyTimeSpent" value="185052000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1690" y="23" width="1705" height="961" extended-state="0" />
+    <frame x="1717" y="23" width="1705" height="961" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
@@ -496,8 +486,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DataCleanup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="53" column="38" lean-forward="true" selection-start-line="53" selection-start-column="38" selection-end-line="53" selection-end-column="38" />
+        <state relative-caret-position="273">
+          <caret line="62" column="38" lean-forward="true" selection-start-line="62" selection-start-column="38" selection-end-line="62" selection-end-column="38" />
           <folding>
             <element signature="e#241#259#0" expanded="true" />
           </folding>
@@ -506,8 +496,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Test_DataCleanup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="641">
-          <caret line="216" column="81" selection-start-line="216" selection-start-column="81" selection-end-line="216" selection-end-column="81" />
+        <state relative-caret-position="285">
+          <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
