@@ -1,11 +1,4 @@
-import pandas as pd
-
-import numpy as np
-from sklearn.pipeline import make_pipeline
-from sklearn.model_selection import cross_val_score
-from eLCS import eLCS
 from skrebate import ReliefF
-from Classifier import *
 from DataCleanup import *
 
 
