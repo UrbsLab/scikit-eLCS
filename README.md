@@ -14,7 +14,7 @@ While Learning Classifier Systems are commonly applied to genetic analyses, wher
 * Multi-class endpoints (i.e., classification)
 * Continuous endpoints (i.e., regression)
 
-Built into this code, is a strategy to 'automatically' detect from the loaded data, these relevant characteristics so that they don't need to be parameterized at initialization.
+Built into this code, is a strategy to 'automatically' detect from the loaded data, these relevant characteristics so that they don't need to be parameterized at initialization. The core Scikit package only supports numeric data. However, an additional StringEnumerator Class is provided within the DataCleanup file that allows quick data conversion from any type of data into pure numeric data, making it possible for natively string/non-numeric data to be run by eLCS.
 
 ## License
 Please see the repository [license](https://github.com/UrbsLab/scikit-eLCS/blob/master/LICENSE) for the licensing and usage information for scikit-rebate.
