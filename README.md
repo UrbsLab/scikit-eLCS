@@ -1,3 +1,5 @@
+Master Status: [![Build Status](https://travis-ci.com/UrbsLab/scikit-eLCS.svg?branch=master)](https://travis-ci.com/UrbsLab/scikit-eLCS)
+
 # scikit-eLCS
 
 This package includes a sci-kit compatible Python implementation of eLCS, a supervised learning variant of the Learning Classifier System. In general, Learning Classifier Systems (LCSs) are a classification of Rule Based Machine Learning Algorithms that have been shown to perform well on problems involving high amounts of heterogeneity and epistasis. Well designed LCSs are also highly human interpretable. LCS variants have been shown to adeptly handle supervised and reinforced, classification and regression, online and offline learning problems, as well as missing or unbalanced data. These characteristics of versatility and interpretability give LCSs a wide range of potential applications, notably those in biomedicine. This package is **still under active development** and we encourage you to check back on this repository for updates.
