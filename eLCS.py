@@ -10,21 +10,16 @@ import numpy as np
 import math
 
 class eLCS(BaseEstimator):
-    def __init__(self, learningIterations=10000, trackingFrequency=0, learningEvalCheckpoints=np.array([10000]), N=1000,
+    def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([1,10,50,100,200,500,700,1000]), N=1000,
                  p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]),nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
                  doSubsumption=1, selectionMethod='tournament', theta_sel=0.5,classLabel="",dataHeaders=np.array([]),randomSeed = "none"):
+
         self.learningIterations = learningIterations
         self.N = N
         self.p_spec = p_spec
         self.discreteAttributeLimit = discreteAttributeLimit #Can be number, or "c" or "d"
         self.specifiedAttributes = specifiedAttributes
-
-        try:
-            int(discreteAttributeLimit)
-        except:
-            if discreteAttributeLimit != "c" or discreteAttributeLimit != "d":
-                raise Exception("Discrete Attribute Limit is invalid. Must be integer, 'c' or 'd'")
 
         self.nu = nu
         self.chi = chi
@@ -41,25 +36,12 @@ class eLCS(BaseEstimator):
         self.selectionMethod = selectionMethod
         self.theta_sel = theta_sel
         self.trackingFrequency = trackingFrequency
-        self.learningCheckpoints = learningEvalCheckpoints #This might be a problem
-        self.timer = Timer()
-        self.trackingObjs = np.array([])
-        self.popStatObjs = np.array([])
+
+        self.learningCheckpoints = learningCheckpoints
+
         self.dataHeaders = dataHeaders
         self.randomSeed = randomSeed
         self.classLabel = classLabel
-        if self.classLabel == "":
-            if not("phenotype" in self.dataHeaders):
-                self.classLabel = "phenotype"
-            else:
-                raise Exception("'phenotype' cannot be an attribute header name")
-
-        if self.randomSeed != "none":
-            try:
-                int(randomSeed)
-                random.seed(int(self.randomSeed))
-            except:
-                raise Exception("Random seed must be a number")
 
     def fit(self, X, y):
         """Scikit-learn required: Computes the feature importance scores from the training data.
@@ -75,6 +57,65 @@ class eLCS(BaseEstimator):
         __________
         self
         """
+        # print(self.learningIterations)
+        # print(self.trackingFrequency)
+        # print(self.learningCheckpoints)
+        # print(self.N)
+        # print(self.p_spec)
+        # print(self.discreteAttributeLimit)
+        # print(self.specifiedAttributes)
+        # print(self.nu)
+        # print(self.chi)
+        # print(self.upsilon)
+        # print(self.theta_GA)
+        # print(self.theta_del)
+        # print(self.theta_sub)
+        # print(self.acc_sub)
+        # print(self.beta)
+        # print(self.delta)
+        # print(self.init_fit)
+        # print(self.fitnessReduction)
+        # print(self.doSubsumption)
+        # print(self.selectionMethod)
+        # print(self.theta_sel)
+        # print(self.classLabel)
+        # print(self.dataHeaders)
+        # print(self.randomSeed)
+
+        #Parameter Checking
+        if self.selectionMethod != "tournament" and self.selectionMethod != "roulette":
+            raise Exception("Invalid selection type. Must be tournament or roulette")
+
+        try:
+            int(self.discreteAttributeLimit)
+        except:
+            if self.discreteAttributeLimit != "c" or self.discreteAttributeLimit != "d":
+                raise Exception("Discrete Attribute Limit is invalid. Must be integer, 'c' or 'd'")
+
+        if np.array_equal(self.learningCheckpoints,np.array([])):
+            self.learningCheckpoints = np.array([self.learningIterations])
+        else:
+            if self.learningCheckpoints.min() > self.learningIterations:
+                raise Exception("At least 1 learning evaluation checkpoint must be below the number of learning iterations")
+
+
+        self.timer = Timer()
+        self.trackingObjs = np.array([])
+        self.popStatObjs = np.array([])
+
+        if self.classLabel == "":
+            if not("phenotype" in self.dataHeaders):
+                self.classLabel = "phenotype"
+            else:
+                raise Exception("'phenotype' cannot be an attribute header name")
+
+        if self.randomSeed != "none":
+            try:
+                int(self.randomSeed)
+                random.seed(int(self.randomSeed))
+            except:
+                raise Exception("Random seed must be a number")
+
         #Populate DataHeaders
         if np.array_equal(self.dataHeaders,np.array([])):
             counter = 0
@@ -89,7 +130,7 @@ class eLCS(BaseEstimator):
                 for value in instance:
                     if not(np.isnan(value)):
                         float(value)
-            for value in self.dataPhenotypes:
+            for value in y:
                 if not(np.isnan(value)):
                     float(value)
 

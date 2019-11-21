@@ -1,4 +1,5 @@
 from eLCS import *
+import numpy as np
 
 class DataManagement:
     def __init__(self, dataFeatures, dataPhenotypes, elcs):
@@ -6,7 +7,9 @@ class DataManagement:
         self.numAttributes = dataFeatures.shape[1]  # The number of attributes in the input file.
         self.attributeInfoType = np.empty(self.numAttributes,dtype=bool) #stores false (d) or true (c) depending on its type, which points to parallel reference in one of the below 2 arrays
         self.attributeInfoContinuous = np.empty((self.numAttributes,2)) #stores continuous ranges and NaN otherwise
-        self.attributeInfoDiscrete = np.empty(self.numAttributes,dtype=object) #stores arrays of discrete values and NaN otherwise
+        self.attributeInfoDiscrete = np.empty(self.numAttributes,dtype=object) #stores arrays of discrete values or NaN otherwise.
+        for i in range(0,self.numAttributes):
+            self.attributeInfoDiscrete[i] = AttributeInfoDiscreteElement()
 
         # About Phenotypes
         self.discretePhenotype = True  # Is the Class/Phenotype Discrete? (False = Continuous)
@@ -99,7 +102,7 @@ class DataManagement:
                     target = features[currentInstanceIndex,att]
                     if target in list(stateDict.keys()):
                         stateDict[target] += 1
-                    elif target == elcs.labelMissingData:
+                    elif np.isnan(target):
                         pass
                     else:
                         stateDict[target] = 1
@@ -130,13 +133,10 @@ class DataManagement:
             for currentInstanceIndex in range(self.numTrainInstances):
                 target = features[currentInstanceIndex,currentFeatureIndexInAttributeInfo]
                 if not self.attributeInfoType[currentFeatureIndexInAttributeInfo]:#if attribute is discrete
-                    if target in self.attributeInfoDiscrete[currentFeatureIndexInAttributeInfo] or np.isnan(target):
+                    if target in self.attributeInfoDiscrete[currentFeatureIndexInAttributeInfo].distinctValues or np.isnan(target):
                         pass
                     else:
-                        if self.attributeInfoDiscrete[currentFeatureIndexInAttributeInfo] == None:
-                            self.attributeInfoDiscrete[currentFeatureIndexInAttributeInfo] = np.array([target])
-                        else:
-                            self.attributeInfoDiscrete[currentFeatureIndexInAttributeInfo] = np.concatenate((self.attributInfoDiscrete[currentFeatureIndexInAttributeInfo],[target]),axis = 0)
+                        self.attributeInfoDiscrete[currentFeatureIndexInAttributeInfo].distinctValues = np.append(self.attributeInfoDiscrete[currentFeatureIndexInAttributeInfo].distinctValues,target)
                 else: #if attribute is continuous
                     if np.isnan(target):
                         pass
@@ -151,3 +151,7 @@ class DataManagement:
         formatted = np.insert(features,self.numAttributes,phenotypes,1) #Combines features and phenotypes into one array
         np.random.shuffle(formatted)
         return formatted
+
+class AttributeInfoDiscreteElement():
+    def __init__(self):
+        self.distinctValues = np.array([])
