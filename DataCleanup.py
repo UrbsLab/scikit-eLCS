@@ -57,6 +57,12 @@ class StringEnumerator:
                     newAttributeConverter[str(array[index])] = str(index)
             self.map[headerName] = newAttributeConverter
 
+    def addAttributeConverterMap(self,headerName,map):
+        if headerName in self.dataHeaders and not (headerName in self.map) and not("" in map) and not("NA" in map) and not("NaN" in map):
+            self.map[headerName] = map
+        else:
+            raise Exception("Invalid Map")
+
     def addAttributeConverterRandom(self,headerName):
         if headerName in self.dataHeaders and not (headerName in self.map):
             headerIndex = np.where(self.dataHeaders == headerName)[0][0]

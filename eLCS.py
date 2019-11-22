@@ -19,7 +19,7 @@ class eLCS(BaseEstimator):
         self.N = N
         self.p_spec = p_spec
         self.discreteAttributeLimit = discreteAttributeLimit #Can be number, or "c" or "d"
-        self.specifiedAttributes = specifiedAttributes
+        self.specifiedAttributes = specifiedAttributes #Must be array of indices
 
         self.nu = nu
         self.chi = chi
@@ -86,11 +86,16 @@ class eLCS(BaseEstimator):
         if self.selectionMethod != "tournament" and self.selectionMethod != "roulette":
             raise Exception("Invalid selection type. Must be tournament or roulette")
 
+        # Check Specified Headers and Discrete Attr List for Validity
         try:
             int(self.discreteAttributeLimit)
         except:
             if self.discreteAttributeLimit != "c" or self.discreteAttributeLimit != "d":
                 raise Exception("Discrete Attribute Limit is invalid. Must be integer, 'c' or 'd'")
+            else:
+                #is c or d, check specified headers
+                print("check in progress")
+
 
         if np.array_equal(self.learningCheckpoints,np.array([])):
             self.learningCheckpoints = np.array([self.learningIterations])
@@ -115,6 +120,9 @@ class eLCS(BaseEstimator):
                 random.seed(int(self.randomSeed))
             except:
                 raise Exception("Random seed must be a number")
+
+
+
 
         #Populate DataHeaders
         if np.array_equal(self.dataHeaders,np.array([])):
