@@ -31,7 +31,7 @@ class DataManagement:
 
     def discriminatePhenotype(self,phenotypes,elcs):#Determine if phenotype is discrete or continuous
         try:
-            int(elcs.discreteAttributeLimit)
+            int(elcs.discretePhenotypeLimit)
         except:
             self.isDefault = False
 
@@ -48,23 +48,15 @@ class DataManagement:
                     classDict[target] = 1
                 currentPhenotypeIndex+=1
 
-            if (len(list(classDict.keys())) > elcs.discreteAttributeLimit):
+            if (len(list(classDict.keys())) > elcs.discretePhenotypeLimit):
                 self.discretePhenotype = False
                 self.phenotypeList = np.array([float(target),float(target)])
-        elif elcs.discreteAttributeLimit == "c":
-            if elcs.classLabel in elcs.specifiedAttributes:
-                self.discretePhenotype = False
-                self.phenotypeList = np.array([float(phenotypes[0]),float(phenotypes[0])])
-            else:
-                self.discretePhenotype = True
-                self.phenotypeList = np.array([])
-        elif elcs.discreteAttributeLimit == "d":
-            if elcs.classLabel in elcs.specifiedAttributes:
-                self.discretePhenotype = True
-                self.phenotypeList = np.array([])
-            else:
-                self.discretePhenotype = False
-                self.phenotypeList = np.array([float(phenotypes[0]),float(phenotypes[0])])
+        elif elcs.discretePhenotypeLimit == "c":
+            self.discretePhenotype = False
+            self.phenotypeList = np.array([float(phenotypes[0]),float(phenotypes[0])])
+        elif elcs.discretePhenotypeLimit == "d":
+            self.discretePhenotype = True
+            self.phenotypeList = np.array([])
 
     def discriminateClasses(self,phenotypes):
         currentPhenotypeIndex = 0
@@ -111,12 +103,12 @@ class DataManagement:
                 if len(list(stateDict.keys())) > elcs.discreteAttributeLimit:
                     attIsDiscrete = False
             elif elcs.discreteAttributeLimit == "c":
-                if elcs.dataHeaders[att] in elcs.specifiedAttributes:
+                if att in elcs.specifiedAttributes:
                     attIsDiscrete = False
                 else:
                     attIsDiscrete = True
             elif elcs.discreteAttributeLimit == "d":
-                if elcs.dataHeaders[att] in elcs.specifiedAttributes:
+                if att in elcs.specifiedAttributes:
                     attIsDiscrete = True
                 else:
                     attIsDiscrete = False

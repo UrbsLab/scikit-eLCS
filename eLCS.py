@@ -11,14 +11,15 @@ import math
 
 class eLCS(BaseEstimator):
     def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([1,10,50,100,200,500,700,1000]), N=1000,
-                 p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]),nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
+                 p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]), discretePhenotypeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
-                 doSubsumption=1, selectionMethod='tournament', theta_sel=0.5,classLabel="",dataHeaders=np.array([]),randomSeed = "none"):
+                 doSubsumption=1, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none"):
 
         self.learningIterations = learningIterations
         self.N = N
         self.p_spec = p_spec
         self.discreteAttributeLimit = discreteAttributeLimit #Can be number, or "c" or "d"
+        self.discretePhenotypeLimit = discretePhenotypeLimit
         self.specifiedAttributes = specifiedAttributes #Must be array of indices
 
         self.nu = nu
@@ -39,9 +40,7 @@ class eLCS(BaseEstimator):
 
         self.learningCheckpoints = learningCheckpoints
 
-        self.dataHeaders = dataHeaders
         self.randomSeed = randomSeed
-        self.classLabel = classLabel
 
     def fit(self, X, y):
         """Scikit-learn required: Computes the feature importance scores from the training data.
@@ -57,30 +56,6 @@ class eLCS(BaseEstimator):
         __________
         self
         """
-        # print(self.learningIterations)
-        # print(self.trackingFrequency)
-        # print(self.learningCheckpoints)
-        # print(self.N)
-        # print(self.p_spec)
-        # print(self.discreteAttributeLimit)
-        # print(self.specifiedAttributes)
-        # print(self.nu)
-        # print(self.chi)
-        # print(self.upsilon)
-        # print(self.theta_GA)
-        # print(self.theta_del)
-        # print(self.theta_sub)
-        # print(self.acc_sub)
-        # print(self.beta)
-        # print(self.delta)
-        # print(self.init_fit)
-        # print(self.fitnessReduction)
-        # print(self.doSubsumption)
-        # print(self.selectionMethod)
-        # print(self.theta_sel)
-        # print(self.classLabel)
-        # print(self.dataHeaders)
-        # print(self.randomSeed)
 
         #Parameter Checking
         if self.selectionMethod != "tournament" and self.selectionMethod != "roulette":
@@ -93,9 +68,13 @@ class eLCS(BaseEstimator):
             if self.discreteAttributeLimit != "c" or self.discreteAttributeLimit != "d":
                 raise Exception("Discrete Attribute Limit is invalid. Must be integer, 'c' or 'd'")
             else:
-                #is c or d, check specified headers
-                print("check in progress")
+                numAttr = X.shape[1]
+                for a in self.specifiedAttributes:
+                    if a >= numAttr or a < 0:
+                        raise Exception("Indexes for at least one specified attribute is out of bounds")
 
+        if self.discretePhenotypeLimit != "c" and self.discretePhenotypeLimit != "d" and self.discretePhenotypeLimit != 10:
+            raise Exception("Invalid discrete phenotype limit")
 
         if np.array_equal(self.learningCheckpoints,np.array([])):
             self.learningCheckpoints = np.array([self.learningIterations])
@@ -103,16 +82,9 @@ class eLCS(BaseEstimator):
             if self.learningCheckpoints.min() > self.learningIterations:
                 raise Exception("At least 1 learning evaluation checkpoint must be below the number of learning iterations")
 
-
         self.timer = Timer()
         self.trackingObjs = np.array([])
         self.popStatObjs = np.array([])
-
-        if self.classLabel == "":
-            if not("phenotype" in self.dataHeaders):
-                self.classLabel = "phenotype"
-            else:
-                raise Exception("'phenotype' cannot be an attribute header name")
 
         if self.randomSeed != "none":
             try:
@@ -120,17 +92,6 @@ class eLCS(BaseEstimator):
                 random.seed(int(self.randomSeed))
             except:
                 raise Exception("Random seed must be a number")
-
-
-
-
-        #Populate DataHeaders
-        if np.array_equal(self.dataHeaders,np.array([])):
-            counter = 0
-            for attribute in len(X[0]):
-                while ("N"+str(counter)) == self.classLabel:
-                    counter += 1
-                self.dataHeaders = np.append(self.dataHeaders,"N"+str(counter))
 
         #Check if X and Y are numeric
         try:
@@ -147,7 +108,7 @@ class eLCS(BaseEstimator):
 
         self.env = OfflineEnvironment(X,y,self)
 
-        if self.trackingFrequency == 0:
+        if self.trackingFrequency <= 0:
             self.trackingFrequency = self.env.formatData.numTrainInstances
 
         self.population = ClassifierSet(self)

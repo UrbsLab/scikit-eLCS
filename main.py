@@ -9,7 +9,7 @@ and labels into np_array of shape [number of items]'''
 converter = StringEnumerator("Datasets/Real/Multiplexer20.csv","class")
 headers, classLabel, dataFeatures,dataPhenotypes = converter.getParams()
 
-clf = eLCS(learningIterations=1000,classLabel=classLabel,dataHeaders=headers)
+clf = eLCS(learningIterations=1000)
 print(np.mean(cross_val_score(clf,dataFeatures,dataPhenotypes)))
 
 # clf.fit(dataFeatures,dataPhenotypes)
