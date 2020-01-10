@@ -1,4 +1,4 @@
-from Old.Classifier import *
+from Classifier import *
 
 class ClassifierSet:
     def __init__(self,elcs):
@@ -49,6 +49,7 @@ class ClassifierSet:
             newCl = Classifier(elcs,setNumerositySum+1,exploreIter,state,phenotype)
             self.addClassifierToPopulation(elcs,newCl,True)
             self.matchSet = np.append(self.matchSet,self.popSet.size - 1)
+            elcs.coveringCounter+=1
             doCovering = False
 
     def getIdenticalClassifier(self,elcs,newCl):
@@ -110,10 +111,12 @@ class ClassifierSet:
             while i < self.correctSet.size:
                 ref = self.correctSet[i]
                 if subsumer.isMoreGeneral(self.popSet[ref],elcs):
-                    #print("Subsumption Done:")
-                    #selcs.printClassifier(self.popSet[ref])
-                    #print("Subsumed by")
-                    #elcs.printClassifier(subsumer)
+                    if elcs.printGAMech:
+                        print("Subsumption Done:")
+                        elcs.printClassifier(self.popSet[ref])
+                        print("Subsumed by")
+                        elcs.printClassifier(subsumer)
+                    elcs.subsumptionCounter += 1
                     subsumer.updateNumerosity(self.popSet[ref].numerosity)
                     self.removeMacroClassifier(ref)
                     self.deleteFromMatchSet(ref)
@@ -149,6 +152,7 @@ class ClassifierSet:
         if (exploreIter - self.getIterStampAverage()) < elcs.theta_GA:
             return
 
+        elcs.gaCounter += 1
         self.setIterStamps(exploreIter)
         changed = False
 
@@ -164,10 +168,11 @@ class ClassifierSet:
             clP2 = selectList[1]
         elcs.timer.stopTimeSelection()
 
-        #print("First Chosen Parent:")
-       # elcs.printClassifier(clP1)
-        #print("Second Chosen Parent")
-        #elcs.printClassifier(clP2)
+        if elcs.printGAMech:
+            print("First Chosen Parent:")
+            elcs.printClassifier(clP1)
+            print("Second Chosen Parent")
+            elcs.printClassifier(clP2)
 
         #Initialize Offspring
         cl1 = Classifier(elcs,clP1,exploreIter)
@@ -178,10 +183,14 @@ class ClassifierSet:
 
         #Crossover Operator (uniform crossover)
         if not cl1.equals(elcs,cl2) and random.random() < elcs.chi:
-            #print("Crossover Invoked")
+            if elcs.printGAMech:
+                print("Crossover Invoked")
             changed = cl1.uniformCrossover(elcs,cl2)
-            #elcs.printClassifier(cl1)
-            #elcs.printClassifier(cl2)
+
+
+            if elcs.printGAMech:
+                elcs.printClassifier(cl1)
+                elcs.printClassifier(cl2)
 
         #Initialize Key Offspring Parameters
         if changed:
@@ -199,12 +208,19 @@ class ClassifierSet:
 
         #Add offspring to population
         if changed or nowchanged or howaboutnow:
-            #if nowchanged:
-                #print("Mutation Cl1")
-            #if howaboutnow:
-                #print("Mutation Cl2")
-            #if changed:
-                #print("Crossover")
+            if elcs.printCrossOver or elcs.printMutation or elcs.printGAMech:
+                if nowchanged:
+                    if elcs.printGAMech:
+                        print("Mutation Cl1")
+                    elcs.mutationCounter+=1
+                if howaboutnow:
+                    if elcs.printGAMech:
+                        print("Mutation Cl2")
+                    elcs.mutationCounter+=1
+                if changed:
+                    if elcs.printGAMech:
+                        print("Crossover")
+                    elcs.crossOverCounter+=1
 
             self.insertDiscoveredClassifiers(elcs,cl1, cl2, clP1, clP2, exploreIter)  # Subsumption
 
@@ -304,22 +320,27 @@ class ClassifierSet:
                 self.addClassifierToPopulation(elcs,cl1,False)
             if cl2.specifiedAttList.size > 0:
                 self.addClassifierToPopulation(elcs,cl2, False)
-            #print("Offspring Classifier:")
-            #elcs.printClassifier(cl1)
-            #print("Offspring Classifier:")
-            #elcs.printClassifier(cl2)
+            if elcs.printGAMech:
+                print("Offspring Classifier:")
+                elcs.printClassifier(cl1)
+                print("Offspring Classifier:")
+                elcs.printClassifier(cl2)
 
     def subsumeClassifier(self,elcs,cl=None,cl1P=None,cl2P=None):
         if cl1P != None and cl1P.subsumes(elcs,cl):
             self.microPopSize += 1
             cl1P.updateNumerosity(1)
-            #print("Parent 1 Subsumes:")
-            #elcs.printClassifier(cl)
+            elcs.subsumptionCounter += 1
+            if elcs.printGAMech:
+                print("Parent 1 Subsumes:")
+                elcs.printClassifier(cl)
         elif cl2P != None and cl2P.subsumes(elcs,cl):
             self.microPopSize += 1
             cl2P.updateNumerosity(1)
-            #print("Parent 2 Subsumes:")
-            #elcs.printClassifier(cl)
+            elcs.subsumptionCounter += 1
+            if elcs.printGAMech:
+                print("Parent 2 Subsumes:")
+                elcs.printClassifier(cl)
         else:
             self.subsumeClassifier2(elcs,cl)  # Try to subsume in the correct set.
 
@@ -333,14 +354,17 @@ class ClassifierSet:
             choice = int(random.random()*choices.size)
             self.popSet[int(choices[choice])].updateNumerosity(1)
             self.microPopSize += 1
-            #print("Subsumption Done in Correct Set:")
-            #elcs.printClassifier(cl)
-            #print("Subsumed by")
-            #elcs.printClassifier(self.popSet[int(choices[choice])])
+            if elcs.printGAMech:
+                print("Subsumption Done in Correct Set:")
+                elcs.printClassifier(cl)
+                print("Subsumed by")
+                elcs.printClassifier(self.popSet[int(choices[choice])])
+            elcs.subsumptionCounter += 1
             return
         self.addClassifierToPopulation(elcs,cl,False)
-        #print("Offspring Classifier:")
-        #elcs.printClassifier(cl)
+        if elcs.printGAMech:
+            print("Offspring Classifier:")
+            elcs.printClassifier(cl)
 
     def deletion(self,elcs,exploreIter):
         elcs.timer.startTimeDeletion()

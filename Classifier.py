@@ -12,7 +12,7 @@ class Classifier():
         self.conditionType = np.array([]) #0 for discrete, 1 for continuous
         self.conditionDiscrete = np.array([]) #discrete values
         self.conditionContinuous = np.array([]) #continouous values
-        self.phenotype = np.infty #arbitrary
+        self.phenotype = None #arbitrary
 
         self.fitness = elcs.init_fit
         self.accuracy = 0.0
@@ -123,7 +123,7 @@ class Classifier():
             # Continuous
             if attributeInfoType:
                 instanceValue = state[self.specifiedAttList[i]]
-                if not(np.isnan(instanceValue)):
+                if np.isnan(instanceValue):
                     pass
                 elif self.conditionContinuous[i,0] < instanceValue < self.conditionContinuous[i,1]:
                     pass
@@ -154,7 +154,7 @@ class Classifier():
             if (clRefs == selfRefs).all():
                 for i in range(cl.specifiedAttList.size):
                     tempIndex = np.where(self.specifiedAttList == cl.specifiedAttList[i])[0][0]
-                    if not ((cl.conditionType[i] == 1 and self.conditionType[tempIndex] == 1 and cl.conditionContinuous[i] == self.conditionContinuous[tempIndex]) or
+                    if not ((cl.conditionType[i] == 1 and self.conditionType[tempIndex] == 1 and cl.conditionContinuous[i,0] == self.conditionContinuous[tempIndex,0] and cl.conditionContinuous[i,1] == self.conditionContinuous[tempIndex,1]) or
                             (cl.conditionType[i] == 0 and self.conditionType[tempIndex] == 0 and cl.conditionDiscrete[i] == self.conditionDiscrete[tempIndex])):
                         return False
                 return True
@@ -206,6 +206,8 @@ class Classifier():
             return False
         for i in range(self.specifiedAttList.size):
             attributeInfoType = elcs.env.formatData.attributeInfoType[self.specifiedAttList[i]]
+            if self.specifiedAttList[i] not in cl.specifiedAttList:
+                return False
 
             # Continuous
             if attributeInfoType:
@@ -301,8 +303,8 @@ class Classifier():
                             else:
                                 cl.conditionContinuous[i_cl2] = np.array([newMin, newMax])
                                 self.conditionType = np.delete(self.conditionType, i_cl1)
-                                self.conditionContinuous = np.delete(cl.conditionContinuous, i_cl1,axis=0)
-                                self.conditionDiscrete = np.delete(cl.conditionDiscrete, i_cl1)
+                                self.conditionContinuous = np.delete(self.conditionContinuous, i_cl1,axis=0)
+                                self.conditionDiscrete = np.delete(self.conditionDiscrete, i_cl1)
 
                                 a = np.where(self.specifiedAttList == attRef)[0][0]
                                 self.specifiedAttList = np.delete(self.specifiedAttList, a)

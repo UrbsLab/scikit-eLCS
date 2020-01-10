@@ -6,11 +6,12 @@ from ClassAccuracy import *
 import copy
 import random
 from sklearn.base import BaseEstimator
+from sklearn.metrics import accuracy_score
 import numpy as np
 import math
 
 class eLCS(BaseEstimator):
-    def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([1,10,50,100,200,500,700,1000]), N=1000,
+    def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([1,10,50,100,200,500,700,1000]), evalWhileFit = False, N=1000,
                  p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]), discretePhenotypeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
                  doSubsumption=1, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none"):
@@ -21,6 +22,7 @@ class eLCS(BaseEstimator):
         self.discreteAttributeLimit = discreteAttributeLimit #Can be number, or "c" or "d"
         self.discretePhenotypeLimit = discretePhenotypeLimit
         self.specifiedAttributes = specifiedAttributes #Must be array of indices
+        self.evalWhileFit = evalWhileFit
 
         self.nu = nu
         self.chi = chi
@@ -42,13 +44,36 @@ class eLCS(BaseEstimator):
 
         self.randomSeed = randomSeed
 
+        ##Debugging Tools
+        self.printPSet = False
+        self.printMSet = False
+        self.printCSet = False
+        self.printPopSize = False
+        self.printGAMech = False
+        self.printMisc = False
+        self.printSubCount = False
+        self.printMicroPopSize = False
+        self.printCrossOver = False
+        self.printMutation = False
+        self.printCovering = False
+        self.printGACount = False
+        self.printIterStampAvg = False
+        self.printCSize = False
+        self.printMSize = False
+
+        self.subsumptionCounter = 0
+        self.crossOverCounter = 0
+        self.mutationCounter = 0
+        self.coveringCounter = 0
+        self.gaCounter = 0
+
     def fit(self, X, y):
         """Scikit-learn required: Computes the feature importance scores from the training data.
 
         Parameters
         ----------
         X: array-like {n_samples, n_features}
-            Training instances to compute the feature importance scores from
+            Training instances
         y: array-like {n_samples}
             Training labels
 
@@ -122,33 +147,34 @@ class eLCS(BaseEstimator):
 
             self.runIteration(state_phenotype,self.explorIter)
 
-            #Evaluations of Algorithm
-            self.timer.startTimeEvaluation()
-
-            if (self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0:
-                self.population.runPopAveEval(self.explorIter,self)
-                trackedAccuracy = np.sum(self.correct)/float(self.trackingFrequency)
-                newObj = TrackingEvalObj(trackedAccuracy,self.explorIter,self.trackingFrequency,self)
-                self.trackingObjs = np.append(self.trackingObjs,newObj)
-            self.timer.stopTimeEvaluation()
-
-            if (self.explorIter + 1) in self.learningCheckpoints:
+            if self.evalWhileFit:
+                #Evaluations of Algorithm
                 self.timer.startTimeEvaluation()
-                self.population.runPopAveEval(self.explorIter,self)
-                self.population.runAttGeneralitySum(True,self)
-                self.env.startEvaluationMode()  #Preserves learning position in training data
 
-                #Only a training file is available
-                if self.env.formatData.discretePhenotype:
-                    trainEval = self.doPopEvaluation()
-                else:
-                    trainEval = self.doContPopEvaluation()
-
-                self.env.stopEvaluationMode()  # Returns to learning position in training data
+                if (self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0:
+                    self.population.runPopAveEval(self.explorIter,self)
+                    trackedAccuracy = np.sum(self.correct)/float(self.trackingFrequency)
+                    newObj = TrackingEvalObj(trackedAccuracy,self.explorIter,self.trackingFrequency,self)
+                    self.trackingObjs = np.append(self.trackingObjs,newObj)
                 self.timer.stopTimeEvaluation()
-                self.timer.returnGlobalTimer()
-                newEvalObj = PopStatObj(trainEval,self.explorIter+1,self.population,self.correct,self)
-                self.popStatObjs = np.append(self.popStatObjs,newEvalObj)
+
+                if (self.explorIter + 1) in self.learningCheckpoints:
+                    self.timer.startTimeEvaluation()
+                    self.population.runPopAveEval(self.explorIter,self)
+                    self.population.runAttGeneralitySum(True,self)
+                    self.env.startEvaluationMode()  #Preserves learning position in training data
+
+                    #Only a training file is available
+                    if self.env.formatData.discretePhenotype:
+                        trainEval = self.doPopEvaluation()
+                    else:
+                        trainEval = self.doContPopEvaluation()
+
+                    self.env.stopEvaluationMode()  # Returns to learning position in training data
+                    self.timer.stopTimeEvaluation()
+                    self.timer.returnGlobalTimer()
+                    newEvalObj = PopStatObj(trainEval,self.explorIter+1,self.population,self.correct,self)
+                    self.popStatObjs = np.append(self.popStatObjs,newEvalObj)
 
             #Incremenet Instance & Iteration
             self.explorIter+=1
@@ -156,8 +182,41 @@ class eLCS(BaseEstimator):
         #
         return self
 
+    def predict(self, X):
+        """Scikit-learn required: Computes the feature importance scores from the training data.
+
+            Parameters
+               ----------
+            X: array-like {n_samples, n_features}
+                Test instances to classify
+
+
+            Returns
+            __________
+            y: array-like {n_samples}
+                Classifications
+        """
+        instances = X.shape[0]
+        predList = np.array([])
+
+        # ----------------------------------------------------------------------------------------------
+        for inst in range(instances):
+            state = X[inst]
+            self.population.makeEvalMatchSet(state, self)
+            prediction = Prediction(self, self.population)
+            phenotypeSelection = prediction.getDecision()
+            if phenotypeSelection == None or phenotypeSelection == "Tie":
+                l = self.env.formatData.phenotypeList
+                phenotypeSelection = np.random.choice(l)
+            predList = np.append(predList,phenotypeSelection) #What to do if None or Tie?
+            self.population.clearSets()
+
+        return predList
+
     def score(self,X,y):
-        return self.popStatObjs[self.popStatObjs.size-1].trainingAccuracy
+        predList = self.predict(X)
+        print(predList)
+        return accuracy_score(predList,y) #Make it balanced accuracy
 
 
     def transform(self, X):
@@ -170,48 +229,76 @@ class eLCS(BaseEstimator):
 
     ##Helper Functions
     def runIteration(self,state_phenotype,exploreIter):
-        #print("ITERATION:"+str(self.explorIter))
-        #print("Data Instance:" ,end=" ")
-       # for i in range(state_phenotype.attributeList.size):
-       #     print(state_phenotype.attributeList[i].value,end=" ")
-       # print(" w/ Phenotype: ",state_phenotype.phenotype)
-        #print("Population Set Size: "+str(self.population.popSet.size))
+        if self.printMisc:
+            print("ITERATION:"+str(self.explorIter))
+            print("Data Instance:" ,end=" ")
+            for i in range(state_phenotype[0].size):
+                print(state_phenotype[0][i],end=" ")
+            print(" w/ Phenotype: ",state_phenotype[1])
+        if self.printPopSize:
+            #print("Population Set Size: "+str(self.population.popSet.size))
+            print(self.population.popSet.size)
+        if self.printSubCount:
+            print(self.subsumptionCounter)
+        if self.printMicroPopSize:
+            print(self.population.microPopSize)
+        if self.printCovering:
+            print(self.coveringCounter)
+        if self.printCrossOver:
+            print(self.crossOverCounter)
+        if self.printMutation:
+            print(self.mutationCounter)
+        if self.printGACount:
+            print(self.gaCounter)
+
+        #Print [P]
+        if self.printPSet:
+            self.printPopSet()
 
         #Form [M]
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
 
         #Print [M]
-        #self.printMatchSet()
+        if self.printMSet:
+            self.printMatchSet()
 
-        #Make a Prediction
-        self.timer.startTimeEvaluation()
-        prediction = Prediction(self,self.population)
-        phenotypePrediction = prediction.getDecision()
+        if self.evalWhileFit:
+            #Make a Prediction
+            self.timer.startTimeEvaluation()
+            prediction = Prediction(self,self.population)
+            phenotypePrediction = prediction.getDecision()
 
-        if phenotypePrediction == None or phenotypePrediction == 'Tie':
-            if self.env.formatData.discretePhenotype:
-                phenotypePrediction = random.choice(self.env.formatData.phenotypeList)
-            else:
-                phenotypePrediction = random.randrange(self.env.formatData.phenotypeList[0],self.env.formatData.phenotypeList[1],(self.env.formatData.phenotypeList[1]-self.env.formatData.phenotypeList[0])/float(1000))
-        else:
-            if self.env.formatData.discretePhenotype:
-                if phenotypePrediction == state_phenotype[1]:
-                    self.correct[exploreIter%self.trackingFrequency] = 1
+            if phenotypePrediction == None or phenotypePrediction == 'Tie':
+                if self.env.formatData.discretePhenotype:
+                    phenotypePrediction = random.choice(self.env.formatData.phenotypeList)
                 else:
-                    self.correct[exploreIter%self.trackingFrequency] = 0
+                    phenotypePrediction = random.randrange(self.env.formatData.phenotypeList[0],self.env.formatData.phenotypeList[1],(self.env.formatData.phenotypeList[1]-self.env.formatData.phenotypeList[0])/float(1000))
             else:
-                predictionError = math.fabs(phenotypePrediction-float(state_phenotype[1]))
-                phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
-                accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
-                self.correct[exploreIter%self.trackingFrequency] = accuracyEstimate
+                if self.env.formatData.discretePhenotype:
+                    if phenotypePrediction == state_phenotype[1]:
+                        self.correct[exploreIter%self.trackingFrequency] = 1
+                    else:
+                        self.correct[exploreIter%self.trackingFrequency] = 0
+                else:
+                    predictionError = math.fabs(phenotypePrediction-float(state_phenotype[1]))
+                    phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
+                    accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
+                    self.correct[exploreIter%self.trackingFrequency] = accuracyEstimate
 
-        self.timer.stopTimeEvaluation()
+            self.timer.stopTimeEvaluation()
 
         #Form [C]
         self.population.makeCorrectSet(self,state_phenotype[1])
 
         #Print [C]
-        #self.printCorrectSet()
+        if self.printCSet:
+            self.printCorrectSet()
+
+        if self.printCSize:
+            print(self.population.correctSet.size)
+
+        if self.printMSize:
+            print(self.population.matchSet.size)
 
         #Update Parameters
         self.population.updateSets(self,exploreIter)
@@ -222,6 +309,12 @@ class eLCS(BaseEstimator):
             self.population.doCorrectSetSubsumption(self)
             self.timer.stopTimeSubsumption()
 
+        if self.printIterStampAvg:
+            if self.population.correctSet.size >= 1:
+                print(self.population.getIterStampAverage()-exploreIter)
+            else:
+                print(0)
+
         #Perform GA
         self.population.runGA(self,exploreIter,state_phenotype[0],state_phenotype[1])
 
@@ -231,7 +324,8 @@ class eLCS(BaseEstimator):
         #Clear [M] and [C]
         self.population.clearSets()
 
-        #print("________________________________________")
+        if self.printMisc:
+            print("________________________________________")
 
     def doPopEvaluation(self):
         noMatch = 0  # How often does the population fail to have a classifier that matches an instance in the data.
@@ -337,6 +431,61 @@ class eLCS(BaseEstimator):
         resultList = np.array([adjustedAccuracyEstimate, instanceCoverage])
         return resultList
 
+    def printClassifier(self,classifier):
+        attributeCounter = 0
+
+        for attribute in range(self.env.formatData.numAttributes):
+            if attribute in classifier.specifiedAttList:
+                specifiedLocation = np.where(classifier.specifiedAttList == attribute)[0][0]
+                if self.env.formatData.attributeInfoType[attributeCounter] == 0:  # isDiscrete
+                    print(classifier.conditionDiscrete[specifiedLocation], end="\t\t\t\t")
+                else:
+                    print("[", end="")
+                    print(
+                        round(classifier.conditionContinuous[specifiedLocation,0] * 10) / 10,
+                        end=", ")
+                    print(
+                        round(classifier.conditionContinuous[specifiedLocation,1] * 10) / 10,
+                        end="")
+                    print("]", end="\t\t")
+            else:
+                print("#", end="\t\t\t\t")
+            attributeCounter += 1
+        if self.env.formatData.discretePhenotype:
+            print(classifier.phenotype,end="\t\t\t\t")
+        else:
+            print("[", end="")
+            print(round(classifier.phenotype[0] * 10) / 10, end=", ")
+            print(round(classifier.phenotype[1] * 10) / 10, end="")
+            print("]",end="\t\t")
+        if round(classifier.fitness*1000)/1000 != classifier.fitness:
+            print(round(classifier.fitness*1000)/1000,end="\t\t")
+        else:
+            print(round(classifier.fitness * 1000) / 1000, end="\t\t\t")
+
+        if round(classifier.accuracy * 1000) / 1000 != classifier.accuracy:
+            print(round(classifier.accuracy*1000)/1000,end="\t\t")
+        else:
+            print(round(classifier.accuracy * 1000) / 1000, end="\t\t\t")
+        print(classifier.numerosity)
+
+    def printMatchSet(self):
+        print("Match Set Size: "+str(self.population.matchSet.size))
+        for classifierRef in self.population.matchSet:
+            self.printClassifier(self.population.popSet[classifierRef])
+        print()
+
+    def printCorrectSet(self):
+        print("Correct Set Size: " + str(self.population.correctSet.size))
+        for classifierRef in self.population.correctSet:
+            self.printClassifier(self.population.popSet[classifierRef])
+        print()
+
+    def printPopSet(self):
+        print("Population Set Size: " + str(self.population.popSet.size))
+        for classifier in self.population.popSet:
+            self.printClassifier(classifier)
+        print()
 
 class TrackingEvalObj():
     def __init__(self,accuracy,exploreIter,trackingFrequency,elcs):

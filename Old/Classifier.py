@@ -1,4 +1,4 @@
-from Old.eLCS import *
+from eLCS import *
 import random
 import copy
 import math

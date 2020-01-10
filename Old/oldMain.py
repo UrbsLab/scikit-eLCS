@@ -15,7 +15,6 @@ print(clf.score(dataFeatures,dataPhenotypes))
 clf.printPopSet()
 #print(np.mean(cross_val_score(clf,dataFeatures,dataPhenotypes)))
 
-
 # clf.fit(dataFeatures,dataPhenotypes)
 #
 #

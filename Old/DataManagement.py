@@ -1,4 +1,5 @@
-from Old.eLCS import *
+from eLCS import *
+import numpy as np
 
 class DataManagement:
     def __init__(self,dataFeatures,dataPhenotypes,elcs):
