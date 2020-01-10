@@ -5,12 +5,12 @@ from Timer import *
 from ClassAccuracy import *
 import copy
 import random
-from sklearn.base import BaseEstimator
-from sklearn.metrics import accuracy_score
+from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.metrics import balanced_accuracy_score
 import numpy as np
 import math
 
-class eLCS(BaseEstimator):
+class eLCS(BaseEstimator,ClassifierMixin):
     def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([1,10,50,100,200,500,700,1000]), evalWhileFit = False, N=1000,
                  p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]), discretePhenotypeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
@@ -50,7 +50,7 @@ class eLCS(BaseEstimator):
         self.printCSet = False
         self.printPopSize = False
         self.printGAMech = False
-        self.printMisc = False
+        self.printMisc = True
         self.printSubCount = False
         self.printMicroPopSize = False
         self.printCrossOver = False
@@ -213,10 +213,19 @@ class eLCS(BaseEstimator):
 
         return predList
 
+
+    '''Having this score method is not mandatory, since the eLCS inherits from ClassifierMixin, which by default has a parent score method. When doing CV,
+    you could pass in "scorer = 'balanced_accuracy'" or any other scorer function which would override the default ClassifierMixin method. This can all be done w/o
+    the score method existing below.
+    
+    However, this score method acts as a replacement for the ClassifierMixin method (so technically, ClassifierMixin doesn't need to be a parent now), so by default,
+    balanced accuracy is the scoring method. In the future, this scorer can be made to be more sophisticated whenever necessary. You can still pass in an external 
+    scorer like above to override this scoring method as well if you want.
+    
+    '''
     def score(self,X,y):
         predList = self.predict(X)
-        print(predList.size)
-        return accuracy_score(predList,y) #Make it balanced accuracy
+        return balanced_accuracy_score(y, predList) #Make it balanced accuracy
 
     def transform(self, X):
         """Not needed for eLCS"""

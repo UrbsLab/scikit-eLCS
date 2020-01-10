@@ -20,9 +20,12 @@ np.random.shuffle(formatted)
 dataFeatures = np.delete(formatted,-1,axis=1)
 dataPhenotypes = formatted[:,-1]
 
-# clf.fit(dataFeatures,dataPhenotypes)
-# print(clf.score(dataFeatures,dataPhenotypes))
+#clf.fit(dataFeatures,dataPhenotypes)
+#print(clf.score(dataFeatures,dataPhenotypes))
 # clf.printPopSet()
+
+#print(np.mean(cross_val_score(clf,dataFeatures,dataPhenotypes,scoring="balanced_accuracy"))) #Example use of external scorer
+
 print(np.mean(cross_val_score(clf,dataFeatures,dataPhenotypes)))
 
 
