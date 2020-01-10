@@ -10,10 +10,10 @@ converter = StringEnumerator("Datasets/Real/Multiplexer11.csv","class")
 headers, classLabel, dataFeatures,dataPhenotypes = converter.getParams()
 
 clf = eLCS(learningIterations=5000,doSubsumption=True)
-clf.fit(dataFeatures,dataPhenotypes)
-print(clf.score(dataFeatures,dataPhenotypes))
-clf.printPopSet()
-#print(np.mean(cross_val_score(clf,dataFeatures,dataPhenotypes)))
+#clf.fit(dataFeatures,dataPhenotypes)
+#print(clf.score(dataFeatures,dataPhenotypes))
+#clf.printPopSet()
+print(np.mean(cross_val_score(clf,dataFeatures,dataPhenotypes)))
 
 # clf.fit(dataFeatures,dataPhenotypes)
 #

@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Old/oldMain.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Test_eLCS.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/Classifier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClassifierSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/ClassifierSet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OfflineEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/OfflineEnvironment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Old/Classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/Old/Classifier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Old/ClassifierSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/Old/ClassifierSet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Old/DataManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/Old/DataManagement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Old/OfflineEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Old/OfflineEnvironment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Old/eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/Old/eLCS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Old/oldMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/Old/oldMain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/eLCS.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -26,7 +18,7 @@
     <window id="8">
       <content type="file-editors">
         <state>
-          <leaf>
+          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
             <file pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/Old/Classifier.py">
                 <provider selected="true" editor-type-id="text-editor">
@@ -39,7 +31,7 @@
             <file pinned="false" current-in-tab="false">
               <entry file="file://$PROJECT_DIR$/Old/ClassifierSet.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="16">
+                  <state relative-caret-position="1125">
                     <caret line="75" column="51" selection-start-line="75" selection-start-column="51" selection-end-line="75" selection-end-column="51" />
                   </state>
                 </provider>
@@ -55,11 +47,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Old/oldMain.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="300">
+              <caret line="20" column="32" lean-forward="true" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -70,23 +62,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/eLCS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="52" column="30" lean-forward="true" selection-start-line="52" selection-start-column="30" selection-end-line="52" selection-end-column="30" />
+            <state relative-caret-position="142">
+              <caret line="215" column="24" lean-forward="true" selection-start-line="215" selection-start-column="24" selection-end-line="215" selection-end-column="24" />
               <folding>
                 <element signature="e#0#49#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-                <marker date="1578681706826" expanded="true" signature="652:967" ph="..." />
               </folding>
             </state>
           </provider>
@@ -105,25 +84,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Classifier.py">
+        <entry file="file://$PROJECT_DIR$/Old/OfflineEnvironment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="81" column="74" selection-start-line="81" selection-start-column="62" selection-end-line="81" selection-end-column="74" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Old/eLCS.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3250">
-              <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
-              <folding>
-                <element signature="e#266#315#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="45">
+              <caret line="3" column="25" lean-forward="true" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -131,8 +95,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="143" column="36" lean-forward="true" selection-start-line="143" selection-start-column="36" selection-end-line="143" selection-end-column="36" />
+            <state relative-caret-position="90">
+              <caret line="6" column="50" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="50" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -141,31 +105,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/OfflineEnvironment.py">
+        <entry file="file://$PROJECT_DIR$/Classifier.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="28" column="34" lean-forward="true" selection-start-line="28" selection-start-column="34" selection-end-line="28" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Old/DataManagement.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="522">
-              <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
+            <state relative-caret-position="1155">
+              <caret line="81" column="74" selection-start-line="81" selection-start-column="62" selection-end-line="81" selection-end-column="74" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Old/OfflineEnvironment.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="26" lean-forward="true" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -181,7 +127,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>iterst</find>
       <find>coverin</find>
       <find>uniform</find>
       <find>updateex</find>
@@ -209,8 +154,9 @@
       <find>updateset</find>
       <find>match</find>
       <find>equal</find>
-      <find>infodiscrete</find>
       <find>updates</find>
+      <find>infodiscrete</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -230,20 +176,20 @@
         <option value="$PROJECT_DIR$/Old/OfflineEnvironment.py" />
         <option value="$PROJECT_DIR$/Old/DataManagement.py" />
         <option value="$PROJECT_DIR$/Old/Classifier.py" />
-        <option value="$PROJECT_DIR$/Old/oldMain.py" />
         <option value="$PROJECT_DIR$/Old/ClassifierSet.py" />
         <option value="$PROJECT_DIR$/Classifier.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/ClassifierSet.py" />
         <option value="$PROJECT_DIR$/OfflineEnvironment.py" />
-        <option value="$PROJECT_DIR$/eLCS.py" />
+        <option value="$PROJECT_DIR$/Old/oldMain.py" />
         <option value="$PROJECT_DIR$/Old/eLCS.py" />
+        <option value="$PROJECT_DIR$/eLCS.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="37" />
-    <option name="y" value="522" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="375" />
+    <option name="y" value="23" />
     <option name="width" value="1624" />
     <option name="height" value="961" />
   </component>
@@ -268,6 +214,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -275,16 +222,10 @@
               <item name="Scikit" type="b2602c69:ProjectViewProjectNode" />
               <item name="Scikit" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Scikit" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Scikit" type="462c0819:PsiDirectoryNode" />
-              <item name="Old" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -310,7 +251,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.oldMain">
+  <component name="RunManager" selected="Python.main">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="Scikit" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -439,7 +380,8 @@
       <workItem from="1576848381403" duration="3458000" />
       <workItem from="1577921544525" duration="345000" />
       <workItem from="1578492813148" duration="1612000" />
-      <workItem from="1578593869756" duration="31519000" />
+      <workItem from="1578593869756" duration="32352000" />
+      <workItem from="1578684639610" duration="1918000" />
     </task>
     <servers />
   </component>
@@ -476,13 +418,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="270125000" />
+    <option name="totallyTimeSpent" value="272876000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="37" y="522" width="1624" height="961" extended-state="1" />
+    <frame x="375" y="23" width="1624" height="961" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15992415" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16182049" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -495,7 +437,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Python Console" order="10" visible="true" weight="0.18296893" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="10" visible="true" weight="0.41887227" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -636,10 +578,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Old/ClassifierSet.py">
+    <entry file="file://$PROJECT_DIR$/OfflineEnvironment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16">
-          <caret line="75" column="51" selection-start-line="75" selection-start-column="51" selection-end-line="75" selection-end-column="51" />
+        <state relative-caret-position="420">
+          <caret line="28" column="34" lean-forward="true" selection-start-line="28" selection-start-column="34" selection-end-line="28" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classifier.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1155">
+          <caret line="81" column="74" selection-start-line="81" selection-start-column="62" selection-end-line="81" selection-end-column="74" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -647,6 +599,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="271">
           <caret line="68" column="38" lean-forward="true" selection-start-line="68" selection-start-column="38" selection-end-line="68" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Old/ClassifierSet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1125">
+          <caret line="75" column="51" selection-start-line="75" selection-start-column="51" selection-end-line="75" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Old/oldMain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -660,20 +629,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Classifier.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="81" column="74" selection-start-line="81" selection-start-column="62" selection-end-line="81" selection-end-column="74" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Old/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
+        <state relative-caret-position="366">
+          <caret line="139" lean-forward="true" selection-start-line="139" selection-end-line="139" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -682,32 +641,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Old/OfflineEnvironment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="26" lean-forward="true" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+        <state relative-caret-position="45">
+          <caret line="3" column="25" lean-forward="true" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="143" column="36" lean-forward="true" selection-start-line="143" selection-start-column="36" selection-end-line="143" selection-end-column="36" />
+        <state relative-caret-position="90">
+          <caret line="6" column="50" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="50" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/OfflineEnvironment.py">
+    <entry file="file://$PROJECT_DIR$/Old/eLCS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="34" lean-forward="true" selection-start-line="28" selection-start-column="34" selection-end-line="28" selection-end-column="34" />
+        <state relative-caret-position="5032">
+          <caret line="499" lean-forward="true" selection-start-line="499" selection-end-line="499" />
+          <folding>
+            <element signature="e#266#315#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/eLCS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="52" column="30" lean-forward="true" selection-start-line="52" selection-start-column="30" selection-end-line="52" selection-end-column="30" />
+        <state relative-caret-position="142">
+          <caret line="215" column="24" lean-forward="true" selection-start-line="215" selection-start-column="24" selection-end-line="215" selection-end-column="24" />
           <folding>
             <element signature="e#0#49#0" expanded="true" />
           </folding>
@@ -716,31 +678,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
+        <state relative-caret-position="300">
+          <caret line="20" column="32" lean-forward="true" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
-            <marker date="1578681706826" expanded="true" signature="652:967" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Old/oldMain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Old/eLCS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3250">
-          <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
-          <folding>
-            <element signature="e#266#315#0" expanded="true" />
           </folding>
         </state>
       </provider>

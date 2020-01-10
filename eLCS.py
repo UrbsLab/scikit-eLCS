@@ -215,9 +215,8 @@ class eLCS(BaseEstimator):
 
     def score(self,X,y):
         predList = self.predict(X)
-        print(predList)
+        print(predList.size)
         return accuracy_score(predList,y) #Make it balanced accuracy
-
 
     def transform(self, X):
         """Not needed for eLCS"""

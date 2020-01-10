@@ -190,7 +190,6 @@ class eLCS(BaseEstimator):
 
     def score(self,X,y):
         predList = self.predict(X)
-        print(predList)
         return accuracy_score(predList, y)  # Make it balanced accuracy
         #return self.popStatObjs[self.popStatObjs.size-1].trainingAccuracy
 
