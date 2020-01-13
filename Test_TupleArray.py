@@ -2,6 +2,16 @@ import unittest
 import numpy as np
 from DynamicNPArray import TupleArray
 
+class Arb(): #Test Object
+    def __init__(self,num):
+        self.num = 5
+
+    def __eq__(self, other):
+        if not isinstance(other,Arb):
+            return False
+
+        return other.num == self.num
+
 class TestTupleArray(unittest.TestCase):
 
     def testEmpty1DInit(self):
@@ -63,6 +73,52 @@ class TestTupleArray(unittest.TestCase):
         self.assertTrue(np.array_equal(np.array([[2],[3],[4]]), t.getArray()))
         self.assertEqual(2, t.lastIndex)
 
+    def testEmptyObjInit(self):
+        t = TupleArray(k=1,dtype=Arb)
+        self.assertTrue(np.array_equal(np.array([[None], [None], [None], [None], [None], [None], [None], [None]]), t.a))
+        self.assertTrue(np.array_equal(np.array([]), t.getArray()))
+        self.assertEqual(-1, t.lastIndex)
+        self.assertEqual(0, t.size())
+
+    def testSmall1DObjInit(self):
+        t = TupleArray(np.array([Arb(2),Arb(3),Arb(6),Arb(5)]))
+        c = np.array([[Arb(2)],[Arb(3)],[Arb(6)],[Arb(5)],[None],[None],[None],[None]])
+        self.assertTrue(np.array_equal(c,t.a))
+        self.assertTrue(np.array_equal(np.array([Arb(2),Arb(3),Arb(6),Arb(5)]),t.getArray()))
+        self.assertEqual(3, t.lastIndex)
+        self.assertEqual(4, t.size())
+
+    def testLarge1DObjInit(self):
+        t = TupleArray(np.array([Arb(2),Arb(3),Arb(6),Arb(5),Arb(6)]),minSize=4)
+        c = np.array([[Arb(2)],[Arb(3)],[Arb(6)],[Arb(5)],[Arb(6)],[None],[None],[None]])
+        self.assertTrue(np.array_equal(c,t.a))
+        self.assertTrue(np.array_equal(np.array([Arb(2),Arb(3),Arb(6),Arb(5),Arb(6)]),t.getArray()))
+        self.assertEqual(4, t.lastIndex)
+        self.assertEqual(5, t.size())
+
+    def testEmptyObj2DInit(self):
+        t = TupleArray(k=2,dtype=Arb,minSize=4)
+        self.assertTrue(np.array_equal(np.array([[None,None], [None,None], [None,None], [None,None]]), t.a))
+        self.assertTrue(np.array_equal(np.array([]), t.getArray()))
+        self.assertEqual(-1, t.lastIndex)
+        self.assertEqual(0, t.size())
+
+    def testSmall2DObjInit(self):
+        t = TupleArray(np.array([[Arb(2),Arb(1)],[Arb(3),Arb(0)],[Arb(6),Arb(7)],[Arb(5),Arb(70)]]))
+        c = np.array([[Arb(2),Arb(1)],[Arb(3),Arb(0)],[Arb(6),Arb(7)],[Arb(5),Arb(70)],[None,None], [None,None], [None,None], [None,None]])
+        self.assertTrue(np.array_equal(c,t.a))
+        self.assertTrue(np.array_equal(np.array([[Arb(2),Arb(1)],[Arb(3),Arb(0)],[Arb(6),Arb(7)],[Arb(5),Arb(70)]]),t.getArray()))
+        self.assertEqual(3, t.lastIndex)
+        self.assertEqual(8, t.size())
+
+    def testLarge2DObjInit(self):
+        t = TupleArray(np.array([[Arb(2), Arb(1)], [Arb(3), Arb(0)], [Arb(6), Arb(7)], [Arb(5), Arb(70)],[Arb(30),Arb(20)]]),minSize=4)
+        c = np.array([[Arb(2), Arb(1)], [Arb(3), Arb(0)], [Arb(6), Arb(7)], [Arb(5), Arb(70)],[Arb(30),Arb(20)], [None, None],[None, None], [None, None]])
+        self.assertTrue(np.array_equal(c, t.a))
+        self.assertTrue(np.array_equal(np.array([[Arb(2), Arb(1)], [Arb(3), Arb(0)], [Arb(6), Arb(7)], [Arb(5), Arb(70)],[Arb(30),Arb(20)]]),t.getArray()))
+        self.assertEqual(4, t.lastIndex)
+        self.assertEqual(10, t.size())
+
     def testInvalidInput(self):
         with self.assertRaises(Exception) as context:
             t = TupleArray(3)
@@ -92,6 +148,26 @@ class TestTupleArray(unittest.TestCase):
             t = TupleArray()
 
         self.assertTrue("Must specify valid dimension if you init w/ empty array" in str(context.exception))
+
+    def testInvalidInput6(self):
+        with self.assertRaises(Exception) as context:
+            t = TupleArray(np.array([[]]))
+
+        self.assertTrue("Invalid input array: must be ndarray and have dimension <= 2" in str(context.exception))
+
+    def testInvalidInput7(self):
+        with self.assertRaises(Exception) as context:
+            t = TupleArray(np.array([[],[]]))
+
+        self.assertTrue("Invalid input array: must be ndarray and have dimension <= 2" in str(context.exception))
+
+    def testInvalidInput8(self):
+        with self.assertRaises(Exception) as context:
+            n = np.array([[2,3]])
+            n = np.delete(n,0,axis=0)
+            t = TupleArray(n)
+
+        self.assertTrue("Invalid input array: must be ndarray and have dimension <= 2" in str(context.exception))
 
     ####################################################################################################################
     def test1DAppendAndRemoveLast(self):

@@ -17,16 +17,17 @@ class TupleArray():
     implemented (see the commented out attempt below). Issues w/ the necessary 0s concatenation prevent n-dimensional
     mutability at the moment.
     '''
-    def __init__(self,a=np.array([]),minSize = 8,k = np.nan):
+    def __init__(self,a=np.array([]),minSize = 8,k = np.nan, dtype = np.float64):
         '''
         :param a: This can either be a shape (n,) ndarray, or a shape (n,k) ndarray. The (n,) will be transformed to a
                   (n,1) array for operations
         :param minSize: minimum size of n in terms of memory allocated
         :param k: explicit setting of dimension (only used and mandatory if array is initialized empty)
+        :param dtype: explicit setting of array dtype (only used if array is initialized empty)
         '''
 
         self.minSize = minSize
-        if not(isinstance(a,np.ndarray) and len(a.shape) <= 2):
+        if not(isinstance(a,np.ndarray) and len(a.shape) <= 2) or (len(a.shape) == 2 and (a.shape[1] == 0 or a.shape[0] == 0)):
             raise Exception("Invalid input array: must be ndarray and have dimension <= 2")
 
         if len(a.shape) == 1 and not(np.array_equal(a,np.array([]))):
@@ -44,15 +45,25 @@ class TupleArray():
                 raise Exception("Must specify valid dimension if you init w/ empty array")
             else:
                 self.k = k
+
+            if np.issubdtype(dtype, np.number):
+                self.emptyPrefix = 0
+            else:
+                self.emptyPrefix = None
         else:
             self.k = a.shape[1]
+            if np.issubdtype(a.dtype, np.number):
+                self.emptyPrefix = 0
+            else:
+                self.emptyPrefix = None
+
 
         self.lastIndex = a.shape[0]-1
         upperBound = self.minSize
         while (self.lastIndex + 1 > upperBound):
             upperBound *= 2
 
-        empty = np.zeros((upperBound-self.lastIndex-1,self.k))
+        empty = np.full((upperBound-self.lastIndex-1,self.k),self.emptyPrefix)
         if np.array_equal(a,np.array([])):
             self.a = empty
         else:
@@ -60,7 +71,7 @@ class TupleArray():
 
     def append(self,value):
         if self.lastIndex == self.a.shape[0] - 1:
-            empty = np.zeros(self.a.shape)
+            empty = np.full(self.a.shape,self.emptyPrefix)
             self.a = np.concatenate((self.a,empty,),axis=0)
         self.lastIndex+=1
         self.a[self.lastIndex] = value
@@ -76,7 +87,7 @@ class TupleArray():
         if (index < 0 or index > self.lastIndex):
             raise Exception('Index out of bounds')
 
-        self.a = np.concatenate((self.a[0:index], self.a[index + 1:self.a.shape[0]], [np.array([0]*self.k)]), axis=0)
+        self.a = np.concatenate((self.a[0:index], self.a[index + 1:self.a.shape[0]], [np.array([self.emptyPrefix]*self.k)]), axis=0)
 
         self.lastIndex -= 1
         if self.lastIndex + 1 <= self.a.shape[0] / 2 and self.a.shape[0] > self.minSize:
