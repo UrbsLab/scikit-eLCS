@@ -45,6 +45,7 @@ class eLCS(BaseEstimator,ClassifierMixin):
         self.randomSeed = randomSeed
 
         ##Debugging Tools
+        self.iterationTrackingObjs = np.array([])
         self.printPSet = False
         self.printMSet = False
         self.printCSet = False
@@ -237,6 +238,7 @@ class eLCS(BaseEstimator,ClassifierMixin):
 
     ##Helper Functions
     def runIteration(self,state_phenotype,exploreIter):
+        iterTrack = IterationTrackingObj()
         if self.printMisc:
             print("ITERATION:"+str(self.explorIter))
             print("Data Instance:" ,end=" ")
@@ -245,18 +247,25 @@ class eLCS(BaseEstimator,ClassifierMixin):
             print(" w/ Phenotype: ",state_phenotype[1])
         if self.printPopSize:
             #print("Population Set Size: "+str(self.population.popSet.size))
+            iterTrack.macroPopSize = self.population.popSet.size
             print(self.population.popSet.size)
         if self.printSubCount:
+            iterTrack.subsumptionCount = self.subsumptionCounter
             print(self.subsumptionCounter)
         if self.printMicroPopSize:
+            iterTrack.microPopSize = self.population.microPopSize
             print(self.population.microPopSize)
         if self.printCovering:
+            iterTrack.coveringCount = self.coveringCounter
             print(self.coveringCounter)
         if self.printCrossOver:
+            iterTrack.crossOverCount = self.crossOverCounter
             print(self.crossOverCounter)
         if self.printMutation:
+            iterTrack.mutationCount = self.mutationCounter
             print(self.mutationCounter)
         if self.printGACount:
+            iterTrack.GACount = self.gaCounter
             print(self.gaCounter)
 
         #Print [P]
@@ -304,9 +313,11 @@ class eLCS(BaseEstimator,ClassifierMixin):
 
         if self.printCSize:
             print(self.population.correctSet.size)
+            iterTrack.correctSetSize = self.population.correctSet.size
 
         if self.printMSize:
             print(self.population.matchSet.size)
+            iterTrack.matchSetSize = self.population.matchSet.size
 
         #Update Parameters
         self.population.updateSets(self,exploreIter)
@@ -320,8 +331,10 @@ class eLCS(BaseEstimator,ClassifierMixin):
         if self.printIterStampAvg:
             if self.population.correctSet.size >= 1:
                 print(self.population.getIterStampAverage()-exploreIter)
+                iterTrack.iterStampAvg = self.population.getIterStampAverage()-exploreIter
             else:
                 print(0)
+                iterTrack.iterStampAvg = 0
 
         #Perform GA
         self.population.runGA(self,exploreIter,state_phenotype[0],state_phenotype[1])
@@ -334,6 +347,9 @@ class eLCS(BaseEstimator,ClassifierMixin):
 
         if self.printMisc:
             print("________________________________________")
+
+        if self.evalWhileFit:
+            self.iterationTrackingObjs = np.append(self.iterationTrackingObjs,iterTrack)
 
     def doPopEvaluation(self):
         noMatch = 0  # How often does the population fail to have a classifier that matches an instance in the data.
@@ -515,3 +531,16 @@ class PopStatObj():
         self.attributeAccList = copy.deepcopy(pop.attributeAccList)
         self.times = copy.deepcopy(elcs.timer.reportTimes())
         self.correct = copy.deepcopy(correct)
+
+class IterationTrackingObj():
+    def __init__(self):
+        self.macroPopSize = 0
+        self.subsumptionCount = 0
+        self.microPopSize = 0
+        self.crossOverCount = 0
+        self.mutationCount = 0
+        self.coveringCount = 0
+        self.GACount = 0
+        self.iterStampAvg = 0
+        self.correctSetSize = 0
+        self.matchSetSize = 0
