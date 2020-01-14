@@ -1,7 +1,15 @@
 
 import numpy as np
 
-class TupleArray():
+class ArrayFactory():
+    def createArray(a=np.array([]),minSize = 8, k = np.nan, dtype =  np.float64):
+        return TupleArray(a,minSize=minSize,k=k,dtype=dtype)
+
+class GenericArray():
+    def __init__(self):
+        pass
+
+class TupleArray(GenericArray):
     '''
     A TupleArray is a data structure that can be thought of as a 2D array, where axis = 0 is mutable in size, and
     axis = 1 is immutable in size.
@@ -10,7 +18,7 @@ class TupleArray():
     of an ndarray, but the fast size mutability of a python list (in one direction).
 
     For example, a user may want to store an expanding list of 5 specific numeric attributes. In the context of eLCS,
-    TupleArrays can be widely used in the storage of rules and the dataset itself.
+    TupleArrays can be widely used in the storage of rules.
 
     Aspirationally, this structure can be extended to support fast mutability in multiple axis. If this is made possible,
     the structure can conceivably be used as a universal replacement for ndarrays. However, this is currently not
@@ -116,39 +124,92 @@ class TupleArray():
         else:
             return (self.lastIndex+1,self.k)
 
-class DynamicNPArray():
+    def getI(self,x,y=0):
+        return self.a[x,y]
 
-    def __init__(self,a=np.array([])):
+    def setI(self,x,y=0,value=0):
+        self.a[x,y] = value
+
+    def setRowI(self,x,value=0): #value must be an np array
+        self.a[x] = value
+
+    def getRowI(self,x):
+        return self.a[x]
+
+class ListArray(GenericArray):
+
+    def __init__(self,a=np.array([]),minSize = 8, k = np.nan, dtype = np.float64):
+        '''
+        :param a: This can either be a shape (n,) ndarray, or a shape (n,k) ndarray. The (n,) will be transformed to a (n,1) array for operations
+        :param minSize: unnecessary, but existent to maintain interface
+        :param k: explicit setting of dimension (only used and mandatory if array is initialized empty)
+        :param dtype: unnecessary, but existent to maintain interface
+        '''
+
+        if not(isinstance(a,np.ndarray) and len(a.shape) <= 2) or (len(a.shape) == 2 and (a.shape[1] == 0 or a.shape[0] == 0)):
+            raise Exception("Invalid input array: must be ndarray and have dimension <= 2")
+
+        if len(a.shape) == 1 and not(np.array_equal(a,np.array([]))):
+            self.transposed = True
+            a = np.transpose([a]) #Enforce uniform shape of (n,k) for all inputs
+        elif np.array_equal(a,np.array([])) and k == 1:
+            self.transposed = True
+        else:
+            self.transposed = False
+
+        if np.array_equal(a,np.array([])):
+            if k < 1 or np.isnan(k):
+                raise Exception("Must specify valid dimension if you init w/ empty array")
+            else:
+                self.k = k
+        else:
+            self.k = a.shape[1]
+
         self.a = a.tolist()
-        self.shape = list(a.shape)
 
     def append(self,value): #currently only supports 1D and 2D arrays along axis 0
-        if isinstance(value,np.ndarray):
-            self.a.append(value.tolist()) #Assumes type is valid
+
+        if self.k==1:
+            self.a.append([value])
         else:
-            self.a.append(value)
-        self.shape[0]+=1
+            if not (isinstance(value, np.ndarray)):
+                raise Exception("Must be an nd array")
+            self.a.append(value.tolist())
 
     def removeLast(self):
         self.a.pop()
-        self.shape[0]-=1
 
     def removeAtIndex(self,index):
         del self.a[index]
-        self.shape[0] -= 1
 
     def removeFirstElementWithValue(self,value):
-        self.a.remove(value)
-        self.shape[0] -= 1
+        if self.k != 1:
+            raise Exception("This method is only useable for 1D arrays")
+        self.a.remove([value])
 
-    def array(self):
-        return np.array(self.a)
+    def getArray(self):
+        if (self.transposed and self.a != []):
+            return np.transpose(np.array(self.a))[0]
+        else:
+            return np.array(self.a)
 
     def shape(self):
-        return tuple(self.shape)
+        return tuple(len(self.a),self.k)
 
     def size(self):
-        return np.prod(self.shape)
+        return len(self.a)*self.k
+
+    def getI(self, x, y=0):
+        return self.a[x][y]
+
+    def setI(self, x, y=0, value=0):
+        self.a[x][y] = value
+
+    def setRowI(self,x,value=0): #value must be an np array
+        self.a[x] = value.tolist()
+
+    def getRowI(self,x):
+        return np.array(self.a[x])
 
 """
 class DynamicNPArray():

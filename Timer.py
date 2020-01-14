@@ -92,11 +92,11 @@ class Timer:
         return self.globalTime / 60.0
 
     def reportTimes(self):
-        outputTime = {"Global Time":str(self.globalTime / 60.0),
-                     "Matching Time":str(self.globalMatching / 60.0),
-                     "Deletion Time":str(self.globalDeletion / 60.0),
-                     "Subsumption Time":str(self.globalSubsumption / 60.0),
-                     "Selection Time":str(self.globalSelection / 60.0),
-                     "Evaluation Time":str(self.globalEvaluation / 60.0)}
+        outputTime = {"Global Time":str(self.globalTime),
+                     "Matching Time":str(self.globalMatching),
+                     "Deletion Time":str(self.globalDeletion),
+                     "Subsumption Time":str(self.globalSubsumption),
+                     "Selection Time":str(self.globalSelection),
+                     "Evaluation Time":str(self.globalEvaluation)}
 
         return outputTime

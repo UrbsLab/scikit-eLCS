@@ -1,5 +1,5 @@
 from DataManagement import *
-from DynamicNPArray import TupleArray
+from DynamicNPArray import ArrayFactory
 
 class OfflineEnvironment:
     def __init__(self,features,phenotypes,eLCS):
@@ -8,7 +8,7 @@ class OfflineEnvironment:
         self.storeDataRef = 0
         self.formatData = DataManagement(features,phenotypes,eLCS)
 
-        self.currentTrainState = TupleArray(self.formatData.trainFormatted.getArray()[self.dataRef][:-1])
+        self.currentTrainState = ArrayFactory.createArray(self.formatData.trainFormatted.getArray()[self.dataRef][:-1])
         self.currentTrainPhenotype = self.formatData.trainFormatted.getArray()[self.dataRef,self.formatData.numAttributes]
 
     def getTrainInstance(self):
@@ -17,14 +17,14 @@ class OfflineEnvironment:
     def newInstance(self):
         if self.dataRef < self.formatData.numTrainInstances-1:
             self.dataRef+=1
-            self.currentTrainState = TupleArray(self.formatData.trainFormatted.getArray()[self.dataRef][:-1])
+            self.currentTrainState = ArrayFactory.createArray(self.formatData.trainFormatted.getArray()[self.dataRef][:-1])
             self.currentTrainPhenotype = self.formatData.trainFormatted.getArray()[self.dataRef,self.formatData.numAttributes]
         else:
             self.resetDataRef()
 
     def resetDataRef(self):
         self.dataRef = 0
-        self.currentTrainState = TupleArray(self.formatData.trainFormatted.getArray()[self.dataRef][:-1])
+        self.currentTrainState = ArrayFactory.createArray(self.formatData.trainFormatted.getArray()[self.dataRef][:-1])
         self.currentTrainPhenotype = self.formatData.trainFormatted.getArray()[self.dataRef,self.formatData.numAttributes]
 
     def startEvaluationMode(self):
