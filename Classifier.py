@@ -8,10 +8,10 @@ from DynamicNPArray import ArrayFactory, GenericArray
 class Classifier():
     def __init__(self,elcs,a=None,b=None,c=None,d=None):
         #Major Parameters
-        self.specifiedAttList = ArrayFactory.createArray(k=1,minSize=elcs.env.formatData.numAttributes)
-        self.conditionType = ArrayFactory.createArray(k=1,minSize=elcs.env.formatData.numAttributes) #0 for discrete, 1 for continuous
-        self.conditionDiscrete = ArrayFactory.createArray(k=1,minSize=elcs.env.formatData.numAttributes) #discrete values
-        self.conditionContinuous = ArrayFactory.createArray(k=2,minSize=elcs.env.formatData.numAttributes) #continouous values
+        self.specifiedAttList = []
+        self.conditionType = [] #0 for discrete, 1 for continuous
+        self.conditionDiscrete = [] #discrete values
+        self.conditionContinuous = [] #continouous values
         self.phenotype = None #arbitrary
 
         self.fitness = elcs.init_fit
@@ -28,7 +28,7 @@ class Classifier():
         self.matchCount = 0  # Known in many LCS implementations as experience i.e. the total number of times this classifier was in a match set
         self.correctCount = 0  # The total number of times this classifier was in a correct set
 
-        if isinstance(c, GenericArray):
+        if isinstance(c, np.ndarray):
             self.classifierCovering(elcs, a, b, c, d)
         elif isinstance(a, Classifier):
             self.classifierCopy(a, b)
@@ -50,15 +50,15 @@ class Classifier():
         # CONTINUOUS PHENOTYPE
         # -------------------------------------------------------
         else:
-            phenotypeRange = dataInfo.phenotypeList.getI(1) - dataInfo.phenotypeList.getI(0)
+            phenotypeRange = dataInfo.phenotypeList[1] - dataInfo.phenotypeList[0]
             rangeRadius = random.randint(25,75) * 0.01 * phenotypeRange / 2.0  # Continuous initialization domain radius.
             Low = float(phenotype) - rangeRadius
             High = float(phenotype) + rangeRadius
-            self.phenotype = ArrayFactory.createArray(np.array([Low, High]))
+            self.phenotype = [Low, High]
 
-        while self.specifiedAttList.size() < 1:
-            for attRef in range(state.size()):
-                if random.random() < elcs.p_spec and not(np.isnan(state.getI(attRef))):
+        while len(self.specifiedAttList) < 1:
+            for attRef in range(state.size):
+                if random.random() < elcs.p_spec and not(np.isnan(state[attRef])):
                     # print("B",end="")
                     self.specifiedAttList.append(attRef)
                     self.buildMatch(elcs, attRef, state)  # Add classifierConditionElement
@@ -77,20 +77,20 @@ class Classifier():
         self.accuracy = toCopy.accuracy
 
     def buildMatch(self, elcs, attRef, state):
-        attributeInfoType = elcs.env.formatData.attributeInfoType.getI(attRef)
+        attributeInfoType = elcs.env.formatData.attributeInfoType[attRef]
         if not(attributeInfoType): #Discrete
-            attributeInfoValue = elcs.env.formatData.attributeInfoDiscrete.getI(attRef)
+            attributeInfoValue = elcs.env.formatData.attributeInfoDiscrete[attRef]
         else:
-            attributeInfoValue = elcs.env.formatData.attributeInfoContinuous.getI(attRef)
+            attributeInfoValue = elcs.env.formatData.attributeInfoContinuous[attRef]
 
         # Continuous attribute
         if attributeInfoType:
             attRange = attributeInfoValue[1] - attributeInfoValue[0]
             rangeRadius = random.randint(25, 75) * 0.01 * attRange / 2.0  # Continuous initialization domain radius.
-            ar = state.getI(attRef)
+            ar = state[attRef]
             Low = ar - rangeRadius
             High = ar + rangeRadius
-            condList = np.array([Low, High])
+            condList = [Low, High]
 
             self.conditionContinuous.append(condList)
             self.conditionDiscrete.append(np.nan)
@@ -98,58 +98,50 @@ class Classifier():
 
         # Discrete attribute
         else:
-            condList = state.getI(attRef)
+            condList = state[attRef]
 
-            self.conditionContinuous.append(np.array([np.nan,np.nan]))
+            self.conditionContinuous.append([np.nan,np.nan])
             self.conditionDiscrete.append(condList)
             self.conditionType.append(0)
 
     # Matching
     def match(self, state, elcs):
-        for i in range(self.conditionDiscrete.size()):
-            specifiedIndex = self.specifiedAttList.getI(i)
-            attributeInfoType = elcs.env.formatData.attributeInfoType.getI(specifiedIndex)
+        for i in range(len(self.conditionDiscrete)):
+            specifiedIndex = self.specifiedAttList[i]
+            attributeInfoType = elcs.env.formatData.attributeInfoType[specifiedIndex]
             if not (attributeInfoType):  # Discrete
-                attributeInfoValue = elcs.env.formatData.attributeInfoDiscrete.getI(specifiedIndex)
+                attributeInfoValue = elcs.env.formatData.attributeInfoDiscrete[specifiedIndex]
             else:
-                attributeInfoValue = elcs.env.formatData.attributeInfoContinuous.getI(specifiedIndex)
+                attributeInfoValue = elcs.env.formatData.attributeInfoContinuous[specifiedIndex]
 
             # Continuous
             if attributeInfoType:
-                instanceValue = state.getI(specifiedIndex)
+                instanceValue = state[specifiedIndex]
                 if np.isnan(instanceValue):
                     pass
-                elif self.conditionContinuous.getI(i,0) < instanceValue < self.conditionContinuous.getI(i,1):
+                elif self.conditionContinuous[i][0] < instanceValue < self.conditionContinuous[i][1]:
                     pass
                 else:
                     return False
 
             # Discrete
             else:
-                stateRep = state.getI(specifiedIndex)
-                if stateRep == self.conditionDiscrete.getI(i) or np.isnan(stateRep):
+                stateRep = state[specifiedIndex]
+                if stateRep == self.conditionDiscrete[i] or np.isnan(stateRep):
                     pass
                 else:
                     return False
         return True
 
     def equals(self, elcs, cl):
-        phenotypesMatch = False
-        if not elcs.env.formatData.discretePhenotype:
-            if (cl.phenotype.getArray() == self.phenotype.getArray()).all():
-                phenotypesMatch = True
-        else:
-            if cl.phenotype == self.phenotype:
-                phenotypesMatch = True
-
-        if phenotypesMatch and cl.specifiedAttList.size() == self.specifiedAttList.size():
-            clRefs = np.sort(cl.specifiedAttList.getArray())
-            selfRefs = np.sort(self.specifiedAttList.getArray())
-            if (clRefs == selfRefs).all():
-                for i in range(cl.specifiedAttList.size()):
-                    tempIndex = np.where(self.specifiedAttList.getArray() == cl.specifiedAttList.getI(i))[0][0]
-                    if not ((cl.conditionType.getI(i) == 1 and self.conditionType.geti(tempIndex) == 1 and cl.conditionContinuous.getI(i,0) == self.conditionContinuous.getI(tempIndex) and cl.conditionContinuous.getI(i,1) == self.conditionContinuous.getI(tempIndex,1)) or
-                            (cl.conditionType.getI(i) == 0 and self.conditionType.getI(tempIndex) == 0 and cl.conditionDiscrete.getI(i) == self.conditionDiscrete.getI(tempIndex))):
+        if cl.phenotype == self.phenotype and len(cl.specifiedAttList) == len(self.specifiedAttList):
+            clRefs = sorted(cl.specifiedAttList)
+            selfRefs = sorted(self.specifiedAttList)
+            if clRefs == selfRefs:
+                for i in range(len(cl.specifiedAttList)):
+                    tempIndex = self.specifiedAttList.index(cl.specifiedAttList[i])
+                    if not (cl.conditionType[i] == 1 and self.conditionType[tempIndex] == 1 and cl.conditionContinuous[i] == self.conditionContinuous[tempIndex] or
+                            (cl.conditionType[i] == 0 and self.conditionType[tempIndex] == 0 and cl.conditionDiscrete[i] == self.conditionDiscrete[tempIndex])):
                         return False
                 return True
         return False
@@ -181,14 +173,14 @@ class Classifier():
     def updateFitness(self, elcs):
         """ Update the fitness parameter. """
         if elcs.env.formatData.discretePhenotype or (
-                self.phenotype.getI(1) - self.phenotype.getI(0)) / elcs.env.formatData.phenotypeRange < 0.5:
+                self.phenotype[1] - self.phenotype[0]) / elcs.env.formatData.phenotypeRange < 0.5:
             self.fitness = pow(self.accuracy, elcs.nu)
         else:
-            if (self.phenotype.getI(1) - self.phenotype.getI(0)) >= elcs.env.formatData.phenotypeRange:
+            if (self.phenotype[1] - self.phenotype[0]) >= elcs.env.formatData.phenotypeRange:
                 self.fitness = 0.0
             else:
                 self.fitness = math.fabs(pow(self.accuracy, elcs.nu) - (
-                            self.phenotype.getI(1) - self.phenotype.getI(0)) / elcs.env.formatData.phenotypeRange)
+                            self.phenotype[1] - self.phenotype[0]) / elcs.env.formatData.phenotypeRange)
 
     def isSubsumer(self, elcs):
         if self.matchCount > elcs.theta_sub and self.accuracy > elcs.acc_sub:
@@ -196,19 +188,19 @@ class Classifier():
         return False
 
     def isMoreGeneral(self, cl, elcs):
-        if self.specifiedAttList.size() >= cl.specifiedAttList.size():
+        if len(self.specifiedAttList) >= len(cl.specifiedAttList):
             return False
-        for i in range(self.specifiedAttList.size()):
-            attributeInfoType = elcs.env.formatData.attributeInfoType.getI(self.specifiedAttList.getI(i))
-            if self.specifiedAttList.getI(i) not in cl.specifiedAttList.getArray():
+        for i in range(len(self.specifiedAttList)):
+            attributeInfoType = elcs.env.formatData.attributeInfoType[self.specifiedAttList[i]]
+            if self.specifiedAttList[i] not in cl.specifiedAttList:
                 return False
 
             # Continuous
             if attributeInfoType:
-                otherRef = np.where(cl.specifiedAttList.getArray() == self.specifiedAttList.getI(i))[0][0]
-                if self.conditionContinuous.getI(i,0) < cl.conditionContinuous.getI(otherRef,0):
+                otherRef = cl.specifiedAttList.index(self.specifiedAttList[i])
+                if self.conditionContinuous[i][0] < cl.conditionContinuous[otherRef][0]:
                     return False
-                if self.conditionContinuous.getI(i,1) > cl.conditionContinuous.getI(otherRef,1):
+                if self.conditionContinuous[i][1] > cl.conditionContinuous[otherRef][1]:
                     return False
         return True
 
@@ -216,107 +208,104 @@ class Classifier():
         if elcs.env.formatData.discretePhenotype or random.random() < 0.5:
             p_self_specifiedAttList = copy.deepcopy(self.specifiedAttList)
             p_cl_specifiedAttList = copy.deepcopy(cl.specifiedAttList)
-            pSelfList = p_self_specifiedAttList.getArray()
-            pClList = p_cl_specifiedAttList.getArray()
 
             # Make list of attribute references appearing in at least one of the parents.-----------------------------
-            comboAttList = ArrayFactory.createArray(k=1,minSize=elcs.env.formatData.numAttributes)
-            for i in pSelfList:
+            comboAttList = []
+            for i in p_self_specifiedAttList:
                 comboAttList.append(i)
-            for i in pClList:
-                if i not in comboAttList.getArray():
+            for i in p_cl_specifiedAttList:
+                if i not in comboAttList:
                     comboAttList.append(i)
-                elif not elcs.env.formatData.attributeInfoType.getI(i):
-                    index = np.where(comboAttList.getArray() == i)[0][0]
-                    comboAttList.removeAtIndex(index)
-            comboAttList = np.sort(comboAttList.getArray())
+                elif not elcs.env.formatData.attributeInfoType[i]:
+                    comboAttList.remove(i)
+            comboAttList.sort()
 
             changed = False
             for attRef in comboAttList:
-                attributeInfoType = elcs.env.formatData.attributeInfoType.getI(attRef)
+                attributeInfoType = elcs.env.formatData.attributeInfoType[attRef]
                 probability = 0.5
                 ref = 0
-                if attRef in pSelfList:
+                if attRef in p_self_specifiedAttList:
                     ref += 1
-                if attRef in pClList:
+                if attRef in p_cl_specifiedAttList:
                     ref += 1
 
                 if ref == 0:
                     pass
                 elif ref == 1:
-                    if attRef in pSelfList and random.random() > probability:
-                        i = np.where(self.specifiedAttList.getArray() == attRef)[0][0]
-                        cl.conditionType.append(self.conditionType.getI(i))
-                        cl.conditionDiscrete.append(self.conditionDiscrete.getI(i))
-                        cl.conditionContinuous.append(self.conditionContinuous.getRowI(i))
-                        self.conditionType.removeAtIndex(i)
-                        self.conditionDiscrete.removeAtIndex(i)
-                        self.conditionContinuous.removeAtIndex(i)
+                    if attRef in p_self_specifiedAttList and random.random() > probability:
+                        i = self.specifiedAttList.index(attRef)
+                        cl.conditionType.append(self.conditionType[i])
+                        cl.conditionDiscrete.append(self.conditionDiscrete[i])
+                        cl.conditionContinuous.append(self.conditionContinuous[i])
+                        del self.conditionType[i]
+                        del self.conditionDiscrete[i]
+                        del self.conditionContinuous[i]
 
                         cl.specifiedAttList.append(attRef)
-                        self.specifiedAttList.removeAtIndex(i)
+                        del self.specifiedAttList[i]
                         changed = True
 
-                    if attRef in pClList and random.random() < probability:
-                        i = np.where(cl.specifiedAttList.getArray() == attRef)[0][0]
-                        self.conditionType.append(cl.conditionType.getI(i))
-                        self.conditionDiscrete.append(cl.conditionDiscrete.getI(i))
-                        self.conditionContinuous.append(cl.conditionContinuous.getRowI(i))
-                        cl.conditionType.removeAtIndex(i)
-                        cl.conditionDiscrete.removeAtIndex(i)
-                        cl.conditionContinuous.removeAtIndex(i)
+                    if attRef in p_cl_specifiedAttList and random.random() < probability:
+                        i = cl.specifiedAttList.index(attRef)
+                        self.conditionType.append(cl.conditionType[i])
+                        self.conditionDiscrete.append(cl.conditionDiscrete[i])
+                        self.conditionContinuous.append(cl.conditionContinuous[i])
+                        del cl.conditionType[i]
+                        del cl.conditionDiscrete[i]
+                        del cl.conditionContinuous[i]
 
                         self.specifiedAttList.append(attRef)
-                        cl.specifiedAttList.removeAtIndex(i)
+                        del cl.specifiedAttList[i]
                         changed = True
                 else:
                     # Continuous Attribute
                     if attributeInfoType:
-                        i_cl1 = np.where(self.specifiedAttList.getArray() == attRef)[0][0]
-                        i_cl2 = np.where(cl.specifiedAttList.getArray() == attRef)[0][0]
+                        i_cl1 = self.specifiedAttList.index(attRef)
+                        i_cl2 = cl.specifiedAttList.index(attRef)
                         tempKey = random.randint(0, 3)
                         if tempKey == 0:
-                            temp = self.conditionContinuous.getI(i_cl1)
-                            self.conditionContinuous.setI(i_cl1,value=cl.conditionContinuous.getI(i_cl2))
-                            cl.conditionContinuous.setI(i_cl2,value=temp)
+                            temp = self.conditionContinuous[i_cl1][0]
+                            self.conditionContinuous[i_cl1][0] = cl.conditionContinuous[i_cl2][0]
+                            cl.conditionContinuous[i_cl2][0] = temp
                         elif tempKey == 1:
-                            temp = self.conditionContinuous.getI(i_cl1,1)
-                            self.conditionContinuous.setI(i_cl1,1,value=cl.conditionContinuous.getI(i_cl2,1))
-                            cl.conditionContinuous.setI(i_cl2,1,value=temp)
+                            temp = self.conditionContinuous[i_cl1][1]
+                            self.conditionContinuous[i_cl1][1] = cl.conditionContinuous[i_cl2][1]
+                            cl.conditionContinuous[i_cl2][1] = temp
                         else:
-                            allList = np.concatenate((self.conditionContinuous.getI(i_cl1), cl.conditionContinuous.getI(i_cl2)))
-                            newMin = np.amin(allList)
-                            newMax = np.amax(allList)
+                            allList = self.conditionContinuous[i_cl1].extend(cl.conditionContinuous[i_cl2])
+                            newMin = min(allList)
+                            newMax = max(allList)
                             if tempKey == 2:
-                                self.conditionContinuous.setI(i_cl1,value=np.array([newMin, newMax]))
-                                cl.conditionType.removeAtIndex(i_cl2)
-                                cl.conditionContinuous.removeAtIndex(i_cl2)
-                                cl.conditionDiscrete.removeAtIndex(i_cl2)
+                                self.conditionContinuous[i_cl1] = [newMin, newMax]
+                                del cl.conditionType[i_cl2]
+                                del cl.conditionContinuous[i_cl2]
+                                del cl.conditionDiscrete[i_cl2]
 
-                                cl.specifiedAttList.removeFirstElementWithValue(attRef)
+                                cl.specifiedAttList.remove(attRef)
                             else:
-                                cl.conditionContinuous.setI(i_cl2,value=np.array([newMin, newMax]))
-                                self.conditionType.removeAtIndex(i_cl1)
-                                self.conditionContinuous.removeAtIndex(i_cl1)
-                                self.conditionDiscrete.removeAtIndex(i_cl1)
+                                cl.conditionContinuous[i_cl2] = [newMin, newMax]
+                                del self.conditionType[i_cl1]
+                                del self.conditionContinuous[i_cl1]
+                                del self.conditionDiscrete[i_cl1]
 
-                                self.specifiedAttList.removeFirstElementWithValue(attRef)
+                                self.specifiedAttList.remove(attRef)
 
                     # Discrete Attribute
                     else:
                         pass
 
-            tempList1 = copy.deepcopy(p_self_specifiedAttList.getArray())
-            tempList2 = copy.deepcopy(cl.specifiedAttList.getArray())
-            tempList1 = np.sort(tempList1)
-            tempList2 = np.sort(tempList2)
+            tempList1 = copy.deepcopy(p_self_specifiedAttList)
+            tempList2 = copy.deepcopy(cl.specifiedAttList)
+            tempList1.sort()
+            tempList2.sort()
 
             # if changed:
             # print("CHANGED")
             # print(tempList1)
             # print(tempList2)
 
-            if changed and len(set(tempList1) & set(tempList2)) == tempList2.size:
+            if changed and len(set(tempList1) & set(tempList2)) == len(tempList2):
                 # print("PASS")
                 changed = False
 
@@ -326,19 +315,19 @@ class Classifier():
 
     def phenotypeCrossover(self, cl):
         changed = False
-        if (self.phenotype.getI(0) == cl.phenotype.getI(0) and self.phenotype.getI(1) == cl.phenotype.getI(1)):
+        if self.phenotype == cl.phenotype:
             return changed
         else:
             tempKey = random.random() < 0.5  # Make random choice between 4 scenarios, Swap minimums, Swap maximums, Children preserve parent phenotypes.
             if tempKey:  # Swap minimum
-                temp = self.phenotype.getI(0)
-                self.phenotype.setI(0,value=cl.phenotype.getI(0))
-                cl.phenotype.setI(0,value = temp)
+                temp = self.phenotype[0]
+                self.phenotype[0] = cl.phenotype[0]
+                cl.phenotype[0] = temp
                 changed = True
             elif tempKey:  # Swap maximum
-                temp = self.phenotype.getI(1)
-                self.phenotype.setI(1,value=cl.phenotype.getI(1))
-                cl.phenotype.setI(1,value = temp)
+                temp = self.phenotype[1]
+                self.phenotype[1] = cl.phenotype[1]
+                cl.phenotype[1] = temp
                 changed = True
 
         return changed
@@ -347,41 +336,41 @@ class Classifier():
         changed = False
         # Mutate Condition
         for attRef in range(elcs.env.formatData.numAttributes):
-            attributeInfoType = elcs.env.formatData.attributeInfoType.getI(attRef)
+            attributeInfoType = elcs.env.formatData.attributeInfoType[attRef]
             if not (attributeInfoType):  # Discrete
-                attributeInfoValue = elcs.env.formatData.attributeInfoDiscrete.getI(attRef)
+                attributeInfoValue = elcs.env.formatData.attributeInfoDiscrete[attRef]
             else:
-                attributeInfoValue = elcs.env.formatData.attributeInfoContinuous.getI(attRef)
+                attributeInfoValue = elcs.env.formatData.attributeInfoContinuous[attRef]
 
-            if random.random() < elcs.upsilon and not(np.isnan(state.getI(attRef))):
+            if random.random() < elcs.upsilon and not(np.isnan(state[attRef])):
                 # Mutation
-                if attRef not in self.specifiedAttList.getArray():
+                if attRef not in self.specifiedAttList:
                     self.specifiedAttList.append(attRef)
                     self.buildMatch(elcs, attRef, state)
                     changed = True
-                elif attRef in self.specifiedAttList.getArray():
-                    i = np.where(self.specifiedAttList.getArray() == attRef)[0][0]
+                elif attRef in self.specifiedAttList:
+                    i = self.specifiedAttList.index(attRef)
 
                     if not attributeInfoType or random.random() > 0.5:
-                        self.specifiedAttList.removeAtIndex(i)
-                        self.conditionType.removeAtIndex(i)
-                        self.conditionDiscrete.removeAtIndex(i)
-                        self.conditionContinuous.removeAtIndex(i)
+                        del self.specifiedAttList[i]
+                        del self.conditionType[i]
+                        del self.conditionDiscrete[i]
+                        del self.conditionContinuous[i]
                         changed = True
                     else:
                         attRange = float(attributeInfoValue[1]) - float(attributeInfoValue[0])
                         mutateRange = random.random() * 0.5 * attRange
                         if random.random() > 0.5:
                             if random.random() > 0.5:
-                                self.conditionContinuous.setI(i,0,value = self.conditionContinuous.getI(i,0)+mutateRange)
+                                self.conditionContinuous[i][0] += mutateRange
                             else:
-                                self.conditionContinuous.setI(i, 0,value=self.conditionContinuous.getI(i, 0) - mutateRange)
+                                self.conditionContinuous[i][0] -= mutateRange
                         else:
                             if random.random() > 0.5:
-                                self.conditionContinuous.setI(i,1,value = self.conditionContinuous.getI(i,1)+mutateRange)
+                                self.conditionContinuous[i][1] += mutateRange
                             else:
-                                self.conditionContinuous.setI(i, 1,value=self.conditionContinuous.getI(i, 1) - mutateRange)
-                        self.conditionContinuous.setRowI(i, np.sort(self.conditionContinuous.getRowI(i)))
+                                self.conditionContinuous[i][1] -= mutateRange
+                        self.conditionContinuous[i] = sorted(self.conditionContinuous[i])
                         changed = True
 
                 else:
@@ -400,9 +389,9 @@ class Classifier():
         changed = False
         if random.random() < elcs.upsilon:
             phenotypeList = copy.deepcopy(elcs.env.formatData.phenotypeList)
-            index = np.where(phenotypeList.getArray() == self.phenotype)[0][0]
-            phenotypeList.removeAtIndex(index)
-            newPhenotype = np.random.choice(phenotypeList.getArray())
+            index = phenotypeList.index(self.phenotype)
+            del phenotypeList[index]
+            newPhenotype = random.choice(phenotypeList)
             self.phenotype = newPhenotype
             changed = True
         return changed
@@ -410,32 +399,32 @@ class Classifier():
     def continuousPhenotypeMutation(self, elcs, phenotype):
         changed = False
         if random.random() < elcs.upsilon:
-            phenRange = self.phenotype.getI(1,0) - self.phenotype.getI(0,0)
+            phenRange = self.phenotype[1][0] - self.phenotype[0][0]
             mutateRange = random.random() * 0.5 * phenRange
             tempKey = random.randint(0,2)  # Make random choice between 3 scenarios, mutate minimums, mutate maximums, mutate both
             if tempKey == 0:  # Mutate minimum
-                if random.random() > 0.5 or self.phenotype.getI(0,0) + mutateRange <= phenotype:  # Checks that mutated range still contains current phenotype
-                    self.phenotype.setI(0,0,value=self.phenotype.getI(0,0) + mutateRange)
+                if random.random() > 0.5 or self.phenotype[0][0] + mutateRange <= phenotype:  # Checks that mutated range still contains current phenotype
+                    self.phenotype[0][0] += mutateRange
                 else:  # Subtract
-                    self.phenotype.setI(0,0,value=self.phenotype.getI(0,0) - mutateRange)
+                    self.phenotype[0][0] -= mutateRange
                 changed = True
             elif tempKey == 1:  # Mutate maximum
-                if random.random() > 0.5 or self.phenotype.getI(1,0) - mutateRange >= phenotype:  # Checks that mutated range still contains current phenotype
-                    self.phenotype.setI(1, 0, value=self.phenotype.getI(1, 0) - mutateRange)
+                if random.random() > 0.5 or self.phenotype[1][0] - mutateRange >= phenotype:  # Checks that mutated range still contains current phenotype
+                    self.phenotype[1][0] -= mutateRange
                 else:  # Subtract
-                    self.phenotype.setI(1, 0, value=self.phenotype.getI(1, 0) + mutateRange)
+                    self.phenotype[1][0] += mutateRange
                 changed = True
             else:  # mutate both
-                if random.random() > 0.5 or self.phenotype.a[0,0] + mutateRange <= phenotype:  # Checks that mutated range still contains current phenotype
-                    self.phenotype.setI(0,0,value=self.phenotype.getI(0,0)+mutateRange)
+                if random.random() > 0.5 or self.phenotype[0][0] + mutateRange <= phenotype:  # Checks that mutated range still contains current phenotype
+                    self.phenotype[0][0] += mutateRange
                 else:  # Subtract
-                    self.phenotype.setI(0, 0, value=self.phenotype.getI(0, 0) - mutateRange)
-                if random.random() > 0.5 or self.phenotype.getI(1,0) - mutateRange >= phenotype:  # Checks that mutated range still contains current phenotype
-                    self.phenotype.setI(1, 0, value=self.phenotype.getI(1, 0) - mutateRange)
+                    self.phenotype[0][0] -= mutateRange
+                if random.random() > 0.5 or self.phenotype[1][0] - mutateRange >= phenotype:  # Checks that mutated range still contains current phenotype
+                    self.phenotype[1][0] -= mutateRange
                 else:  # Subtract
-                    self.phenotype.setI(1, 0, value=self.phenotype.getI(1, 0) + mutateRange)
+                    self.phenotype[1][0] += mutateRange
                 changed = True
-            self.phenotype = ArrayFactory.createArray(np.sort(self.phenotype.getArray()))
+            self.phenotype.sort()
         return changed
 
     def updateTimeStamp(self, ts):
@@ -460,7 +449,7 @@ class Classifier():
 
         # Continuous Phenotype
         else:
-            if self.phenotype.getI(0,0) >= cl.phenotype.getI(0,0) and self.phenotype.getI(1,0) <= cl.phenotype.getI(1,0):
+            if self.phenotype[0][0] >= cl.phenotype[0][0] and self.phenotype[1][0] <= cl.phenotype[1][0]:
                 if self.isSubsumer(elcs) and self.isMoreGeneral(cl, elcs):
                     return True
                 return False

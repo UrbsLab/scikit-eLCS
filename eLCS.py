@@ -46,7 +46,7 @@ class eLCS(BaseEstimator,ClassifierMixin):
         self.randomSeed = randomSeed
 
         ##Debugging Tools
-        self.iterationTrackingObjs = ArrayFactory.createArray(k=1)
+        self.iterationTrackingObjs = []
         self.printPSet = False
         self.printMSet = False
         self.printCSet = False
@@ -110,8 +110,8 @@ class eLCS(BaseEstimator,ClassifierMixin):
                 raise Exception("At least 1 learning evaluation checkpoint must be below the number of learning iterations")
 
         self.timer = Timer()
-        self.trackingObjs = ArrayFactory.createArray(k=1)
-        self.popStatObjs = ArrayFactory.createArray(k=1)
+        self.trackingObjs = []
+        self.popStatObjs = []
 
         if self.randomSeed != "none":
             try:
@@ -201,13 +201,13 @@ class eLCS(BaseEstimator,ClassifierMixin):
 
         # ----------------------------------------------------------------------------------------------
         for inst in range(instances):
-            state = ArrayFactory.createArray(X[inst])
+            state = X[inst]
             self.population.makeEvalMatchSet(state, self)
             prediction = Prediction(self, self.population)
             phenotypeSelection = prediction.getDecision()
             if phenotypeSelection == None or phenotypeSelection == "Tie":
                 l = self.env.formatData.phenotypeList
-                phenotypeSelection = np.random.choice(l.getArray())
+                phenotypeSelection = random.choice(l)
             predList.append(phenotypeSelection) #What to do if None or Tie?
             self.population.clearSets(self)
         self.timer.stopTimeEvaluation()
@@ -243,12 +243,12 @@ class eLCS(BaseEstimator,ClassifierMixin):
             print("ITERATION:"+str(self.explorIter))
             print("Data Instance:" ,end=" ")
             for i in range(state_phenotype[0].size()):
-                print(state_phenotype[0].getI(i),end=" ")
+                print(state_phenotype[0][i],end=" ")
             print(" w/ Phenotype: ",state_phenotype[1])
         if self.printPopSize:
             #print("Population Set Size: "+str(self.population.popSet.size))
-            iterTrack.macroPopSize = self.population.popSet.size()
-            print(self.population.popSet.size())
+            iterTrack.macroPopSize = len(self.population.popSet)
+            print(len(self.population.popSet))
         if self.printSubCount:
             iterTrack.subsumptionCount = self.subsumptionCounter
             print(self.subsumptionCounter)
@@ -289,9 +289,9 @@ class eLCS(BaseEstimator,ClassifierMixin):
 
             if phenotypePrediction == None or phenotypePrediction == 'Tie':
                 if self.env.formatData.discretePhenotype:
-                    phenotypePrediction = random.choice(self.env.formatData.phenotypeList.getArray())
+                    phenotypePrediction = random.choice(self.env.formatData.phenotypeList)
                 else:
-                    phenotypePrediction = random.randrange(self.env.formatData.phenotypeList.getI(0),self.env.formatData.phenotypeList.getI(1),(self.env.formatData.phenotypeList.getI(1)-self.env.formatData.phenotypeList.getI(0))/float(1000))
+                    phenotypePrediction = random.randrange(self.env.formatData.phenotypeList[0],self.env.formatData.phenotypeList[1],(self.env.formatData.phenotypeList[1]-self.env.formatData.phenotypeList[0])/float(1000))
             else:
                 if self.env.formatData.discretePhenotype:
                     if phenotypePrediction == state_phenotype[1]:
@@ -300,7 +300,7 @@ class eLCS(BaseEstimator,ClassifierMixin):
                         self.correct[exploreIter%self.trackingFrequency] = 0
                 else:
                     predictionError = math.fabs(phenotypePrediction-float(state_phenotype[1]))
-                    phenotypeRange = self.env.formatData.phenotypeList.getI(1) - self.env.formatData.phenotypeList.getI(0)
+                    phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
                     accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
                     self.correct[exploreIter%self.trackingFrequency] = accuracyEstimate
 
@@ -314,12 +314,12 @@ class eLCS(BaseEstimator,ClassifierMixin):
             self.printCorrectSet()
 
         if self.printCSize:
-            print(self.population.correctSet.size())
-            iterTrack.correctSetSize = self.population.correctSet.size()
+            print(len(self.population.correctSet))
+            iterTrack.correctSetSize = len(self.population.correctSet)
 
         if self.printMSize:
-            print(self.population.matchSet.size())
-            iterTrack.matchSetSize = self.population.matchSet.size()
+            print(len(self.population.matchSet))
+            iterTrack.matchSetSize = len(self.population.matchSet)
 
         #Update Parameters
         self.population.updateSets(self,exploreIter)
@@ -331,7 +331,7 @@ class eLCS(BaseEstimator,ClassifierMixin):
             self.timer.stopTimeSubsumption()
 
         if self.printIterStampAvg:
-            if self.population.correctSet.size() >= 1:
+            if len(self.population.correctSet) >= 1:
                 iterTrack.iterStampAvg = self.population.getIterStampAverage()-exploreIter
             else:
                 iterTrack.iterStampAvg = 0
@@ -357,7 +357,7 @@ class eLCS(BaseEstimator,ClassifierMixin):
         noMatch = 0  # How often does the population fail to have a classifier that matches an instance in the data.
         tie = 0  # How often can the algorithm not make a decision between classes due to a tie.
         self.env.resetDataRef()  # Go to the first instance in dataset
-        phenotypeList = self.env.formatData.phenotypeList.getArray()
+        phenotypeList = self.env.formatData.phenotypeList
 
         classAccDict = {}
         for each in phenotypeList:
@@ -414,10 +414,10 @@ class eLCS(BaseEstimator,ClassifierMixin):
         instanceCoverage = 1.0 - predictionFail
         predictionMade = 1.0 - (predictionFail + predictionTies)
 
-        adjustedStandardAccuracy = (standardAccuracy * predictionMade) + ((1.0 - predictionMade) * (1.0 / float(phenotypeList.size)))
-        adjustedBalancedAccuracy = (balancedAccuracy * predictionMade) + ((1.0 - predictionMade) * (1.0 / float(phenotypeList.size)))
+        adjustedStandardAccuracy = (standardAccuracy * predictionMade) + ((1.0 - predictionMade) * (1.0 / float(len(phenotypeList))))
+        adjustedBalancedAccuracy = (balancedAccuracy * predictionMade) + ((1.0 - predictionMade) * (1.0 / float(len(phenotypeList))))
 
-        resultList = np.array([adjustedBalancedAccuracy,instanceCoverage])
+        resultList = [adjustedBalancedAccuracy,instanceCoverage]
         return resultList
 
     def doContPopEvaluation(self):
@@ -438,7 +438,7 @@ class eLCS(BaseEstimator,ClassifierMixin):
                 noMatch += 1
             else:
                 predictionError = math.fabs(float(phenotypePrediction) - float(state_phenotype[1]))
-                phenotypeRange = self.env.formatData.phenotypeList.getI(1) - self.env.formatData.phenotypeList.getI(0)
+                phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
                 accuracyEstimateSum += 1.0 - (predictionError / float(phenotypeRange))
 
             self.env.newInstance()  # next instance
@@ -454,24 +454,24 @@ class eLCS(BaseEstimator,ClassifierMixin):
         instanceCoverage = 1.0 - (float(noMatch) / float(instances))
         adjustedAccuracyEstimate = accuracyEstimateSum / float(instances)
 
-        resultList = np.array([adjustedAccuracyEstimate, instanceCoverage])
+        resultList = [adjustedAccuracyEstimate, instanceCoverage]
         return resultList
 
     def printClassifier(self,classifier):
         attributeCounter = 0
 
         for attribute in range(self.env.formatData.numAttributes):
-            if attribute in classifier.specifiedAttList.getArray():
-                specifiedLocation = np.where(classifier.specifiedAttList.getArray() == attribute)[0][0]
-                if self.env.formatData.attributeInfoType.getI(attributeCounter) == 0:  # isDiscrete
-                    print(classifier.conditionDiscrete.getI(specifiedLocation), end="\t\t\t\t")
+            if attribute in classifier.specifiedAttList:
+                specifiedLocation = classifier.specifiedAttList.index(attribute)
+                if self.env.formatData.attributeInfoType[attributeCounter] == 0:  # isDiscrete
+                    print(classifier.conditionDiscrete[specifiedLocation], end="\t\t\t\t")
                 else:
                     print("[", end="")
                     print(
-                        round(classifier.conditionContinuous.getI(specifiedLocation,0) * 10) / 10,
+                        round(classifier.conditionContinuous[specifiedLocation][0] * 10) / 10,
                         end=", ")
                     print(
-                        round(classifier.conditionContinuous.getI(specifiedLocation,1) * 10) / 10,
+                        round(classifier.conditionContinuous[specifiedLocation][1] * 10) / 10,
                         end="")
                     print("]", end="\t\t")
             else:
@@ -481,8 +481,8 @@ class eLCS(BaseEstimator,ClassifierMixin):
             print(classifier.phenotype,end="\t\t\t\t")
         else:
             print("[", end="")
-            print(round(classifier.phenotype.getI(0) * 10) / 10, end=", ")
-            print(round(classifier.phenotype.getI(1) * 10) / 10, end="")
+            print(round(classifier.phenotype[0] * 10) / 10, end=", ")
+            print(round(classifier.phenotype[1] * 10) / 10, end="")
             print("]",end="\t\t")
         if round(classifier.fitness*1000)/1000 != classifier.fitness:
             print(round(classifier.fitness*1000)/1000,end="\t\t")
@@ -496,27 +496,27 @@ class eLCS(BaseEstimator,ClassifierMixin):
         print(classifier.numerosity)
 
     def printMatchSet(self):
-        print("Match Set Size: "+str(self.population.matchSet.size()))
-        for classifierRef in self.population.matchSet.getArray():
-            self.printClassifier(self.population.popSet.getI(classifierRef))
+        print("Match Set Size: "+str(len(self.population.matchSet)))
+        for classifierRef in self.population.matchSet:
+            self.printClassifier(self.population.popSet[classifierRef])
         print()
 
     def printCorrectSet(self):
-        print("Correct Set Size: " + str(self.population.correctSet.size()))
-        for classifierRef in self.population.correctSet.getArray():
-            self.printClassifier(self.population.popSet.getI(classifierRef))
+        print("Correct Set Size: " + str(len(self.population.correctSet)))
+        for classifierRef in self.population.correctSet:
+            self.printClassifier(self.population.popSet[classifierRef])
         print()
 
     def printPopSet(self):
-        print("Population Set Size: " + str(self.population.popSet.size()))
-        for classifier in self.population.popSet.getArray():
+        print("Population Set Size: " + str(len(self.population.popSet)))
+        for classifier in self.population.popSet:
             self.printClassifier(classifier)
         print()
 
 class TrackingEvalObj():
     def __init__(self,accuracy,exploreIter,trackingFrequency,elcs):
         self.exploreIter = exploreIter
-        self.popSetLength = elcs.population.popSet.size()
+        self.popSetLength = len(elcs.population.popSet)
         self.microPopSize = elcs.population.microPopSize
         self.accuracy = accuracy
         self.aveGenerality = elcs.population.aveGenerality
@@ -526,7 +526,7 @@ class PopStatObj():
     def __init__(self,trainEval,exploreIter,pop,correct,elcs):
         self.trainingAccuracy = trainEval[0]
         self.trainingCoverage = trainEval[1]
-        self.macroPopSize = pop.popSet.size()
+        self.macroPopSize = len(pop.popSet)
         self.microPopSize = pop.microPopSize
         self.aveGenerality = pop.aveGenerality
         self.attributeSpecList = copy.deepcopy(pop.attributeSpecList)

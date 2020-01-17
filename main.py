@@ -8,11 +8,11 @@ from sklearn.model_selection import cross_val_score
 '''Separates out features into np_array of shape [number of items, number of features per item] 
 and labels into np_array of shape [number of items]'''
 
-converter = StringEnumerator("Datasets/Real/Multiplexer11.csv","class")
+converter = StringEnumerator("Datasets/Real/Multiplexer20.csv","class")
 headers, classLabel, dataFeatures,dataPhenotypes = converter.getParams()
 t = time.time()
 print("start")
-clf = eLCS(learningIterations=5000,doSubsumption=True)
+clf = eLCS(learningIterations=10000,doSubsumption=True)
 
 #A manual shuffle is needed to perform a proper CV, because CV trains on the first 2/3 of instances, and tests on the last 1/3 of instances. While the algo will shuffle
 #the 2/3 of instances, the original set needs to be shuffled as well.

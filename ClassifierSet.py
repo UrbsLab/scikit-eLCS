@@ -5,9 +5,9 @@ from DynamicNPArray import ArrayFactory
 class ClassifierSet:
     def __init__(self,elcs):
         #Major Parameters
-        self.popSet = ArrayFactory.createArray(k=1,dtype=Classifier,minSize=elcs.N)
-        self.matchSet = ArrayFactory.createArray(k=1,minSize=elcs.N)
-        self.correctSet = ArrayFactory.createArray(k=1,minSize=elcs.N)
+        self.popSet = []
+        self.matchSet = []
+        self.correctSet = []
         self.microPopSize = 0
 
         #Evaluation Parameters
@@ -24,8 +24,8 @@ class ClassifierSet:
         setNumerositySum = 0
 
         #Matching
-        for i in range(self.popSet.size()):
-            cl = self.popSet.getI(i)
+        for i in range(len(self.popSet)):
+            cl = self.popSet[i]
             if cl.match(state,elcs):
                 self.matchSet.append(i)
                 setNumerositySum += cl.numerosity
@@ -35,7 +35,7 @@ class ClassifierSet:
                     if cl.phenotype == phenotype:
                         doCovering = False
                 else:
-                    if float(cl.phenotype.getI(0)) <= float(phenotype) <= float(cl.phenotype.getI(1)):
+                    if float(cl.phenotype[0]) <= float(phenotype) <= float(cl.phenotype[1]):
                         doCovering = False
 
         #Covering
@@ -43,12 +43,12 @@ class ClassifierSet:
             #print("Covering")
             newCl = Classifier(elcs,setNumerositySum+1,exploreIter,state,phenotype)
             self.addClassifierToPopulation(elcs,newCl,True)
-            self.matchSet.append(self.popSet.size() - 1)
+            self.matchSet.append(len(self.popSet) - 1)
             elcs.coveringCounter+=1
             doCovering = False
 
     def getIdenticalClassifier(self,elcs,newCl):
-        for cl in self.popSet.getArray():
+        for cl in self.popSet:
             if newCl.equals(elcs,cl):
                 return cl
         return None
@@ -65,52 +65,52 @@ class ClassifierSet:
             self.microPopSize += 1
 
     def makeCorrectSet(self,elcs,phenotype):
-        for i in range(self.matchSet.size()):
-            ref = self.matchSet.getI(i)
+        for i in range(len(self.matchSet)):
+            ref = self.matchSet[i]
             #Discrete Phenotype
             if elcs.env.formatData.discretePhenotype:
-                if self.popSet.getI(ref).phenotype == phenotype:
+                if self.popSet[ref].phenotype == phenotype:
                     self.correctSet.append(ref)
 
             #Continuous Phenotype
             else:
-                if float(phenotype.getI(1)) <= float(self.popSet.getI(ref).phenotype.getI(1)) and float(phenotype.getI(0)) >= float(self.popSet.getI(ref).phenotype.getI(0)):
+                if float(phenotype[1]) <= float(self.popSet[ref].phenotype[1]) and float(phenotype[0]) >= float(self.popSet[ref].phenotype[0]):
                     self.correctSet.append(ref)
 
     def updateSets(self,elcs,exploreIter):
         matchSetNumerosity = 0
-        for ref in self.matchSet.getArray():
-            matchSetNumerosity += self.popSet.getI(ref).numerosity
+        for ref in self.matchSet:
+            matchSetNumerosity += self.popSet[ref].numerosity
 
-        for ref in self.matchSet.getArray():
-            self.popSet.getI(ref).updateExperience()
-            self.popSet.getI(ref).updateMatchSetSize(elcs,matchSetNumerosity)
-            if ref in self.correctSet.getArray():
-                self.popSet.getI(ref).updateCorrect()
+        for ref in self.matchSet:
+            self.popSet[ref].updateExperience()
+            self.popSet[ref].updateMatchSetSize(elcs,matchSetNumerosity)
+            if ref in self.correctSet:
+                self.popSet[ref].updateCorrect()
 
-            self.popSet.getI(ref).updateAccuracy()
-            self.popSet.getI(ref).updateFitness(elcs)
+            self.popSet[ref].updateAccuracy()
+            self.popSet[ref].updateFitness(elcs)
 
     def doCorrectSetSubsumption(self,elcs):
         subsumer = None
-        for ref in self.correctSet.getArray():
-            cl = self.popSet.getI(ref)
+        for ref in self.correctSet:
+            cl = self.popSet[ref]
             if cl.isSubsumer(elcs):
                 if subsumer == None or cl.isMoreGeneral(subsumer,elcs):
                     subsumer = cl
 
         if subsumer != None:
             i = 0
-            while i < self.correctSet.size():
-                ref = self.correctSet.getI(i)
-                if subsumer.isMoreGeneral(self.popSet.getI(ref),elcs):
+            while i < len(self.correctSet):
+                ref = self.correctSet[i]
+                if subsumer.isMoreGeneral(self.popSet[ref],elcs):
                     if elcs.printGAMech:
                         print("Subsumption Done:")
-                        elcs.printClassifier(self.popSet.getI(ref))
+                        elcs.printClassifier(self.popSet[ref])
                         print("Subsumed by")
                         elcs.printClassifier(subsumer)
                     elcs.subsumptionCounter += 1
-                    subsumer.updateNumerosity(self.popSet.getI(ref).numerosity)
+                    subsumer.updateNumerosity(self.popSet[ref].numerosity)
                     self.removeMacroClassifier(ref)
                     self.deleteFromMatchSet(ref)
                     self.deleteFromCorrectSet(ref)
@@ -118,25 +118,25 @@ class ClassifierSet:
                 i+=1
 
     def removeMacroClassifier(self,ref):
-        self.popSet.removeAtIndex(ref)
+        del self.popSet[ref]
 
     def deleteFromMatchSet(self,deleteRef):
-        if deleteRef in self.matchSet.getArray():
-            self.matchSet.removeFirstElementWithValue(deleteRef)
+        if deleteRef in self.matchSet:
+            self.matchSet.remove(deleteRef)
 
-        for j in range(self.matchSet.size()):
-            ref = self.matchSet.getI(j)
+        for j in range(len(self.matchSet)):
+            ref = self.matchSet[j]
             if ref > deleteRef:
-                self.matchSet.setI(j,value=self.matchSet.getI(j)-1)
+                self.matchSet[j] -=1
 
     def deleteFromCorrectSet(self,deleteRef):
-        if deleteRef in self.correctSet.getArray():
-            self.correctSet.removeFirstElementWithValue(deleteRef)
+        if deleteRef in self.correctSet:
+            self.correctSet.remove(deleteRef)
 
-        for j in range(self.correctSet.size()):
-            ref = self.correctSet.getI(j)
+        for j in range(len(self.correctSet)):
+            ref = self.correctSet[j]
             if ref > deleteRef:
-                self.correctSet.setI(j,value=self.correctSet.getI(j)-1)
+                self.correctSet[j] -= 1
 
     def runGA(self,elcs,exploreIter,state,phenotype):
         #GA Run Requirement
@@ -217,23 +217,23 @@ class ClassifierSet:
     def getIterStampAverage(self):
         sumCl = 0.0
         numSum = 0.0
-        for i in range(self.correctSet.size()):
-            ref = self.correctSet.getI(i)
-            sumCl += self.popSet.getI(ref).timeStampGA * self.popSet.getI(ref).numerosity
-            numSum += self.popSet.getI(ref).numerosity
+        for i in range(len(self.correctSet)):
+            ref = self.correctSet[i]
+            sumCl += self.popSet[ref].timeStampGA * self.popSet[ref].numerosity
+            numSum += self.popSet[ref].numerosity
         #print("ITERSTAMP AVG: ",sumCl/float(numSum))
         return sumCl/float(numSum)
 
     def setIterStamps(self,exploreIter):
-        for i in range(self.correctSet.size()):
-            ref = self.correctSet.getI(i)
-            self.popSet.getI(ref).updateTimeStamp(exploreIter)
+        for i in range(len(self.correctSet)):
+            ref = self.correctSet[i]
+            self.popSet[ref].updateTimeStamp(exploreIter)
 
     def selectClassifierRW(self):
         setList = copy.deepcopy(self.correctSet)
 
-        if setList.size() > 2:
-            selectList = np.array([None,None])
+        if len(setList) > 2:
+            selectList = [None,None]
             currentCount = 0
 
             while currentCount < 2:
@@ -241,56 +241,54 @@ class ClassifierSet:
 
                 choiceP = random.random() * fitSum
                 i = 0
-                sumCl = self.popSet.getI(setList[i]).fitness
+                sumCl = self.popSet[setList[i]].fitness
                 while choiceP > sumCl:
                     i = i + 1
-                    sumCl += self.popSet.getI(setList[i]).fitness
+                    sumCl += self.popSet[setList[i]].fitness
 
-                selectList[currentCount] = self.popSet.getI(setList.getI(i))
-                index = np.where(setList.getArray() == setList.getI(i))[0][0]
-                setList.removeAtIndex(index)
+                selectList[currentCount] = self.popSet[setList[i]]
+                setList.remove(setList[i])
                 currentCount += 1
 
-        elif setList.size() == 2:
-            selectList = np.array([self.popSet.getI(setList.getI(0)), self.popSet.getI(setList.getI(1))])
-        elif setList.size() == 1:
-            selectList = np.array([self.popSet.getI(setList.getI(0)), self.popSet.getI(setList.getI(0))])
+        elif len(setList) == 2:
+            selectList = [self.popSet[setList[0]], self.popSet[setList[1]]]
+        elif len(setList) == 1:
+            selectList = [self.popSet[setList[0]], self.popSet[setList[0]]]
 
         return selectList
 
     def getFitnessSum(self, setList):
         """ Returns the sum of the fitnesses of all classifiers in the set. """
         sumCl = 0.0
-        for i in range(setList.size()):
-            ref = setList.getI(i)
-            sumCl += self.popSet.getI(ref).fitness
+        for i in range(len(setList)):
+            ref = setList[i]
+            sumCl += self.popSet[ref].fitness
         return sumCl
 
     def selectClassifierT(self,elcs):
-        selectList = np.array([None, None])
+        selectList = [None, None]
         currentCount = 0
         setList = self.correctSet
 
         while currentCount < 2:
-            tSize = int(setList.size() * elcs.theta_sel)
+            tSize = int(len(setList) * elcs.theta_sel)
 
             #Select tSize elements from correctSet
             copyList = copy.deepcopy(self.correctSet)
-            posList = ArrayFactory.createArray(k=1,minSize=max(8,tSize))
+            posList = []
             for i in range(tSize):
-                choice = np.random.choice(copyList.getArray())
-                index = np.where(copyList.getArray()==choice)[0][0]
+                choice = random.choice(copyList)
                 posList.append(choice)
-                copyList.removeAtIndex(index)
+                copyList.remove(choice)
 
             bestF = 0
-            bestC = self.correctSet.getI(0)
-            for j in posList.getArray():
-                if self.popSet.getI(j).fitness > bestF:
-                    bestF = self.popSet.getI(j).fitness
+            bestC = self.correctSet[0]
+            for j in posList:
+                if self.popSet[j].fitness > bestF:
+                    bestF = self.popSet[j].fitness
                     bestC = j
 
-            selectList[currentCount] = self.popSet.getI(bestC)
+            selectList[currentCount] = self.popSet[bestC]
             currentCount += 1
 
         return selectList
@@ -298,15 +296,15 @@ class ClassifierSet:
     def insertDiscoveredClassifiers(self,elcs,cl1,cl2,clP1,clP2,exploreIter):
         if elcs.doSubsumption:
             elcs.timer.startTimeSubsumption()
-            if cl1.specifiedAttList.size() > 0:
+            if len(cl1.specifiedAttList) > 0:
                 self.subsumeClassifier(elcs,cl1,clP1,clP2)
-            if cl2.specifiedAttList.size() > 0:
+            if len(cl2.specifiedAttList) > 0:
                 self.subsumeClassifier(elcs,cl2, clP1, clP2)
             elcs.timer.stopTimeSubsumption()
         else:
-            if cl1.specifiedAttList.size() > 0:
+            if len(cl1.specifiedAttList) > 0:
                 self.addClassifierToPopulation(elcs,cl1,False)
-            if cl2.specifiedAttList.size() > 0:
+            if len(cl2.specifiedAttList) > 0:
                 self.addClassifierToPopulation(elcs,cl2, False)
             if elcs.printGAMech:
                 print("Offspring Classifier:")
@@ -333,20 +331,20 @@ class ClassifierSet:
             self.subsumeClassifier2(elcs,cl)  # Try to subsume in the correct set.
 
     def subsumeClassifier2(self,elcs,cl):
-        choices = ArrayFactory.createArray(k=1,minSize=self.correctSet.size())
-        for ref in self.correctSet.getArray():
-            if self.popSet.getI(ref).subsumes(elcs,cl):
+        choices = []
+        for ref in self.correctSet:
+            if self.popSet[ref].subsumes(elcs,cl):
                 choices.append(ref)
 
-        if choices.size() > 0:
-            choice = int(random.random()*choices.size())
-            self.popSet.getI(int(choices.getI(choice))).updateNumerosity(1)
+        if len(choices) > 0:
+            choice = int(random.random()*len(choices))
+            self.popSet[int(choices[choice])].updateNumerosity(1)
             self.microPopSize += 1
             if elcs.printGAMech:
                 print("Subsumption Done in Correct Set:")
                 elcs.printClassifier(cl)
                 print("Subsumed by")
-                elcs.printClassifier(self.popSet.getI(int(choices.getI(choice))))
+                elcs.printClassifier(self.popSet[(int(choices[choice]))])
             elcs.subsumptionCounter += 1
             return
         self.addClassifierToPopulation(elcs,cl,False)
@@ -362,8 +360,8 @@ class ClassifierSet:
         meanFitness = self.getPopFitnessSum() / float(self.microPopSize)
 
         sumCl = 0.0
-        voteList = ArrayFactory.createArray(k=1,minSize=elcs.N)
-        for cl in self.popSet.getArray():
+        voteList = []
+        for cl in self.popSet:
             vote = cl.getDelProp(elcs,meanFitness)
             sumCl += vote
             voteList.append(vote)
@@ -371,9 +369,9 @@ class ClassifierSet:
         choicePoint = sumCl * random.random()  # Determine the choice point
 
         newSum = 0.0
-        for i in range(voteList.size()):
-            cl = self.popSet.getI(i)
-            newSum = newSum + voteList.getI(i)
+        for i in range(len(voteList)):
+            cl = self.popSet[i]
+            newSum = newSum + voteList[i]
             if newSum > choicePoint:  # Select classifier for deletion
                 # Delete classifier----------------------------------
                 cl.updateNumerosity(-1)
@@ -388,20 +386,20 @@ class ClassifierSet:
     def getPopFitnessSum(self):
         """ Returns the sum of the fitnesses of all classifiers in the set. """
         sumCl = 0.0
-        for cl in self.popSet.getArray():
+        for cl in self.popSet:
             sumCl += cl.fitness * cl.numerosity
         return sumCl
 
     def clearSets(self,elcs):
         """ Clears out references in the match and correct sets for the next learning iteration. """
-        self.matchSet = ArrayFactory.createArray(k=1,minSize=elcs.N)
-        self.correctSet = ArrayFactory.createArray(k=1,minSize=elcs.N)
+        self.matchSet = []
+        self.correctSet = []
 
     def runPopAveEval(self,exploreIter,elcs):
         genSum = 0
         agedCount = 0
-        for cl in self.popSet.getArray():
-            genSum += ((elcs.env.formatData.numAttributes - cl.conditionType.size())/float(elcs.env.formatData.numAttributes))*cl.numerosity
+        for cl in self.popSet:
+            genSum += ((elcs.env.formatData.numAttributes - len(cl.conditionType))/float(elcs.env.formatData.numAttributes))*cl.numerosity
         if self.microPopSize == 0:
             self.aveGenerality = 'NA'
         else:
@@ -409,25 +407,25 @@ class ClassifierSet:
 
         if not elcs.env.formatData.discretePhenotype:
             sumRuleRange = 0
-            for cl in self.popSet.getArray():
-                sumRuleRange += (cl.phenotype.getI(1)-cl.phenotype.getI(0))*cl.numerosity
-            phenotypeRange = elcs.env.formatData.phenotypeList.getI(1)-elcs.env.formatData.phenotypeList.getI(0)
+            for cl in self.popSet:
+                sumRuleRange += (cl.phenotype[1]-cl.phenotype[0])*cl.numerosity
+            phenotypeRange = elcs.env.formatData.phenotypeList[1]-elcs.env.formatData.phenotypeList[0]
             self.avePhenotypeRange = (sumRuleRange / float(self.microPopSize)) / float(phenotypeRange)
 
     def runAttGeneralitySum(self,isEvaluationSummary,elcs):
         if isEvaluationSummary:
-            self.attributeSpecList = ArrayFactory.createArray(k=1,minSize=elcs.env.formatData.numAttributes)
-            self.attributeAccList = ArrayFactory.createArray(k=1,minSize=elcs.env.formatData.numAttributes)
+            self.attributeSpecList = []
+            self.attributeAccList = []
             for i in range(elcs.env.formatData.numAttributes):
                 self.attributeSpecList.append(0)
                 self.attributeAccList.append(0.0)
-            for cl in self.popSet.getArray():
-                for ref in cl.specifiedAttList.getArray():
-                    self.attributeSpecList.setI(ref,value=self.attributeSpecList.getI(ref)+cl.numerosity)
-                    self.attributeAccList.setI(ref,value=self.attributeAccList.getI(ref)+cl.numerosity * cl.accuracy)
+            for cl in self.popSet:
+                for ref in cl.specifiedAttList:
+                    self.attributeSpecList[ref] += cl.numerosity
+                    self.attributeAccList[ref] += cl.numerosity * cl.accuracy
 
     def makeEvalMatchSet(self,state,elcs):
-        for i in range(self.popSet.size()):
-            cl = self.popSet.getI(i)
+        for i in range(len(self.popSet)):
+            cl = self.popSet[i]
             if cl.match(state,elcs):
                 self.matchSet.append(i)

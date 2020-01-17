@@ -6,15 +6,15 @@ class DataManagement:
     def __init__(self, dataFeatures, dataPhenotypes, elcs):
         # About Attributes
         self.numAttributes = dataFeatures.shape[1]  # The number of attributes in the input file.
-        self.attributeInfoType = ArrayFactory.createArray(np.empty(self.numAttributes,dtype=bool)) #stores false (d) or true (c) depending on its type, which points to parallel reference in one of the below 2 arrays
-        self.attributeInfoContinuous = ArrayFactory.createArray(np.empty((self.numAttributes,2))) #stores continuous ranges and NaN otherwise
-        self.attributeInfoDiscrete = ArrayFactory.createArray(np.empty(self.numAttributes,dtype=object)) #stores arrays of discrete values or NaN otherwise.
+        self.attributeInfoType = [0]*self.numAttributes #stores false (d) or true (c) depending on its type, which points to parallel reference in one of the below 2 arrays
+        self.attributeInfoContinuous = [[0,0]]*self.numAttributes #stores continuous ranges and NaN otherwise
+        self.attributeInfoDiscrete = [0]*self.numAttributes #stores arrays of discrete values or NaN otherwise.
         for i in range(0,self.numAttributes):
-            self.attributeInfoDiscrete.setI(i,value=AttributeInfoDiscreteElement())
+            self.attributeInfoDiscrete[i] = AttributeInfoDiscreteElement()
 
         # About Phenotypes
         self.discretePhenotype = True  # Is the Class/Phenotype Discrete? (False = Continuous)
-        self.phenotypeList = ArrayFactory.createArray(k=1)  # Stores all possible discrete phenotype states/classes or maximum and minimum values for a continuous phenotype
+        self.phenotypeList = []  # Stores all possible discrete phenotype states/classes or maximum and minimum values for a continuous phenotype
         self.phenotypeRange = None  # Stores the difference between the maximum and minimum values for a continuous phenotype
         self.isDefault = True #Is discrete attribute limit an int or string
 
@@ -28,7 +28,7 @@ class DataManagement:
 
         self.discriminateAttributes(dataFeatures, elcs)
         self.characterizeAttributes(dataFeatures, elcs)
-        self.trainFormatted = self.formatData(dataFeatures,dataPhenotypes,elcs)
+        self.trainFormatted = self.formatData(dataFeatures,dataPhenotypes,elcs) #The only np array
 
     def discriminatePhenotype(self,phenotypes,elcs):#Determine if phenotype is discrete or continuous
         try:
@@ -51,22 +51,20 @@ class DataManagement:
 
             if (len(list(classDict.keys())) > elcs.discretePhenotypeLimit):
                 self.discretePhenotype = False
-                self.phenotypeList.append(float(target))
-                self.phenotypeList.append(float(target))
+                self.phenotypeList = [float(target),float(target)]
         elif elcs.discretePhenotypeLimit == "c":
             self.discretePhenotype = False
-            self.phenotypeList.append(float(phenotypes[0]))
-            self.phenotypeList.append(float(phenotypes[0]))
+            self.phenotypeList = [float(phenotypes[0]), float(phenotypes[0])]
         elif elcs.discretePhenotypeLimit == "d":
             self.discretePhenotype = True
-            self.phenotypeList = ArrayFactory.createArray(k=1)
+            self.phenotypeList = []
 
     def discriminateClasses(self,phenotypes):
         currentPhenotypeIndex = 0
         classCount = {}
         while (currentPhenotypeIndex < self.numTrainInstances):
             target = phenotypes[currentPhenotypeIndex]
-            if (target in self.phenotypeList.getArray()):
+            if target in self.phenotypeList:
                 classCount[target]+=1
             else:
                 self.phenotypeList.append(target)
@@ -77,13 +75,13 @@ class DataManagement:
         for target in phenotypes:
             if np.isnan(target):
                 pass
-            elif float(target) > self.phenotypeList.getI(1):
-                self.phenotypeList.setI(1,0,value=float(target))
-            elif float(target) < self.phenotypeList.getI(0):
-                self.phenotypeList.setI(1,0,value=float(target))
+            elif float(target) > self.phenotypeList[1]:
+                self.phenotypeList[1][0] = float(target)
+            elif float(target) < self.phenotypeList[0]:
+                self.phenotypeList[1][0] = float(target)
             else:
                 pass
-        self.phenotypeRange = self.phenotypeList.getI(1) - self.phenotypeList.getI(0)
+        self.phenotypeRange = self.phenotypeList[1] - self.phenotypeList[0]
 
     def discriminateAttributes(self,features,elcs):
         self.discreteCount = 0
@@ -117,36 +115,36 @@ class DataManagement:
                     attIsDiscrete = False
 
             if attIsDiscrete:
-                self.attributeInfoType.setI(att,False)
+                self.attributeInfoType[att] = False
                 self.discreteCount += 1
             else:
-                self.attributeInfoType.setI(att,True)
+                self.attributeInfoType[att] = True
                 self.continuousCount += 1
 
     def characterizeAttributes(self,features,elcs):
         for currentFeatureIndexInAttributeInfo in range(self.numAttributes):
             for currentInstanceIndex in range(self.numTrainInstances):
                 target = features[currentInstanceIndex,currentFeatureIndexInAttributeInfo]
-                if not self.attributeInfoType.getI(currentFeatureIndexInAttributeInfo):#if attribute is discrete
-                    if target in self.attributeInfoDiscrete.getI(currentFeatureIndexInAttributeInfo).distinctValues.getArray() or np.isnan(target):
+                if not self.attributeInfoType[currentFeatureIndexInAttributeInfo]:#if attribute is discrete
+                    if target in self.attributeInfoDiscrete[currentFeatureIndexInAttributeInfo].distinctValues or np.isnan(target):
                         pass
                     else:
-                        self.attributeInfoDiscrete.getI(currentFeatureIndexInAttributeInfo).distinctValues.append(target)
+                        self.attributeInfoDiscrete[currentFeatureIndexInAttributeInfo].distinctValues.append(target)
                 else: #if attribute is continuous
                     if np.isnan(target):
                         pass
-                    elif float(target) > self.attributeInfoContinuous.getI(currentFeatureIndexInAttributeInfo,1):
-                        self.attributeInfoContinuous.setI(currentFeatureIndexInAttributeInfo,1,float(target))
-                    elif float(target) < self.attributeInfoContinuous.getI(currentFeatureIndexInAttributeInfo,0):
-                        self.attributeInfoContinuous.setI(currentFeatureIndexInAttributeInfo, 0, float(target))
+                    elif float(target) > self.attributeInfoContinuous[currentFeatureIndexInAttributeInfo][1]:
+                        self.attributeInfoContinuous[currentFeatureIndexInAttributeInfo][1] = float(target)
+                    elif float(target) < self.attributeInfoContinuous[currentFeatureIndexInAttributeInfo][0]:
+                        self.attributeInfoContinuous[currentFeatureIndexInAttributeInfo][0] = float(target)
                     else:
                         pass
 
     def formatData(self,features,phenotypes,elcs):
         formatted = np.insert(features,self.numAttributes,phenotypes,1) #Combines features and phenotypes into one array
         np.random.shuffle(formatted)
-        return ArrayFactory.createArray(formatted)
+        return formatted
 
 class AttributeInfoDiscreteElement():
     def __init__(self):
-        self.distinctValues = ArrayFactory.createArray(k=1)
+        self.distinctValues = []
