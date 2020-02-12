@@ -273,7 +273,7 @@ class Classifier():
                             self.conditionContinuous[i_cl1][1] = cl.conditionContinuous[i_cl2][1]
                             cl.conditionContinuous[i_cl2][1] = temp
                         else:
-                            allList = self.conditionContinuous[i_cl1].extend(cl.conditionContinuous[i_cl2])
+                            allList = self.conditionContinuous[i_cl1] + cl.conditionContinuous[i_cl2]
                             newMin = min(allList)
                             newMax = max(allList)
                             if tempKey == 2:
@@ -399,30 +399,30 @@ class Classifier():
     def continuousPhenotypeMutation(self, elcs, phenotype):
         changed = False
         if random.random() < elcs.upsilon:
-            phenRange = self.phenotype[1][0] - self.phenotype[0][0]
+            phenRange = self.phenotype[1] - self.phenotype[0]
             mutateRange = random.random() * 0.5 * phenRange
             tempKey = random.randint(0,2)  # Make random choice between 3 scenarios, mutate minimums, mutate maximums, mutate both
             if tempKey == 0:  # Mutate minimum
-                if random.random() > 0.5 or self.phenotype[0][0] + mutateRange <= phenotype:  # Checks that mutated range still contains current phenotype
-                    self.phenotype[0][0] += mutateRange
+                if random.random() > 0.5 or self.phenotype[0] + mutateRange <= phenotype:  # Checks that mutated range still contains current phenotype
+                    self.phenotype[0] += mutateRange
                 else:  # Subtract
-                    self.phenotype[0][0] -= mutateRange
+                    self.phenotype[0] -= mutateRange
                 changed = True
             elif tempKey == 1:  # Mutate maximum
-                if random.random() > 0.5 or self.phenotype[1][0] - mutateRange >= phenotype:  # Checks that mutated range still contains current phenotype
-                    self.phenotype[1][0] -= mutateRange
+                if random.random() > 0.5 or self.phenotype[1] - mutateRange >= phenotype:  # Checks that mutated range still contains current phenotype
+                    self.phenotype[1] -= mutateRange
                 else:  # Subtract
-                    self.phenotype[1][0] += mutateRange
+                    self.phenotype[1] += mutateRange
                 changed = True
             else:  # mutate both
-                if random.random() > 0.5 or self.phenotype[0][0] + mutateRange <= phenotype:  # Checks that mutated range still contains current phenotype
-                    self.phenotype[0][0] += mutateRange
+                if random.random() > 0.5 or self.phenotype[0] + mutateRange <= phenotype:  # Checks that mutated range still contains current phenotype
+                    self.phenotype[0] += mutateRange
                 else:  # Subtract
-                    self.phenotype[0][0] -= mutateRange
-                if random.random() > 0.5 or self.phenotype[1][0] - mutateRange >= phenotype:  # Checks that mutated range still contains current phenotype
-                    self.phenotype[1][0] -= mutateRange
+                    self.phenotype[0] -= mutateRange
+                if random.random() > 0.5 or self.phenotype[1] - mutateRange >= phenotype:  # Checks that mutated range still contains current phenotype
+                    self.phenotype[1] -= mutateRange
                 else:  # Subtract
-                    self.phenotype[1][0] += mutateRange
+                    self.phenotype[1] += mutateRange
                 changed = True
             self.phenotype.sort()
         return changed
@@ -449,7 +449,7 @@ class Classifier():
 
         # Continuous Phenotype
         else:
-            if self.phenotype[0][0] >= cl.phenotype[0][0] and self.phenotype[1][0] <= cl.phenotype[1][0]:
+            if self.phenotype[0] >= cl.phenotype[0] and self.phenotype[1] <= cl.phenotype[1]:
                 if self.isSubsumer(elcs) and self.isMoreGeneral(cl, elcs):
                     return True
                 return False

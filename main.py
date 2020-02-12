@@ -8,7 +8,7 @@ from sklearn.model_selection import cross_val_score
 '''Separates out features into np_array of shape [number of items, number of features per item] 
 and labels into np_array of shape [number of items]'''
 
-converter = StringEnumerator("Datasets/Real/Multiplexer20.csv","class")
+converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv","Class")
 headers, classLabel, dataFeatures,dataPhenotypes = converter.getParams()
 t = time.time()
 print("start")

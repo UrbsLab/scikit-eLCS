@@ -5,13 +5,13 @@ from Timer import *
 from ClassAccuracy import *
 import copy
 import random
-from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.metrics import balanced_accuracy_score
 import numpy as np
 import math
 from DynamicNPArray import ArrayFactory
 
-class eLCS(BaseEstimator,ClassifierMixin):
+class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([1,10,50,100,200,500,700,1000]), evalWhileFit = False, N=1000,
                  p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]), discretePhenotypeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
@@ -223,9 +223,10 @@ class eLCS(BaseEstimator,ClassifierMixin):
     scorer like above to override this scoring method as well if you want.
     
     '''
-    def score(self,X,y):
-        predList = self.predict(X)
-        return balanced_accuracy_score(y, predList) #Make it balanced accuracy
+    #Commented out score function so that RegressorMixin and ClassifierMixin default methods can be used appropriately
+    # def score(self,X,y):
+    #     predList = self.predict(X)
+    #     return balanced_accuracy_score(y, predList) #Make it balanced accuracy
 
     def transform(self, X):
         """Not needed for eLCS"""

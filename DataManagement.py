@@ -76,9 +76,9 @@ class DataManagement:
             if np.isnan(target):
                 pass
             elif float(target) > self.phenotypeList[1]:
-                self.phenotypeList[1][0] = float(target)
+                self.phenotypeList[1] = float(target)
             elif float(target) < self.phenotypeList[0]:
-                self.phenotypeList[1][0] = float(target)
+                self.phenotypeList[0] = float(target)
             else:
                 pass
         self.phenotypeRange = self.phenotypeList[1] - self.phenotypeList[0]

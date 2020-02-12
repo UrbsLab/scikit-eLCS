@@ -74,7 +74,7 @@ class ClassifierSet:
 
             #Continuous Phenotype
             else:
-                if float(phenotype[1]) <= float(self.popSet[ref].phenotype[1]) and float(phenotype[0]) >= float(self.popSet[ref].phenotype[0]):
+                if float(phenotype) <= float(self.popSet[ref].phenotype[1]) and float(phenotype) >= float(self.popSet[ref].phenotype[0]):
                     self.correctSet.append(ref)
 
     def updateSets(self,elcs,exploreIter):
