@@ -15,16 +15,218 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([1,10,50,100,200,500,700,1000]), evalWhileFit = False, N=1000,
                  p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]), discretePhenotypeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
-                 doSubsumption=1, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none"):
+                 doSubsumption=True, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none"):
 
+        '''
+        :param learningIterations:      Must be nonnegative integer. The number of training cycles to run.
+        :param trackingFrequency:       Must be nonnegative integer. Relevant only if evalWhileFit param is true. Conducts accuracy approximations and population measurements every trackingFrequency iterations.
+                                        If param == 0, tracking done once every epoch.
+        :param learningCheckpoints:     Must be ndarray of nonnegative integers. Relevant only if evalWhileFit param is true. Conducts detailed evaluation of model performance by finding precise training accuracy
+        :param evalWhileFit:            Must be boolean. Determines if live tracking and evaluation is done during model training
+        :param N:                       Must be nonnegative integer. Maximum micro classifier population size (sum of classifier numerosities).
+        :param p_spec:                  Must be float from 0 - 1. Probability of specifying an attribute during the covering procedure. Advised: larger amounts of attributes => lower p_spec values
+        :param discreteAttributeLimit:  Must be nonnegative integer OR "c" OR "d". Multipurpose param. If it is a nonnegative integer, discreteAttributeLimit determines the threshold that determines
+                                        if an attribute will be treated as a continuous or discrete attribute. For example, if discreteAttributeLimit == 10, if an attribute has more than 10 unique
+                                        values in the dataset, the attribute will be continuous. If the attribute has 10 or less unique values, it will be discrete. Alternatively,
+                                        discreteAttributeLimit can take the value of "c" or "d". See next param for this.
+        :param specifiedAttributes:     Must be an ndarray type of nonnegative integer attributeIndices (zero indexed).
+                                        If "c", attributes specified by index in this param will be continuous and the rest will be discrete. If "d", attributes specified by index in this
+                                        param will be discrete and the rest will be continuous.
+                                        If this value is given, and discreteAttributeLimit is not "c" or "d", discreteAttributeLimit overrides this specification
+        :param discretePhenotypeLimit:  Must be nonnegative integer OR "c" OR "d". Works similarly to discreteAttributeLimit. Multipurpose param. If it is a nonnegative integer, this param determines the
+                                        continuous/discrete threshold for the phenotype. If it is "c" or "d", the phenotype is explicitly defined as continuous or discrete.
+        :param nu:                      (v) Must be a float. Power parameter used to determine the importance of high accuracy when calculating fitness. (typically set to 5, recommended setting of 1 in noisy data)
+        :param chi:                     (X) Must be float from 0 - 1. The probability of applying crossover in the GA. (typically set to 0.5-1.0)
+        :param upsilon:                 (u) Must be float from 0 - 1. The probability of mutating an allele within an offspring.(typically set to 0.01-0.05)
+        :param theta_GA:                Must be nonnegative float. The GA threshold. The GA is applied in a set when the average time (# of iterations) since the last GA in the correct set is greater than theta_GA.
+        :param theta_del:               Must be a nonnegative integer. The deletion experience threshold; The calculation of the deletion probability changes once this threshold is passed.
+        :param theta_sub:               Must be a nonnegative integer. The subsumption experience threshold;
+        :param acc_sub:                 Must be float from 0 - 1. Subsumption accuracy requirement
+        :param beta:                    Must be float. Learning parameter; Used in calculating average correct set size
+        :param delta:                   Must be float. Deletion parameter; Used in determining deletion vote calculation.
+        :param init_fit:                Must be float. The initial fitness for a new classifier. (typically very small, approaching but not equal to zero)
+        :param fitnessReduction:        Must be float. Initial fitness reduction in GA offspring rules.
+        :param doSubsumption:           Must be boolean. Determines if subsumption is done in the learning process.
+        :param selectionMethod:         Must be either "tournament" or "roulette". Determines GA selection method. Recommended: tournament
+        :param theta_sel:               Must be float from 0 - 1. The fraction of the correct set to be included in tournament selection.
+        :param randomSeed:              Must be an integer or "none". Set a constant random seed value to some integer (in order to obtain reproducible results). Put 'none' if none (for pseudo-random algorithm runs).
+        '''
+
+        '''
+        Parameter Validity Checking
+        Checks all parameters for valid values
+        '''
+        #learningIterations
+        if not self.checkIsInt(learningIterations):
+            raise Exception("learningIterations param must be nonnegative integer")
+
+        if learningIterations < 0:
+            raise Exception("learningIterations param must be nonnegative integer")
+
+        #trackingFrequency
+        if not self.checkIsInt(trackingFrequency):
+            raise Exception("trackingFrequency param must be nonnegative integer")
+
+        if trackingFrequency < 0:
+            raise Exception("trackingFrequency param must be nonnegative integer")
+
+        #learningCheckpoints
+        if not (isinstance(learningCheckpoints,np.ndarray)):
+            raise Exception("learningCheckpoints param must be ndarray")
+
+        for learningCheckpt in learningCheckpoints:
+            if not self.checkIsInt(learningCheckpt):
+                raise Exception("All learningCheckpoints elements param must be nonnegative integers")
+            if int(learningCheckpt) < 0:
+                raise Exception("All learningCheckpoints elements param must be nonnegative integers")
+
+
+        #evalWhileFit
+        if not(isinstance(evalWhileFit,bool)):
+            raise Exception("evalWhileFit param must be boolean")
+
+        #N
+        if not self.checkIsInt(N):
+            raise Exception("N param must be nonnegative integer")
+
+        if N < 0:
+            raise Exception("N param must be nonnegative integer")
+
+        #p_spec
+        if not self.checkIsFloat(p_spec):
+            raise Exception("p_spec param must be float from 0 - 1")
+
+        if p_spec < 0 or p_spec > 1:
+            raise Exception("p_spec param must be float from 0 - 1")
+
+        #discreteAttributeLimit
+        if discreteAttributeLimit != "c" and discreteAttributeLimit != "d":
+            try:
+                dpl = int(discreteAttributeLimit)
+                if not self.checkIsInt(discreteAttributeLimit):
+                    raise Exception("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'")
+                if dpl < 0:
+                    raise Exception("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'")
+            except:
+                raise Exception("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'")
+
+        #specifiedAttributes
+        if not (isinstance(specifiedAttributes,np.ndarray)):
+            raise Exception("specifiedAttributes param must be ndarray")
+
+        for spAttr in specifiedAttributes:
+            if not self.checkIsInt(spAttr):
+                raise Exception("All specifiedAttributes elements param must be nonnegative integers")
+            if int(spAttr) < 0:
+                raise Exception("All specifiedAttributes elements param must be nonnegative integers")
+
+        #discretePhenotypeLimit
+        if discretePhenotypeLimit != "c" and discretePhenotypeLimit != "d":
+            try:
+                dpl = int(discretePhenotypeLimit)
+                if not self.checkIsInt(discretePhenotypeLimit):
+                    raise Exception("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'")
+                if dpl < 0:
+                    raise Exception("discretePhenotypeLimit param must be nonnegative integer or 'c' or 'd'")
+            except:
+                raise Exception("discretePhenotypeLimit param must be nonnegative integer or 'c' or 'd'")
+
+        #nu
+        if not self.checkIsFloat(nu):
+            raise Exception("nu param must be float")
+
+        #chi
+        if not self.checkIsFloat(chi):
+            raise Exception("chi param must be float from 0 - 1")
+
+        if chi < 0 or chi > 1:
+            raise Exception("chi param must be float from 0 - 1")
+
+        #upsilon
+        if not self.checkIsFloat(upsilon):
+            raise Exception("upsilon param must be float from 0 - 1")
+
+        if upsilon < 0 or upsilon > 1:
+            raise Exception("upsilon param must be float from 0 - 1")
+
+        #theta_GA
+        if not self.checkIsFloat(theta_GA):
+            raise Exception("theta_GA param must be nonnegative float")
+
+        if theta_GA < 0:
+            raise Exception("theta_GA param must be nonnegative float")
+
+        #theta_del
+        if not self.checkIsInt(theta_del):
+            raise Exception("theta_del param must be nonnegative integer")
+
+        if theta_del < 0:
+            raise Exception("theta_del param must be nonnegative integer")
+
+        #theta_sub
+        if not self.checkIsInt(theta_sub):
+            raise Exception("theta_sub param must be nonnegative integer")
+
+        if theta_sub < 0:
+            raise Exception("theta_sub param must be nonnegative integer")
+
+        #acc_sub
+        if not self.checkIsFloat(acc_sub):
+            raise Exception("acc_sub param must be float from 0 - 1")
+
+        if acc_sub < 0 or acc_sub > 1:
+            raise Exception("acc_sub param must be float from 0 - 1")
+
+        #beta
+        if not self.checkIsFloat(beta):
+            raise Exception("beta param must be float")
+
+        #delta
+        if not self.checkIsFloat(delta):
+            raise Exception("delta param must be float")
+
+        #init_fit
+        if not self.checkIsFloat(init_fit):
+            raise Exception("init_fit param must be float")
+
+        #fitnessReduction
+        if not self.checkIsFloat(fitnessReduction):
+            raise Exception("fitnessReduction param must be float")
+
+        #doSubsumption
+        if not(isinstance(doSubsumption,bool)):
+            raise Exception("doSubsumption param must be boolean")
+
+        #selectionMethod
+        if selectionMethod != "tournament" and selectionMethod != "roulette":
+            raise Exception("selectionMethod param must be 'tournament' or 'roulette'")
+
+        #theta_sel
+        if not self.checkIsFloat(theta_sel):
+            raise Exception("theta_sel param must be float from 0 - 1")
+
+        if theta_sel < 0 or theta_sel > 1:
+            raise Exception("theta_sel param must be float from 0 - 1")
+
+        #randomSeed
+        if randomSeed != "none":
+            try:
+                if not self.checkIsInt(randomSeed):
+                    raise Exception("randomSeed param must be integer or 'none'")
+                random.seed(int(randomSeed))
+            except:
+                raise Exception("randomSeed param must be integer or 'none'")
+
+        '''
+        Set params
+        '''
         self.learningIterations = learningIterations
         self.N = N
         self.p_spec = p_spec
-        self.discreteAttributeLimit = discreteAttributeLimit #Can be number, or "c" or "d"
+        self.discreteAttributeLimit = discreteAttributeLimit
         self.discretePhenotypeLimit = discretePhenotypeLimit
-        self.specifiedAttributes = specifiedAttributes #Must be array of indices
+        self.specifiedAttributes = specifiedAttributes
         self.evalWhileFit = evalWhileFit
-
         self.nu = nu
         self.chi = chi
         self.upsilon = upsilon
@@ -40,12 +242,12 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.selectionMethod = selectionMethod
         self.theta_sel = theta_sel
         self.trackingFrequency = trackingFrequency
-
         self.learningCheckpoints = learningCheckpoints
-
         self.randomSeed = randomSeed
 
-        ##Debugging Tools
+        '''
+        Set debugging tools
+        '''
         self.iterationTrackingObjs = []
         self.printPSet = False
         self.printMSet = False
@@ -69,75 +271,64 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.coveringCounter = 0
         self.gaCounter = 0
 
+    def checkIsInt(self,num):
+        try:
+            n = float(num)
+            if num - int(num) == 0:
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def checkIsFloat(self,num):
+        try:
+            n = float(num)
+            return True
+        except:
+            return False
+
     def fit(self, X, y):
-        """Scikit-learn required: Computes the feature importance scores from the training data.
+        """Scikit-learn required: Supervised training of eLCS
 
         Parameters
         ----------
         X: array-like {n_samples, n_features}
-            Training instances
+            Training instances. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC
         y: array-like {n_samples}
-            Training labels
+            Training labels. ALL INSTANCE PHENOTYPES MUST BE NUMERIC
 
         Returns
         __________
         self
         """
 
-        #Parameter Checking
-        if self.selectionMethod != "tournament" and self.selectionMethod != "roulette":
-            raise Exception("Invalid selection type. Must be tournament or roulette")
-
-        # Check Specified Headers and Discrete Attr List for Validity
-        try:
-            int(self.discreteAttributeLimit)
-        except:
-            if self.discreteAttributeLimit != "c" or self.discreteAttributeLimit != "d":
-                raise Exception("Discrete Attribute Limit is invalid. Must be integer, 'c' or 'd'")
-            else:
-                numAttr = X.shape[1]
-                for a in self.specifiedAttributes:
-                    if a >= numAttr or a < 0:
-                        raise Exception("Indexes for at least one specified attribute is out of bounds")
-
-        if self.discretePhenotypeLimit != "c" and self.discretePhenotypeLimit != "d" and self.discretePhenotypeLimit != 10:
-            raise Exception("Invalid discrete phenotype limit")
-
-        if np.array_equal(self.learningCheckpoints,np.array([])):
-            self.learningCheckpoints = np.array([self.learningIterations])
-        else:
-            if self.learningCheckpoints.min() > self.learningIterations:
-                raise Exception("At least 1 learning evaluation checkpoint must be below the number of learning iterations")
-
-        self.timer = Timer()
-        self.trackingObjs = []
-        self.popStatObjs = []
-
-        if self.randomSeed != "none":
-            try:
-                int(self.randomSeed)
-                random.seed(int(self.randomSeed))
-            except:
-                raise Exception("Random seed must be a number")
-
-        #Check if X and Y are numeric
+        # Check if X and Y are numeric
         try:
             for instance in X:
                 for value in instance:
-                    if not(np.isnan(value)):
+                    if not (np.isnan(value)):
                         float(value)
             for value in y:
-                if not(np.isnan(value)):
+                if not (np.isnan(value)):
                     float(value)
 
         except:
             raise Exception("X and y must be fully numeric")
 
+        #Set up environment
         self.env = OfflineEnvironment(X,y,self)
 
-        if self.trackingFrequency <= 0:
+        # Modify certain params to default values
+        if np.array_equal(self.learningCheckpoints,np.array([])):
+            self.learningCheckpoints = np.array([self.learningIterations])
+
+        if self.trackingFrequency == 0:
             self.trackingFrequency = self.env.formatData.numTrainInstances
 
+        self.timer = Timer()
+        self.trackingObjs = []
+        self.popStatObjs = []
         self.population = ClassifierSet(self)
         self.explorIter = 0
         self.correct = np.empty(self.trackingFrequency)
@@ -183,19 +374,28 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
     def predict(self, X):
         self.timer.startTimeEvaluation()
-        """Scikit-learn required: Computes the feature importance scores from the training data.
+        """Scikit-learn required: Test Accuracy of eLCS
 
             Parameters
                ----------
             X: array-like {n_samples, n_features}
-                Test instances to classify
+                Test instances to classify. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC
 
 
             Returns
             __________
             y: array-like {n_samples}
-                Classifications
+                Classifications.
         """
+
+        try:
+            for instance in X:
+                for value in instance:
+                    if not (np.isnan(value)):
+                        float(value)
+        except:
+            raise Exception("X and y must be fully numeric")
+
         instances = X.shape[0]
         predList = ArrayFactory.createArray(k=1)
 
