@@ -3,7 +3,7 @@ import DataCleanup
 import pandas as pd
 import numpy as np
 from eLCS import *
-
+from DataCleanup import *
 
 class Test_eLCS(unittest.TestCase):
 
@@ -556,17 +556,108 @@ class Test_eLCS(unittest.TestCase):
     '''
 
     #Check X and Y must be numeric for fit method
+    def testFullInts(self):
+        converter = StringEnumerator("Datasets/Tests/NumericTests/numericInts.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=2)
+        clf.fit(dataFeatures,dataPhenotypes)
+        self.assertTrue(clf.explorIter,2)
+
+    def testFullFloats(self):
+        converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloats.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=2)
+        clf.fit(dataFeatures, dataPhenotypes)
+        self.assertTrue(clf.explorIter, 2)
+
+    def testFullFloatsMissing(self):
+        converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloatsMissing.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=2)
+        clf.fit(dataFeatures, dataPhenotypes)
+        self.assertTrue(clf.explorIter, 2)
+
+    def testStringExists(self):
+        data = pd.read_csv("Datasets/Tests/NumericTests/numericFloatsString.csv", sep=',')  # Puts data from csv into indexable np arrays
+        data = data.fillna("NA")
+        dataFeatures = data.drop("class", axis=1).values  # splits into an array of instances
+        dataPhenotypes = data["class"].values
+
+        clf = eLCS(learningIterations=2)
+
+        with self.assertRaises(Exception) as context:
+            clf.fit(dataFeatures,dataPhenotypes)
+        self.assertTrue("X and y must be fully numeric" in str(context.exception))
+
+    def testNANPhenotypeExists(self):
+        data = pd.read_csv("Datasets/Tests/NumericTests/numericFloatsNAN.csv", sep=',')  # Puts data from csv into indexable np arrays
+        data = data.fillna("NA")
+        dataFeatures = data.drop("class", axis=1).values  # splits into an array of instances
+        dataPhenotypes = data["class"].values
+        clf = eLCS(learningIterations=2)
+
+        with self.assertRaises(Exception) as context:
+            clf.fit(dataFeatures,dataPhenotypes)
+        self.assertTrue("X and y must be fully numeric" in str(context.exception))
+
+    #Test Specified and Default Phenotype and Attribute Types
+    def testDefault(self):
+        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=0)
+        clf.fit(dataFeatures,dataPhenotypes)
+        self.assertEqual(clf.env.formatData.attributeInfoType,[True,False,False])
+        self.assertTrue(clf.env.formatData.discretePhenotype)
+
+    def testDefault2(self):
+        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=0,discreteAttributeLimit=9)
+        clf.fit(dataFeatures,dataPhenotypes)
+        self.assertEqual(clf.env.formatData.attributeInfoType,[True,True,True])
+        self.assertTrue(clf.env.formatData.discretePhenotype)
+
+    def testDiscreteSpec(self):
+        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=0,discreteAttributeLimit="d",specifiedAttributes=np.array([0,2,3]))
+        clf.fit(dataFeatures,dataPhenotypes)
+        self.assertEqual(clf.env.formatData.attributeInfoType,[False,True,False])
+        self.assertTrue(clf.env.formatData.discretePhenotype)
+
+    def testContSpec(self):
+        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=0,discreteAttributeLimit="c",specifiedAttributes=np.array([0,2,3]))
+        clf.fit(dataFeatures,dataPhenotypes)
+        self.assertEqual(clf.env.formatData.attributeInfoType,[True,False,True])
+        self.assertTrue(clf.env.formatData.discretePhenotype)
 
     #Check Y must be discrete for fit method (eLCS works best only on classification problems)
+    def testContSpec2(self):
+        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=0,discreteAttributeLimit="c",specifiedAttributes=np.array([0,2,3]),discretePhenotypeLimit="d")
+        clf.fit(dataFeatures,dataPhenotypes)
+        self.assertEqual(clf.env.formatData.attributeInfoType,[True,False,True])
+        self.assertTrue(clf.env.formatData.discretePhenotype)
 
-    #Test balanced accuracy, times for binary attribute/phenotype training data (MP problems)
+    def testContPhenotype(self):
+        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=0, discretePhenotypeLimit=9)
+        with self.assertRaises(Exception) as context:
+            clf.fit(dataFeatures, dataPhenotypes)
+        self.assertTrue("eLCS works best with classification problems. While we have the infrastructure to support continuous phenotypes, we have disabled it for this version." in str(context.exception))
 
-    #Test balanced accuracy, times for binary attribute/phenotype training data w/ missing data
+    #Test performance for binary attribute/phenotype training data (MP problems)
 
-    #Test balanced accuracy, times for continuous attribute training data
+    #Test performance for binary attribute/phenotype training data w/ missing data
 
-    #Test balanced accuracy, times for continuous attribute training data w/ missing data
+    #Test performance for continuous attribute training data
 
-    #Test balanced accuracy, times for binary attribute/phenotype testing data (MP problems w/ CV)
+    #Test performance for continuous attribute training data w/ missing data
 
-    #Test balanced accuracy, times for continuous attribute training data (w/ CV)
+    #Test performance for binary attribute/phenotype testing data (MP problems w/ CV)
+
+    #Test performance for continuous attribute training data (w/ CV)

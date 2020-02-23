@@ -294,9 +294,9 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         Parameters
         ----------
         X: array-like {n_samples, n_features}
-            Training instances. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC
+            Training instances. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC or NAN
         y: array-like {n_samples}
-            Training labels. ALL INSTANCE PHENOTYPES MUST BE NUMERIC
+            Training labels. ALL INSTANCE PHENOTYPES MUST BE NUMERIC NOT NAN OR OTHER TYPE
 
         Returns
         __________
@@ -310,14 +310,16 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                     if not (np.isnan(value)):
                         float(value)
             for value in y:
-                if not (np.isnan(value)):
-                    float(value)
+                float(value)
 
         except:
             raise Exception("X and y must be fully numeric")
 
         #Set up environment
         self.env = OfflineEnvironment(X,y,self)
+
+        if not self.env.formatData.discretePhenotype:
+            raise Exception("eLCS works best with classification problems. While we have the infrastructure to support continuous phenotypes, we have disabled it for this version.")
 
         # Modify certain params to default values
         if np.array_equal(self.learningCheckpoints,np.array([])):

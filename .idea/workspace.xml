@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/IterationRecord.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataManagement.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test_eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test_eLCS.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/eLCS.py" afterDir="false" />
     </list>
@@ -12,15 +15,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DockManager">
-    <window id="1">
+    <window id="3">
       <content type="file-editors">
         <state>
           <leaf>
-            <file pinned="false" current-in-tab="true">
+            <file pinned="false" current-in-tab="false">
               <entry file="file://$PROJECT_DIR$/eLCS.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="465">
-                    <caret line="733" column="23" selection-start-line="733" selection-start-column="23" selection-end-line="733" selection-end-column="23" />
+                  <state relative-caret-position="9681">
+                    <caret line="667" column="69" selection-start-line="667" selection-start-column="69" selection-end-line="667" selection-end-column="69" />
                     <folding>
                       <element signature="e#0#49#0" expanded="true" />
                     </folding>
@@ -29,12 +32,30 @@
               </entry>
             </file>
             <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/ClassifierSet.py">
+              <entry file="file://$PROJECT_DIR$/Timer.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="2775">
-                    <caret line="185" column="41" selection-start-line="185" selection-start-column="32" selection-end-line="185" selection-end-column="41" />
+                  <state relative-caret-position="589">
+                    <caret line="97" column="29" selection-start-line="97" selection-start-column="29" selection-end-line="97" selection-end-column="29" />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/IterationRecord.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="315">
+                    <caret line="22" column="65" lean-forward="true" selection-start-line="22" selection-start-column="65" selection-end-line="22" selection-end-column="65" />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/Classifier.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="465">
+                    <caret line="31" column="39" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
                     <folding>
-                      <element signature="e#0#24#0" expanded="true" />
+                      <element signature="e#0#18#0" expanded="true" />
                     </folding>
                   </state>
                 </provider>
@@ -53,8 +74,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="42" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
+            <state relative-caret-position="270">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -65,20 +86,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
-              <caret line="93" column="21" selection-start-line="93" selection-start-column="21" selection-end-line="93" selection-end-column="21" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Classifier.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
-              <caret line="75" column="20" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
+            <state relative-caret-position="891">
+              <caret line="60" column="42" lean-forward="true" selection-start-line="60" selection-start-column="42" selection-end-line="60" selection-end-column="42" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -87,10 +96,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/IterationRecord.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="213">
+              <caret line="81" column="24" selection-start-line="81" selection-start-column="24" selection-end-line="81" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Test_eLCS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="434">
-              <caret line="572" selection-start-line="572" selection-end-line="572" />
+            <state relative-caret-position="241">
+              <caret line="639" column="92" lean-forward="true" selection-start-line="639" selection-start-column="92" selection-end-line="639" selection-end-column="92" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -99,12 +120,24 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Test_DataCleanup.py">
+        <entry file="file://$PROJECT_DIR$/DataCleanup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1755">
-              <caret line="71" column="36" lean-forward="true" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
+            <state relative-caret-position="255">
+              <caret line="17" column="53" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
               <folding>
-                <element signature="e#0#15#0" expanded="true" />
+                <element signature="e#241#259#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ClassifierSet.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="675">
+              <caret line="45" column="48" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="48" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -121,11 +154,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>specifiedAt</find>
-      <find>runattge</find>
-      <find>correct</find>
-      <find>clears</find>
-      <find>makepop</find>
       <find>runga</find>
       <find>timem</find>
       <find>timed</find>
@@ -149,8 +177,13 @@
       <find>init_fit</find>
       <find>trackingfreq</find>
       <find>array</find>
-      <find>fitnessre</find>
       <find>print</find>
+      <find>fitnessre</find>
+      <find>attributeinfotype</find>
+      <find>getit</find>
+      <find>popset</find>
+      <find>isdefault</find>
+      <find>iterstamp</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -179,18 +212,18 @@
         <option value="$PROJECT_DIR$/OfflineEnvironment.py" />
         <option value="$PROJECT_DIR$/ClassifierSet.py" />
         <option value="$PROJECT_DIR$/Classifier.py" />
-        <option value="$PROJECT_DIR$/DataManagement.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/../../../../Sophomore/SophomoreSpring/NetworkFleetOptimization.py" />
         <option value="$PROJECT_DIR$/eLCS.py" />
+        <option value="$PROJECT_DIR$/DataManagement.py" />
         <option value="$PROJECT_DIR$/Test_eLCS.py" />
+        <option value="$PROJECT_DIR$/IterationRecord.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="4" />
-    <option name="y" value="23" />
-    <option name="width" value="1461" />
+    <option name="y" value="24" />
+    <option name="width" value="1610" />
     <option name="height" value="975" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -485,55 +518,55 @@
       <workItem from="1578944853277" duration="42161000" />
       <workItem from="1579288014899" duration="8492000" />
       <workItem from="1579977390101" duration="1816000" />
-      <workItem from="1581515062679" duration="21599000" />
+      <workItem from="1581515062679" duration="33246000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 33m 35s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 19h 57m 58s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 33m 48s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 20h 00m 54s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 35m 10s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 20h 01m 42s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 36m 44s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 20h 02m 08s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 37m 46s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 20h 05m 34s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 39m 55s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 20h 05m 38s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 41m 00s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 20h 06m 02s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 44m 32s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 20h 07m 23s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 46m 01s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 20h 08m 49s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 13h 51m 45s.xml">
+    <history-entry file="Unittests_for_Test_eLCS_Test_eLCS - 2020.02.22 at 20h 10m 55s.xml">
       <configuration name="Unittests for Test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="396891000" />
+    <option name="totallyTimeSpent" value="408538000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="23" width="1461" height="975" extended-state="0" />
+    <frame x="0" y="24" width="1610" height="975" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16560958" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14987245" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.34994337" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.34994337" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997735" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -549,7 +582,7 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" side_tool="true" weight="0.32959503" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="SciView" order="5" visible="true" weight="0.021141648" />
+      <window_info anchor="right" id="SciView" order="5" visible="true" weight="0.019132653" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -558,7 +591,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Scikit$main.coverage" NAME="main Coverage Results" MODIFIED="1566491398309" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Scikit$Unittests_for_Test_TupleArray_TestTupleArray.coverage" NAME="Unittests for Test_TupleArray.TestTupleArray Coverage Results" MODIFIED="1579042589646" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Scikit$Unittests_for_Test_eLCS_Test_eLCS.coverage" NAME="Unittests for Test_eLCS.Test_eLCS Coverage Results" MODIFIED="1582397503207" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Scikit$Unittests_for_Test_eLCS_Test_eLCS.coverage" NAME="Unittests for Test_eLCS.Test_eLCS Coverage Results" MODIFIED="1582420254072" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Scikit$Unittests_for_Test_ListArray_TestListArray.coverage" NAME="Unittests for Test_ListArray.TestListArray Coverage Results" MODIFIED="1579042574615" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Scikit$Unittests_for_Test_DataCleanup_TestDataCleanup.coverage" NAME="Unittests for Test_DataCleanup.TestDataCleanup Coverage Results" MODIFIED="1574181704111" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
@@ -582,16 +615,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="810">
           <caret line="64" selection-start-line="64" selection-end-line="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataCleanup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="67" column="51" selection-start-line="67" selection-start-column="40" selection-end-line="67" selection-end-column="51" />
-          <folding>
-            <element signature="e#241#259#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -630,13 +653,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="186">
           <caret line="691" selection-start-line="691" selection-end-line="691" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Timer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="346">
-          <caret line="97" column="29" selection-start-line="97" selection-start-column="29" selection-end-line="97" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -711,72 +727,99 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/Timer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="42" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Classifier.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="75" column="20" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataManagement.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="93" column="21" selection-start-line="93" selection-start-column="21" selection-end-line="93" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Test_DataCleanup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1755">
-          <caret line="71" column="36" lean-forward="true" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="589">
+          <caret line="97" column="29" selection-start-line="97" selection-start-column="29" selection-end-line="97" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ClassifierSet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2775">
-          <caret line="185" column="41" selection-start-line="185" selection-start-column="32" selection-end-line="185" selection-end-column="41" />
+        <state relative-caret-position="675">
+          <caret line="45" column="48" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="48" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/eLCS.py">
+    <entry file="file://$PROJECT_DIR$/Test_DataCleanup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="733" column="23" selection-start-line="733" selection-start-column="23" selection-end-line="733" selection-end-column="23" />
+        <state relative-caret-position="-1555">
+          <caret line="71" column="36" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
           <folding>
-            <element signature="e#0#49#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataCleanup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="53" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
+          <folding>
+            <element signature="e#241#259#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Test_eLCS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="572" selection-start-line="572" selection-end-line="572" />
+        <state relative-caret-position="241">
+          <caret line="639" column="92" lean-forward="true" selection-start-line="639" selection-start-column="92" selection-end-line="639" selection-end-column="92" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataManagement.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="891">
+          <caret line="60" column="42" lean-forward="true" selection-start-line="60" selection-start-column="42" selection-end-line="60" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eLCS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9681">
+          <caret line="667" column="69" selection-start-line="667" selection-start-column="69" selection-end-line="667" selection-end-column="69" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classifier.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="39" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/IterationRecord.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="81" column="24" selection-start-line="81" selection-start-column="24" selection-end-line="81" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
