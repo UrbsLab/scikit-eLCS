@@ -59,7 +59,6 @@ class Classifier():
         while len(self.specifiedAttList) < 1:
             for attRef in range(state.size):
                 if random.random() < elcs.p_spec and not(np.isnan(state[attRef])):
-                    # print("B",end="")
                     self.specifiedAttList.append(attRef)
                     self.buildMatch(elcs, attRef, state)  # Add classifierConditionElement
 
@@ -300,13 +299,7 @@ class Classifier():
             tempList1.sort()
             tempList2.sort()
 
-            # if changed:
-            # print("CHANGED")
-            # print(tempList1)
-            # print(tempList2)
-
             if changed and len(set(tempList1) & set(tempList2)) == len(tempList2):
-                # print("PASS")
                 changed = False
 
             return changed

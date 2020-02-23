@@ -10,8 +10,7 @@ and labels into np_array of shape [number of items]'''
 
 converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv","Class")
 headers, classLabel, dataFeatures,dataPhenotypes = converter.getParams()
-t = time.time()
-print("start")
+
 clf = eLCS(learningIterations=10000,doSubsumption=True)
 
 #A manual shuffle is needed to perform a proper CV, because CV trains on the first 2/3 of instances, and tests on the last 1/3 of instances. While the algo will shuffle
@@ -26,7 +25,6 @@ clf.fit(dataFeatures,dataPhenotypes)
 
 print(clf.score(dataFeatures,dataPhenotypes))
 print(clf.timer.reportTimes())
-print("total time:"+str(time.time()-t))
 # clf.printPopSet()
 
 #print(np.mean(cross_val_score(clf,dataFeatures,dataPhenotypes,scoring="balanced_accuracy"))) #Example use of external scorer

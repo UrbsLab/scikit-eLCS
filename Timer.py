@@ -89,9 +89,10 @@ class Timer:
     def returnGlobalTimer(self):
         """ Set the global end timer, call at very end of algorithm. """
         self.globalTime = (time.time() - self.globalStartRef) + self.addedTime  # Reports time in minutes, addedTime is for population reboot.
-        return self.globalTime / 60.0
+        return self.globalTime
 
     def reportTimes(self):
+        self.globalTime = (time.time() - self.globalStartRef) + self.addedTime
         outputTime = {"Global Time":str(self.globalTime),
                      "Matching Time":str(self.globalMatching),
                      "Deletion Time":str(self.globalDeletion),

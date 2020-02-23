@@ -10,9 +10,10 @@ from sklearn.metrics import balanced_accuracy_score
 import numpy as np
 import math
 from DynamicNPArray import ArrayFactory
+from IterationRecord import *
 
 class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
-    def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([1,10,50,100,200,500,700,1000]), evalWhileFit = False, N=1000,
+    def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([]), evalWhileFit = False, N=1000,
                  p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]), discretePhenotypeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
                  doSubsumption=True, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none"):
@@ -246,30 +247,11 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.randomSeed = randomSeed
 
         '''
-        Set debugging tools
+        Set tracking tools
         '''
-        self.iterationTrackingObjs = []
-        self.printPSet = False
-        self.printMSet = False
-        self.printCSet = False
-        self.printPopSize = False
-        self.printGAMech = False
-        self.printMisc = False
-        self.printSubCount = False
-        self.printMicroPopSize = False
-        self.printCrossOver = False
-        self.printMutation = False
-        self.printCovering = False
-        self.printGACount = False
-        self.printIterStampAvg = False
-        self.printCSize = False
-        self.printMSize = False
-
-        self.subsumptionCounter = 0
-        self.crossOverCounter = 0
-        self.mutationCounter = 0
-        self.coveringCounter = 0
-        self.gaCounter = 0
+        self.trackingObj = tempTrackingObj()
+        self.record = IterationRecord()
+        self.hasTrained = False
 
     def checkIsInt(self,num):
         try:
@@ -329,8 +311,6 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             self.trackingFrequency = self.env.formatData.numTrainInstances
 
         self.timer = Timer()
-        self.trackingObjs = []
-        self.popStatObjs = []
         self.population = ClassifierSet(self)
         self.explorIter = 0
         self.correct = np.empty(self.trackingFrequency)
@@ -349,29 +329,46 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 if (self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0:
                     self.population.runPopAveEval(self.explorIter,self)
                     trackedAccuracy = np.sum(self.correct)/float(self.trackingFrequency)
-                    newObj = TrackingEvalObj(trackedAccuracy,self.explorIter,self.trackingFrequency,self)
-                    self.trackingObjs.append(newObj)
+                    self.record.addToTracking(self.explorIter,trackedAccuracy,self.population.aveGenerality,
+                                              self.trackingObj.macroPopSize,self.trackingObj.microPopSize,
+                                              self.trackingObj.matchSetSize,self.trackingObj.correctSetSize,
+                                              self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
+                                              self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
+                                              self.trackingObj.coveringCount,self.trackingObj.deletionCount,
+                                              self.timer.returnGlobalTimer(),self.timer.globalMatching,
+                                              self.timer.globalDeletion,self.timer.globalSubsumption,
+                                              self.timer.globalSelection,self.timer.globalEvaluation)
+                else: #If not detailed track, record regular easy to track data every iteration
+                    self.record.addToTracking(self.explorIter, "", "",
+                                              self.trackingObj.macroPopSize, self.trackingObj.microPopSize,
+                                              self.trackingObj.matchSetSize, self.trackingObj.correctSetSize,
+                                              self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
+                                              self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
+                                              self.trackingObj.coveringCount, self.trackingObj.deletionCount,
+                                              self.timer.returnGlobalTimer(), self.timer.globalMatching,
+                                              self.timer.globalDeletion, self.timer.globalSubsumption,
+                                              self.timer.globalSelection, self.timer.globalEvaluation)
 
                 if (self.explorIter + 1) in self.learningCheckpoints:
                     self.population.runPopAveEval(self.explorIter,self)
                     self.population.runAttGeneralitySum(True,self)
                     self.env.startEvaluationMode()  #Preserves learning position in training data
 
-                    #Only a training file is available
                     if self.env.formatData.discretePhenotype:
                         trainEval = self.doPopEvaluation()
                     else:
                         trainEval = self.doContPopEvaluation()
 
+                    self.record.addToEval(self.explorIter,trainEval[0],trainEval[1],self.population.popSet)
+
                     self.env.stopEvaluationMode()  # Returns to learning position in training data
-                    newEvalObj = PopStatObj(trainEval,self.explorIter+1,self.population,self.correct,self)
-                    self.popStatObjs.append(newEvalObj)
+
                 self.timer.stopTimeEvaluation()
 
             #Incremenet Instance & Iteration
             self.explorIter+=1
             self.env.newInstance()
-        #
+        self.hasTrained = True
         return self
 
     def predict(self, X):
@@ -440,49 +437,13 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
     ##Helper Functions
     def runIteration(self,state_phenotype,exploreIter):
-        iterTrack = IterationTrackingObj()
-
-        if self.printMisc:
-            print("ITERATION:"+str(self.explorIter))
-            print("Data Instance:" ,end=" ")
-            for i in range(state_phenotype[0].size()):
-                print(state_phenotype[0][i],end=" ")
-            print(" w/ Phenotype: ",state_phenotype[1])
-        if self.printPopSize:
-            #print("Population Set Size: "+str(self.population.popSet.size))
-            iterTrack.macroPopSize = len(self.population.popSet)
-            print(len(self.population.popSet))
-        if self.printSubCount:
-            iterTrack.subsumptionCount = self.subsumptionCounter
-            print(self.subsumptionCounter)
-        if self.printMicroPopSize:
-            iterTrack.microPopSize = self.population.microPopSize
-            print(self.population.microPopSize)
-        if self.printCovering:
-            iterTrack.coveringCount = self.coveringCounter
-            print(self.coveringCounter)
-        if self.printCrossOver:
-            iterTrack.crossOverCount = self.crossOverCounter
-            print(self.crossOverCounter)
-        if self.printMutation:
-            iterTrack.mutationCount = self.mutationCounter
-            print(self.mutationCounter)
-        if self.printGACount:
-            iterTrack.GACount = self.gaCounter
-            print(self.gaCounter)
-
-        #Print [P]
-        if self.printPSet:
-            self.printPopSet()
+        #Reset tracking object counters
+        self.trackingObj.resetAll()
 
         #Form [M]
         self.timer.startTimeMatching()
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
         self.timer.stopTimeMatching()
-
-        #Print [M]
-        if self.printMSet:
-            self.printMatchSet()
 
         if self.evalWhileFit:
             #Make a Prediction
@@ -512,18 +473,6 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         #Form [C]
         self.population.makeCorrectSet(self,state_phenotype[1])
 
-        #Print [C]
-        if self.printCSet:
-            self.printCorrectSet()
-
-        if self.printCSize:
-            print(len(self.population.correctSet))
-            iterTrack.correctSetSize = len(self.population.correctSet)
-
-        if self.printMSize:
-            print(len(self.population.matchSet))
-            iterTrack.matchSetSize = len(self.population.matchSet)
-
         #Update Parameters
         self.population.updateSets(self,exploreIter)
 
@@ -533,12 +482,6 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             self.population.doCorrectSetSubsumption(self)
             self.timer.stopTimeSubsumption()
 
-        if self.printIterStampAvg:
-            if len(self.population.correctSet) >= 1:
-                iterTrack.iterStampAvg = self.population.getIterStampAverage()-exploreIter
-            else:
-                iterTrack.iterStampAvg = 0
-
         #Perform GA
         self.population.runGA(self,exploreIter,state_phenotype[0],state_phenotype[1])
 
@@ -547,14 +490,14 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.population.deletion(self,exploreIter)
         self.timer.stopTimeDeletion()
 
+        self.trackingObj.macroPopSize = len(self.population.popSet)
+        self.trackingObj.microPopSize = len(self.population.microPopSize)
+        self.trackingObj.matchSetSize = len(self.population.matchSet)
+        self.trackingObj.correctSetSize = len(self.population.correctSet)
+        self.trackingObj.avgIterAge = self.population.getIterStampAverage()
+
         #Clear [M] and [C]
         self.population.clearSets(self)
-
-        if self.printMisc:
-            print("________________________________________")
-
-        if self.evalWhileFit:
-            self.iterationTrackingObjs.append(iterTrack)
 
     def doPopEvaluation(self):
         noMatch = 0  # How often does the population fail to have a classifier that matches an instance in the data.
@@ -660,6 +603,80 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         resultList = [adjustedAccuracyEstimate, instanceCoverage]
         return resultList
 
+    def exportIterationTrackingDataToCSV(self):
+        if self.hasTrained:
+            self.record.exportTrackingToCSV()
+        else:
+            raise Exception("There is no tracking data to export, as the eLCS model has not been trained")
+
+    def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype"):
+        if self.hasTrained:
+            if self.evalWhileFit:
+                self.record.exportFinalRulePopulationToCSV(headerNames,className)
+            else:
+                self.population.runPopAveEval(self.explorIter, self)
+                self.population.runAttGeneralitySum(True, self)
+                self.env.startEvaluationMode()  # Preserves learning position in training data
+
+                if self.env.formatData.discretePhenotype:
+                    trainEval = self.doPopEvaluation()
+                else:
+                    trainEval = self.doContPopEvaluation()
+
+                self.record.addToEval(self.explorIter, trainEval[0], trainEval[1], self.population.popSet)
+
+                self.env.stopEvaluationMode()  # Returns to learning position in training data
+        else:
+            raise Exception("There is no rule population to export, as the eLCS model has not been trained")
+
+    def getMacroPopulationSize(self,iterationNumber):
+        return self.record.getMacroPopulationSize(iterationNumber)
+
+    def getFinalMacroPopulationSize(self):
+        return self.record.getFinalMacroPopulationSize()
+
+    def getMicroPopulationSize(self, iterationNumber):
+        return self.record.getMicroPopulationSize(iterationNumber)
+
+    def getFinalMicroPopulationSize(self):
+        return self.record.getFinalMicroPopulationSize()
+
+    def getPopAvgGenerality(self, iterationNumber):
+        return self.record.getPopAvgGenerality(iterationNumber)
+
+    def getFinalPopAvgGenerality(self):
+        return self.record.getFinalPopAvgGenerality()
+
+    def getTimeToTrain(self, iterationNumber):
+        return self.record.getTimeToTrain(iterationNumber)
+
+    def getFinalTimeToTrain(self):
+        return self.record.getFinalTimeToTrain()
+
+    def getAccuracy(self, iterationNumber):
+        return self.record.getAccuracy(iterationNumber)
+
+    def getFinalAccuracy(self):
+        if self.evalWhileFit:
+            return self.getFinalAccuracy()
+        else:
+            self.population.runPopAveEval(self.explorIter, self)
+            self.population.runAttGeneralitySum(True, self)
+            self.env.startEvaluationMode()  # Preserves learning position in training data
+
+            if self.env.formatData.discretePhenotype:
+                trainEval = self.doPopEvaluation()
+            else:
+                trainEval = self.doContPopEvaluation()
+
+            self.record.addToEval(self.explorIter, trainEval[0], trainEval[1], self.population.popSet)
+
+            self.env.stopEvaluationMode()  # Returns to learning position in training data
+            return self.getFinalAccuracy()
+
+
+    #######################################################PRINT METHODS FOR DEBUGGING################################################################################
+
     def printClassifier(self,classifier):
         attributeCounter = 0
 
@@ -716,36 +733,29 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             self.printClassifier(classifier)
         print()
 
-class TrackingEvalObj():
-    def __init__(self,accuracy,exploreIter,trackingFrequency,elcs):
-        self.exploreIter = exploreIter
-        self.popSetLength = len(elcs.population.popSet)
-        self.microPopSize = elcs.population.microPopSize
-        self.accuracy = accuracy
-        self.aveGenerality = elcs.population.aveGenerality
-        self.time = elcs.timer.returnGlobalTimer()
-
-class PopStatObj():
-    def __init__(self,trainEval,exploreIter,pop,correct,elcs):
-        self.trainingAccuracy = trainEval[0]
-        self.trainingCoverage = trainEval[1]
-        self.macroPopSize = len(pop.popSet)
-        self.microPopSize = pop.microPopSize
-        self.aveGenerality = pop.aveGenerality
-        self.attributeSpecList = copy.deepcopy(pop.attributeSpecList)
-        self.attributeAccList = copy.deepcopy(pop.attributeAccList)
-        self.times = copy.deepcopy(elcs.timer.reportTimes())
-        self.correct = copy.deepcopy(correct)
-
-class IterationTrackingObj():
+    #######################################################TEMPORARY STORAGE OBJECTS################################################################################
+class tempTrackingObj():
+    #Tracks stats of every iteration (except accuracy, avg generality, and times)
     def __init__(self):
         self.macroPopSize = 0
-        self.subsumptionCount = 0
         self.microPopSize = 0
+        self.matchSetSize = 0
+        self.correctSetSize = 0
+        self.avgIterAge = 0
+        self.subsumptionCount = 0
         self.crossOverCount = 0
         self.mutationCount = 0
         self.coveringCount = 0
-        self.GACount = 0
-        self.iterStampAvg = 0
-        self.correctSetSize = 0
+        self.deletionCount = 0
+
+    def resetAll(self):
+        self.macroPopSize = 0
+        self.microPopSize = 0
         self.matchSetSize = 0
+        self.correctSetSize = 0
+        self.avgIterAge = 0
+        self.subsumptionCount = 0
+        self.crossOverCount = 0
+        self.mutationCount = 0
+        self.coveringCount = 0
+        self.deletionCount = 0

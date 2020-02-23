@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/IterationRecord.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataManagement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test_eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test_eLCS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/Classifier.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClassifierSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/ClassifierSet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IterationRecord.py" beforeDir="false" afterPath="$PROJECT_DIR$/IterationRecord.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Timer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Timer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/eLCS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,47 +16,17 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DockManager">
-    <window id="3">
+    <window id="4">
       <content type="file-editors">
         <state>
           <leaf>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/eLCS.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="9681">
-                    <caret line="667" column="69" selection-start-line="667" selection-start-column="69" selection-end-line="667" selection-end-column="69" />
-                    <folding>
-                      <element signature="e#0#49#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/Timer.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="589">
-                    <caret line="97" column="29" selection-start-line="97" selection-start-column="29" selection-end-line="97" selection-end-column="29" />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
+            <file pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/IterationRecord.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="315">
-                    <caret line="22" column="65" lean-forward="true" selection-start-line="22" selection-start-column="65" selection-end-line="22" selection-end-column="65" />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/Classifier.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="465">
-                    <caret line="31" column="39" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
+                  <state relative-caret-position="1950">
+                    <caret line="130" column="11" selection-start-line="130" selection-start-column="11" selection-end-line="130" selection-end-column="11" />
                     <folding>
-                      <element signature="e#0#18#0" expanded="true" />
+                      <element signature="e#0#10#0" expanded="true" />
                     </folding>
                   </state>
                 </provider>
@@ -74,8 +45,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="375">
+              <caret line="26" column="30" lean-forward="true" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -84,22 +55,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DataManagement.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="891">
-              <caret line="60" column="42" lean-forward="true" selection-start-line="60" selection-start-column="42" selection-end-line="60" selection-end-column="42" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/IterationRecord.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="81" column="24" selection-start-line="81" selection-start-column="24" selection-end-line="81" selection-end-column="24" />
+            <state relative-caret-position="-75">
+              <caret line="130" column="4" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="4" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -110,8 +69,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Test_eLCS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="639" column="92" lean-forward="true" selection-start-line="639" selection-start-column="92" selection-end-line="639" selection-end-column="92" />
+            <state relative-caret-position="-1245">
+              <caret line="552" column="33" lean-forward="true" selection-start-line="552" selection-start-column="33" selection-end-line="552" selection-end-column="33" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -120,12 +79,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DataCleanup.py">
+        <entry file="file://$PROJECT_DIR$/Classifier.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="53" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
+            <state relative-caret-position="3075">
+              <caret line="205" column="24" selection-start-line="205" selection-start-column="24" selection-end-line="205" selection-end-column="24" />
               <folding>
-                <element signature="e#241#259#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -134,10 +93,31 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ClassifierSet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
-              <caret line="45" column="48" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="48" />
+            <state relative-caret-position="335">
+              <caret line="367" column="53" selection-start-line="367" selection-start-column="53" selection-end-line="367" selection-end-column="53" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Timer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1455">
+              <caret line="97" column="59" selection-start-line="97" selection-start-column="59" selection-end-line="97" selection-end-column="59" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/eLCS.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-286">
+              <caret line="632" column="15" selection-start-line="632" selection-start-column="15" selection-end-line="632" selection-end-column="15" />
+              <folding>
+                <element signature="e#0#49#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -154,15 +134,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>runga</find>
-      <find>timem</find>
-      <find>timed</find>
-      <find>elcs</find>
-      <find>clearset</find>
-      <find>start</find>
-      <find>timer</find>
-      <find>time</find>
-      <find>tuplearray</find>
       <find>append</find>
       <find>condition</find>
       <find>state</find>
@@ -177,13 +148,22 @@
       <find>init_fit</find>
       <find>trackingfreq</find>
       <find>array</find>
-      <find>print</find>
       <find>fitnessre</find>
       <find>attributeinfotype</find>
       <find>getit</find>
       <find>popset</find>
       <find>isdefault</find>
       <find>iterstamp</find>
+      <find>popstat</find>
+      <find>trackingevalobj</find>
+      <find>iterationtrackingobj</find>
+      <find>subsumption</find>
+      <find>subsumptioncounter</find>
+      <find>deletioncounter</find>
+      <find>crossovercoun</find>
+      <find>print</find>
+      <find>runpop</find>
+      <find>added</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -204,20 +184,20 @@
         <option value="$PROJECT_DIR$/Old/eLCS.py" />
         <option value="$PROJECT_DIR$/Test_DynamicNPArray.py" />
         <option value="$PROJECT_DIR$/Test_TupleArray.py" />
-        <option value="$PROJECT_DIR$/Timer.py" />
         <option value="$PROJECT_DIR$/DynamicNPArraySpeedTests.py" />
         <option value="$PROJECT_DIR$/Test_ListArray.py" />
         <option value="$PROJECT_DIR$/DynamicNPArray.py" />
         <option value="$PROJECT_DIR$/Prediction.py" />
         <option value="$PROJECT_DIR$/OfflineEnvironment.py" />
-        <option value="$PROJECT_DIR$/ClassifierSet.py" />
-        <option value="$PROJECT_DIR$/Classifier.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/../../../../Sophomore/SophomoreSpring/NetworkFleetOptimization.py" />
-        <option value="$PROJECT_DIR$/eLCS.py" />
         <option value="$PROJECT_DIR$/DataManagement.py" />
         <option value="$PROJECT_DIR$/Test_eLCS.py" />
+        <option value="$PROJECT_DIR$/Classifier.py" />
+        <option value="$PROJECT_DIR$/ClassifierSet.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/Timer.py" />
         <option value="$PROJECT_DIR$/IterationRecord.py" />
+        <option value="$PROJECT_DIR$/eLCS.py" />
       </list>
     </option>
   </component>
@@ -518,7 +498,7 @@
       <workItem from="1578944853277" duration="42161000" />
       <workItem from="1579288014899" duration="8492000" />
       <workItem from="1579977390101" duration="1816000" />
-      <workItem from="1581515062679" duration="33246000" />
+      <workItem from="1581515062679" duration="37934000" />
     </task>
     <servers />
   </component>
@@ -555,7 +535,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="408538000" />
+    <option name="totallyTimeSpent" value="413226000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1610" height="975" extended-state="0" />
@@ -727,23 +707,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Timer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="589">
-          <caret line="97" column="29" selection-start-line="97" selection-start-column="29" selection-end-line="97" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ClassifierSet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="45" column="48" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="48" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Test_DataCleanup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1555">
@@ -764,26 +727,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Test_eLCS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="639" column="92" lean-forward="true" selection-start-line="639" selection-start-column="92" selection-end-line="639" selection-end-column="92" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="891">
@@ -794,32 +737,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/eLCS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9681">
-          <caret line="667" column="69" selection-start-line="667" selection-start-column="69" selection-end-line="667" selection-end-column="69" />
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Classifier.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="39" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
+        <state relative-caret-position="3075">
+          <caret line="205" column="24" selection-start-line="205" selection-start-column="24" selection-end-line="205" selection-end-column="24" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ClassifierSet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="367" column="53" selection-start-line="367" selection-start-column="53" selection-end-line="367" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Timer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1455">
+          <caret line="97" column="59" selection-start-line="97" selection-start-column="59" selection-end-line="97" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="26" column="30" lean-forward="true" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Test_eLCS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1245">
+          <caret line="552" column="33" lean-forward="true" selection-start-line="552" selection-start-column="33" selection-end-line="552" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/IterationRecord.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="81" column="24" selection-start-line="81" selection-start-column="24" selection-end-line="81" selection-end-column="24" />
+        <state relative-caret-position="-75">
+          <caret line="130" column="4" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="4" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eLCS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-286">
+          <caret line="632" column="15" selection-start-line="632" selection-start-column="15" selection-end-line="632" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
           </folding>
         </state>
       </provider>

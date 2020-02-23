@@ -40,11 +40,10 @@ class ClassifierSet:
 
         #Covering
         while doCovering:
-            #print("Covering")
             newCl = Classifier(elcs,setNumerositySum+1,exploreIter,state,phenotype)
             self.addClassifierToPopulation(elcs,newCl,True)
             self.matchSet.append(len(self.popSet) - 1)
-            elcs.coveringCounter+=1
+            elcs.trackingObj.coveringCount+=1
             doCovering = False
 
     def getIdenticalClassifier(self,elcs,newCl):
@@ -104,12 +103,7 @@ class ClassifierSet:
             while i < len(self.correctSet):
                 ref = self.correctSet[i]
                 if subsumer.isMoreGeneral(self.popSet[ref],elcs):
-                    if elcs.printGAMech:
-                        print("Subsumption Done:")
-                        elcs.printClassifier(self.popSet[ref])
-                        print("Subsumed by")
-                        elcs.printClassifier(subsumer)
-                    elcs.subsumptionCounter += 1
+                    elcs.trackingObj.subsumptionCount += 1
                     subsumer.updateNumerosity(self.popSet[ref].numerosity)
                     self.removeMacroClassifier(ref)
                     self.deleteFromMatchSet(ref)
@@ -158,12 +152,6 @@ class ClassifierSet:
             clP1 = selectList[0]
             clP2 = selectList[1]
 
-        if elcs.printGAMech:
-            print("First Chosen Parent:")
-            elcs.printClassifier(clP1)
-            print("Second Chosen Parent")
-            elcs.printClassifier(clP2)
-
         #Initialize Offspring
         cl1 = Classifier(elcs,clP1,exploreIter)
         if clP2 == None:
@@ -173,12 +161,7 @@ class ClassifierSet:
 
         #Crossover Operator (uniform crossover)
         if not cl1.equals(elcs,cl2) and random.random() < elcs.chi:
-            if elcs.printGAMech:
-                print("Crossover Invoked")
             changed = cl1.uniformCrossover(elcs,cl2)
-            if elcs.printGAMech:
-                elcs.printClassifier(cl1)
-                elcs.printClassifier(cl2)
 
         #Initialize Key Offspring Parameters
         if changed:
@@ -197,19 +180,12 @@ class ClassifierSet:
 
         #Add offspring to population
         if changed or nowchanged or howaboutnow:
-            if elcs.printMutation or elcs.printCrossOver or elcs.printGAMech:
-                if nowchanged:
-                    if elcs.printGAMech:
-                        print("Mutation Cl1")
-                    elcs.mutationCounter += 1
-                if howaboutnow:
-                    if elcs.printGAMech:
-                        print("Mutation Cl2")
-                    elcs.mutationCounter += 1
-                if changed:
-                    if elcs.printGAMech:
-                        print("Crossover")
-                    elcs.crossOverCounter += 1
+            if nowchanged:
+                elcs.trackingObj.mutationCount += 1
+            if howaboutnow:
+                elcs.trackingObj.mutationCount += 1
+            if changed:
+                elcs.trackingObj.crossOverCount += 1
             elcs.timer.startTimeSubsumption()
             self.insertDiscoveredClassifiers(elcs,cl1, cl2, clP1, clP2, exploreIter)  # Subsumption
             elcs.timer.stopTimeSubsumption()
@@ -221,7 +197,6 @@ class ClassifierSet:
             ref = self.correctSet[i]
             sumCl += self.popSet[ref].timeStampGA * self.popSet[ref].numerosity
             numSum += self.popSet[ref].numerosity
-        #print("ITERSTAMP AVG: ",sumCl/float(numSum))
         return sumCl/float(numSum)
 
     def setIterStamps(self,exploreIter):
@@ -306,27 +281,16 @@ class ClassifierSet:
                 self.addClassifierToPopulation(elcs,cl1,False)
             if len(cl2.specifiedAttList) > 0:
                 self.addClassifierToPopulation(elcs,cl2, False)
-            if elcs.printGAMech:
-                print("Offspring Classifier:")
-                elcs.printClassifier(cl1)
-                print("Offspring Classifier:")
-                elcs.printClassifier(cl2)
 
     def subsumeClassifier(self,elcs,cl=None,cl1P=None,cl2P=None):
         if cl1P != None and cl1P.subsumes(elcs,cl):
             self.microPopSize += 1
             cl1P.updateNumerosity(1)
-            if elcs.printGAMech:
-                print("Parent 1 Subsumes:")
-                elcs.printClassifier(cl)
-            elcs.subsumptionCounter+=1
+            elcs.trackingObj.subsumptionCount+=1
         elif cl2P != None and cl2P.subsumes(elcs,cl):
             self.microPopSize += 1
             cl2P.updateNumerosity(1)
-            if elcs.printGAMech:
-                print("Parent 2 Subsumes:")
-                elcs.printClassifier(cl)
-            elcs.subsumptionCounter += 1
+            elcs.trackingObj.subsumptionCount += 1
         else:
             self.subsumeClassifier2(elcs,cl)  # Try to subsume in the correct set.
 
@@ -340,17 +304,9 @@ class ClassifierSet:
             choice = int(random.random()*len(choices))
             self.popSet[int(choices[choice])].updateNumerosity(1)
             self.microPopSize += 1
-            if elcs.printGAMech:
-                print("Subsumption Done in Correct Set:")
-                elcs.printClassifier(cl)
-                print("Subsumed by")
-                elcs.printClassifier(self.popSet[(int(choices[choice]))])
-            elcs.subsumptionCounter += 1
+            elcs.trackingObj.subsumptionCount += 1
             return
         self.addClassifierToPopulation(elcs,cl,False)
-        if elcs.printGAMech:
-            print("Offspring Classifier:")
-            elcs.printClassifier(cl)
 
     def deletion(self,elcs,exploreIter):
         while (self.microPopSize > elcs.N):
@@ -380,6 +336,7 @@ class ClassifierSet:
                     self.removeMacroClassifier(i)
                     self.deleteFromMatchSet(i)
                     self.deleteFromCorrectSet(i)
+                    elcs.trackingObj.deletionCount += 1
                 return
         return
 
