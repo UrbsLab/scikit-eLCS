@@ -138,7 +138,6 @@ class ClassifierSet:
             return
         elcs.timer.startTimeSelection()
 
-        elcs.gaCounter += 1
         self.setIterStamps(exploreIter)
         changed = False
 

@@ -252,6 +252,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.trackingObj = tempTrackingObj()
         self.record = IterationRecord()
         self.hasTrained = False
+        self.evalWhileFitAfter = self.evalWhileFit
 
     def checkIsInt(self,num):
         try:
@@ -284,6 +285,9 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         __________
         self
         """
+        #If trained already, raise Exception
+        if self.hasTrained:
+            raise Exception("Cannot train already trained model again")
 
         # Check if X and Y are numeric
         try:
@@ -322,33 +326,34 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
             self.runIteration(state_phenotype,self.explorIter)
 
+
+            #Evaluations of Algorithm
+            self.timer.startTimeEvaluation()
+
+            if ((self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0 and self.evalWhileFit) or self.explorIter + 1 == self.learningIterations:
+                self.population.runPopAveEval(self.explorIter,self)
+                trackedAccuracy = np.sum(self.correct)/float(self.trackingFrequency)
+                self.record.addToTracking(self.explorIter,trackedAccuracy,self.population.aveGenerality,
+                                            self.trackingObj.macroPopSize,self.trackingObj.microPopSize,
+                                            self.trackingObj.matchSetSize,self.trackingObj.correctSetSize,
+                                            self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
+                                            self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
+                                            self.trackingObj.coveringCount,self.trackingObj.deletionCount,
+                                            self.timer.returnGlobalTimer(),self.timer.globalMatching,
+                                            self.timer.globalDeletion,self.timer.globalSubsumption,
+                                            self.timer.globalSelection,self.timer.globalEvaluation)
+            else: #If not detailed track, record regular easy to track data every iteration
+                self.record.addToTracking(self.explorIter, "", "",
+                                            self.trackingObj.macroPopSize, self.trackingObj.microPopSize,
+                                            self.trackingObj.matchSetSize, self.trackingObj.correctSetSize,
+                                            self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
+                                            self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
+                                            self.trackingObj.coveringCount, self.trackingObj.deletionCount,
+                                            self.timer.returnGlobalTimer(), self.timer.globalMatching,
+                                            self.timer.globalDeletion, self.timer.globalSubsumption,
+                                            self.timer.globalSelection, self.timer.globalEvaluation)
+
             if self.evalWhileFit:
-                #Evaluations of Algorithm
-                self.timer.startTimeEvaluation()
-
-                if (self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0:
-                    self.population.runPopAveEval(self.explorIter,self)
-                    trackedAccuracy = np.sum(self.correct)/float(self.trackingFrequency)
-                    self.record.addToTracking(self.explorIter,trackedAccuracy,self.population.aveGenerality,
-                                              self.trackingObj.macroPopSize,self.trackingObj.microPopSize,
-                                              self.trackingObj.matchSetSize,self.trackingObj.correctSetSize,
-                                              self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
-                                              self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
-                                              self.trackingObj.coveringCount,self.trackingObj.deletionCount,
-                                              self.timer.returnGlobalTimer(),self.timer.globalMatching,
-                                              self.timer.globalDeletion,self.timer.globalSubsumption,
-                                              self.timer.globalSelection,self.timer.globalEvaluation)
-                else: #If not detailed track, record regular easy to track data every iteration
-                    self.record.addToTracking(self.explorIter, "", "",
-                                              self.trackingObj.macroPopSize, self.trackingObj.microPopSize,
-                                              self.trackingObj.matchSetSize, self.trackingObj.correctSetSize,
-                                              self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
-                                              self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
-                                              self.trackingObj.coveringCount, self.trackingObj.deletionCount,
-                                              self.timer.returnGlobalTimer(), self.timer.globalMatching,
-                                              self.timer.globalDeletion, self.timer.globalSubsumption,
-                                              self.timer.globalSelection, self.timer.globalEvaluation)
-
                 if (self.explorIter + 1) in self.learningCheckpoints:
                     self.population.runPopAveEval(self.explorIter,self)
                     self.population.runAttGeneralitySum(True,self)
@@ -363,7 +368,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
                     self.env.stopEvaluationMode()  # Returns to learning position in training data
 
-                self.timer.stopTimeEvaluation()
+            self.timer.stopTimeEvaluation()
 
             #Incremenet Instance & Iteration
             self.explorIter+=1
@@ -422,10 +427,10 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     scorer like above to override this scoring method as well if you want.
     
     '''
-    #Commented out score function so that RegressorMixin and ClassifierMixin default methods can be used appropriately
-    # def score(self,X,y):
-    #     predList = self.predict(X)
-    #     return balanced_accuracy_score(y, predList) #Make it balanced accuracy
+    #Commented out score function if continuous phenotype is built in, so that RegressorMixin and ClassifierMixin default methods can be used appropriately
+    def score(self,X,y):
+        predList = self.predict(X)
+        return balanced_accuracy_score(y, predList) #Make it balanced accuracy
 
     def transform(self, X):
         """Not needed for eLCS"""
@@ -491,7 +496,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.timer.stopTimeDeletion()
 
         self.trackingObj.macroPopSize = len(self.population.popSet)
-        self.trackingObj.microPopSize = len(self.population.microPopSize)
+        self.trackingObj.microPopSize = self.population.microPopSize
         self.trackingObj.matchSetSize = len(self.population.matchSet)
         self.trackingObj.correctSetSize = len(self.population.correctSet)
         self.trackingObj.avgIterAge = self.population.getIterStampAverage()
@@ -535,7 +540,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                     classAccDict[each].updateAccuracy(thisIsMe, accuratePhenotype)
 
             self.env.newInstance()  # next instance
-            self.population.clearSets()
+            self.population.clearSets(self)
 
         # Calculate Standard Accuracy--------------------------------------------
         instancesCorrectlyClassified = classAccDict[phenotypeList[0]].T_myClass + classAccDict[phenotypeList[0]].T_otherClass
@@ -611,7 +616,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
     def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype"):
         if self.hasTrained:
-            if self.evalWhileFit:
+            if self.evalWhileFitAfter:
                 self.record.exportFinalRulePopulationToCSV(headerNames,className)
             else:
                 self.population.runPopAveEval(self.explorIter, self)
@@ -623,8 +628,8 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 else:
                     trainEval = self.doContPopEvaluation()
 
-                self.record.addToEval(self.explorIter, trainEval[0], trainEval[1], self.population.popSet)
-
+                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], self.population.popSet)
+                self.evalWhileFitAfter = True #So it doesn't run this else again if this is invoked again
                 self.env.stopEvaluationMode()  # Returns to learning position in training data
         else:
             raise Exception("There is no rule population to export, as the eLCS model has not been trained")
@@ -657,22 +662,22 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         return self.record.getAccuracy(iterationNumber)
 
     def getFinalAccuracy(self):
-        if self.evalWhileFit:
-            return self.getFinalAccuracy()
+        if self.evalWhileFitAfter:
+            return self.record.getFinalAccuracy()
         else:
             self.population.runPopAveEval(self.explorIter, self)
             self.population.runAttGeneralitySum(True, self)
             self.env.startEvaluationMode()  # Preserves learning position in training data
-
             if self.env.formatData.discretePhenotype:
                 trainEval = self.doPopEvaluation()
             else:
                 trainEval = self.doContPopEvaluation()
 
-            self.record.addToEval(self.explorIter, trainEval[0], trainEval[1], self.population.popSet)
+            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], self.population.popSet)
 
             self.env.stopEvaluationMode()  # Returns to learning position in training data
-            return self.getFinalAccuracy()
+            self.evalWhileFitAfter = True #So it doesn't run this again when this is invoked again
+            return self.record.getFinalAccuracy()
 
 
     #######################################################PRINT METHODS FOR DEBUGGING################################################################################

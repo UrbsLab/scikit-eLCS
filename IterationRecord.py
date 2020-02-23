@@ -44,13 +44,13 @@ class IterationRecord():
                       subsumptionCount,crossoverCount,mutationCount,coveringCount,deletionCount,
                       globalTime,matchingTime,deletionTime,subsumptionTime,selectionTime,evaluationTime):
 
-        self.trackingDict[iterationNumber] = [iterationNumber,accuracy,avgPopGenerality,macroSize,microSize,mSize,cSize,iterAvg,
+        self.trackingDict[iterationNumber] = [accuracy,avgPopGenerality,macroSize,microSize,mSize,cSize,iterAvg,
                                    subsumptionCount,crossoverCount,mutationCount,coveringCount,deletionCount,
                                    globalTime,matchingTime,deletionTime,subsumptionTime,selectionTime,evaluationTime]
 
 
     def addToEval(self,iterationNumber,evalAccuracy,instanceCoverage,fullPopSet):
-        self.evaluationDict[iterationNumber] = [iterationNumber,evalAccuracy,instanceCoverage,fullPopSet]
+        self.evaluationDict[iterationNumber] = [evalAccuracy,instanceCoverage,fullPopSet]
 
     def exportTrackingToCSV(self):
         #Exports each entry in Tracking Array as a column
@@ -126,39 +126,44 @@ class IterationRecord():
             raise Exception("No Evaluation Data Exists for this iteration. If you want to have evaluation data for this iteration, make sure it was included in the learningCheckpoints param in eLCS")
 
     def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className='phenotype'):
-        self.exportEvaluationToCSV(len(self.evaluationDict.items())-1,headerNames,className)
+        self.exportEvaluationToCSV(sorted(self.evaluationDict.items())[len(self.evaluationDict.items()) - 1][0],headerNames,className)
 
     def getMacroPopulationSize(self,iterationNumber):
         if iterationNumber in self.trackingDict:
             return self.trackingDict[iterationNumber][2]
+        raise Exception("Iteration Number not tracked")
 
     def getFinalMacroPopulationSize(self):
-        return self.trackingDict[len(self.trackingDict.items())-1][2]
+        return sorted(self.trackingDict.items())[len(self.trackingDict.items()) - 1][1][2]
 
     def getMicroPopulationSize(self, iterationNumber):
         if iterationNumber in self.trackingDict:
             return self.trackingDict[iterationNumber][3]
+        raise Exception("Iteration Number not tracked")
 
     def getFinalMicroPopulationSize(self):
-        return self.trackingDict[len(self.trackingDict.items()) - 1][3]
+        return sorted(self.trackingDict.items())[len(self.trackingDict.items()) - 1][1][3]
 
     def getPopAvgGenerality(self, iterationNumber):
         if iterationNumber in self.trackingDict:
             return self.trackingDict[iterationNumber][1]
+        raise Exception("Iteration Number not tracked")
 
     def getFinalPopAvgGenerality(self):
-        return self.trackingDict[len(self.trackingDict.items()) - 1][1]
+        return sorted(self.trackingDict.items())[len(self.trackingDict.items()) - 1][1][1]
 
     def getTimeToTrain(self, iterationNumber):
         if iterationNumber in self.trackingDict:
             return self.trackingDict[iterationNumber][12]
+        raise Exception("Iteration Number not tracked")
 
     def getFinalTimeToTrain(self):
-        return self.trackingDict[len(self.trackingDict.items()) - 1][12]
+        return sorted(self.trackingDict.items())[len(self.trackingDict.items())-1][1][12]
 
     def getAccuracy(self, iterationNumber):
         if iterationNumber in self.trackingDict:
             return self.evaluationDict[iterationNumber][0]
+        raise Exception("Iteration Number not tracked")
 
     def getFinalAccuracy(self):
-        return self.evalDict[len(self.evalDict.items()) - 1][0]
+        return sorted(self.evaluationDict.items())[len(self.evaluationDict.items())-1][1][0]
