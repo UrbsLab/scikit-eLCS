@@ -8,7 +8,7 @@ from sklearn.model_selection import cross_val_score
 '''Separates out features into np_array of shape [number of items, number of features per item] 
 and labels into np_array of shape [number of items]'''
 
-converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv", "Class")
+converter = StringEnumerator("Datasets/Real/Multiplexer11.csv", "class")
 headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
 clf = eLCS(learningIterations=5000)
 

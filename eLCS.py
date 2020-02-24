@@ -23,6 +23,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         :param trackingFrequency:       Must be nonnegative integer. Relevant only if evalWhileFit param is true. Conducts accuracy approximations and population measurements every trackingFrequency iterations.
                                         If param == 0, tracking done once every epoch.
         :param learningCheckpoints:     Must be ndarray of nonnegative integers. Relevant only if evalWhileFit param is true. Conducts detailed evaluation of model performance by finding precise training accuracy
+                                        at the specified iteration count. Iterations are 0 indexed.
         :param evalWhileFit:            Must be boolean. Determines if live tracking and evaluation is done during model training
         :param N:                       Must be nonnegative integer. Maximum micro classifier population size (sum of classifier numerosities).
         :param p_spec:                  Must be float from 0 - 1. Probability of specifying an attribute during the covering procedure. Advised: larger amounts of attributes => lower p_spec values
@@ -308,8 +309,8 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             raise Exception("eLCS works best with classification problems. While we have the infrastructure to support continuous phenotypes, we have disabled it for this version.")
 
         # Modify certain params to default values
-        if np.array_equal(self.learningCheckpoints,np.array([])):
-            self.learningCheckpoints = np.array([self.learningIterations])
+        if not (self.learningIterations - 1 in self.learningCheckpoints):
+            self.learningCheckpoints = np.append(self.learningCheckpoints,self.learningIterations - 1)
 
         if self.trackingFrequency == 0:
             self.trackingFrequency = self.env.formatData.numTrainInstances
@@ -354,7 +355,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                                             self.timer.globalSelection, self.timer.globalEvaluation)
 
             if self.evalWhileFit:
-                if (self.explorIter + 1) in self.learningCheckpoints:
+                if (self.explorIter) in self.learningCheckpoints: #0 indexed learning Checkpoints
                     self.population.runPopAveEval(self.explorIter,self)
                     self.population.runAttGeneralitySum(True,self)
                     self.env.startEvaluationMode()  #Preserves learning position in training data
@@ -634,6 +635,9 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         else:
             raise Exception("There is no rule population to export, as the eLCS model has not been trained")
 
+    '''
+    Note that all iterationNumbers are zero indexed (i.e. if learningIterations = 1000, the last iteration would be 999)
+    '''
     def getMacroPopulationSize(self,iterationNumber):
         return self.record.getMacroPopulationSize(iterationNumber)
 
@@ -659,7 +663,10 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         return self.record.getFinalTimeToTrain()
 
     def getAccuracy(self, iterationNumber):
-        return self.record.getAccuracy(iterationNumber)
+        if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
+            return self.record.getAccuracy(iterationNumber)
+        else:
+            self.getFinalAccuracy()
 
     def getFinalAccuracy(self):
         if self.evalWhileFitAfter:
