@@ -75,14 +75,14 @@ class IterationRecord():
         :return:
         '''
         if not (iterationNumber in self.evaluationDict):
-            raise Exception("No Evaluation Data Exists for this iteration. If you want to have evaluation data for this iteration, make sure it was included in the learningCheckpoints param in eLCS")
+            raise Exception("No Evaluation Data Exists for this iteration. If you want to have evaluation data for this iteration, make sure it was included in the learningCheckpoints param in eLCS and that evalWhileFit is True")
 
         numAttributes = elcs.env.formatData.numAttributes
 
         headerNames = headerNames.tolist() #Convert to Python List
 
         #Default headerNames if none provided
-        if isinstance(headerNames,np.ndarray):
+        if len(headerNames) == 0:
             for i in range(numAttributes):
                 headerNames.append("N"+str(i))
 

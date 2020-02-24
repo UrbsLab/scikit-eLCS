@@ -8,32 +8,32 @@ from sklearn.model_selection import cross_val_score
 '''Separates out features into np_array of shape [number of items, number of features per item] 
 and labels into np_array of shape [number of items]'''
 
-converter = StringEnumerator("Datasets/Real/Multiplexer11.csv", "class")
+converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv", "Class")
 headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-clf = eLCS(learningIterations=5000)
+clf = eLCS(learningIterations=5000,evalWhileFit=True,learningCheckpoints=np.array([99,999]))
 
 clf.fit(dataFeatures,dataPhenotypes)
 
-clf.exportIterationTrackingDataToCSV()
-clf.exportRulePopulationAtIterationToCSV(4999,headers,classLabel)
-#clf.exportFinalRulePopulationToCSV(headers,classLabel)
-
 #Standard Getters
-print(clf.getMacroPopulationSize(iterationNumber=300))
+print(clf.getMacroPopulationSize(iterationNumber=299))
 print(clf.getFinalMacroPopulationSize())
 
-print(clf.getMicroPopulationSize(iterationNumber=300))
+print(clf.getMicroPopulationSize(iterationNumber=299))
 print(clf.getFinalMicroPopulationSize())
 
-print(clf.getPopAvgGenerality(iterationNumber=300))
+print(clf.getPopAvgGenerality(iterationNumber=299))
 print(clf.getFinalPopAvgGenerality())
 
-print(clf.getTimeToTrain(iterationNumber=300))
+print(clf.getTimeToTrain(iterationNumber=299))
 print(clf.getFinalTimeToTrain())
 
 #Eval Getters
-print(clf.getAccuracy(iterationNumber=4999))
 print(clf.getFinalAccuracy())
+print(clf.getAccuracy(iterationNumber=4999))
+
+clf.exportIterationTrackingDataToCSV()
+clf.exportRulePopulationAtIterationToCSV(4999,headerNames=headers,className=classLabel)
+#clf.exportFinalRulePopulationToCSV(headers,classLabel)
 
 #A manual shuffle is needed to perform a proper CV, because CV trains on the first 2/3 of instances, and tests on the last 1/3 of instances. While the algo will shuffle
 #the 2/3 of instances, the original set needs to be shuffled as well.

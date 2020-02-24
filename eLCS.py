@@ -365,7 +365,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                     else:
                         trainEval = self.doContPopEvaluation()
 
-                    self.record.addToEval(self.explorIter,trainEval[0],trainEval[1],self.population.popSet)
+                    self.record.addToEval(self.explorIter,trainEval[0],trainEval[1],copy.deepcopy(self.population.popSet))
 
                     self.env.stopEvaluationMode()  # Returns to learning position in training data
 
@@ -615,12 +615,19 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         else:
             raise Exception("There is no tracking data to export, as the eLCS model has not been trained")
 
+    '''
+    If evalWhiteFit was turned off, as long as the iterationNumber is the final iteration, an immediate evaluation will be run
+    on the population and an export will be made. Past unsaved rule populations are not obviously not valid for evaluation or export.
+    '''
     def exportRulePopulationAtIterationToCSV(self,iterationNumber,headerNames=np.array([]),className='phenotype'):
         if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
             self.record.exportEvaluationToCSV(self, iterationNumber, headerNames, className)
         else:
             self.exportFinalRulePopulationToCSV(headerNames,className)
 
+    '''
+    Even if evalWhileFit was turned off, this will run an immediate evaluation and export it.
+    '''
     def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype"):
         if self.hasTrained:
             if self.evalWhileFitAfter:
@@ -635,7 +642,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 else:
                     trainEval = self.doContPopEvaluation()
 
-                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], self.population.popSet)
+                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet))
                 self.evalWhileFitAfter = True #So it doesn't run this else again if this is invoked again
                 self.env.stopEvaluationMode()  # Returns to learning position in training data
                 self.record.exportFinalRulePopulationToCSV(self,headerNames, className)
@@ -669,12 +676,19 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     def getFinalTimeToTrain(self):
         return self.record.getFinalTimeToTrain()
 
+    '''
+    If evalWhiteFit was turned off, as long as the iterationNumber is the final iteration, an immediate evaluation will be run
+    on the population. Past unsaved rule populations are not obviously not valid for evaluation.
+    '''
     def getAccuracy(self, iterationNumber):
         if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
             return self.record.getAccuracy(iterationNumber)
         else:
             self.getFinalAccuracy()
 
+    '''
+    Even if evalWhileFit was turned off, this will run an immediate evaluation and give an accuracy.
+    '''
     def getFinalAccuracy(self):
         if self.evalWhileFitAfter:
             return self.record.getFinalAccuracy()
@@ -687,7 +701,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             else:
                 trainEval = self.doContPopEvaluation()
 
-            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], self.population.popSet)
+            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet))
 
             self.env.stopEvaluationMode()  # Returns to learning position in training data
             self.evalWhileFitAfter = True #So it doesn't run this again when this is invoked again
