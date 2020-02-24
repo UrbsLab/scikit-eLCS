@@ -331,7 +331,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             #Evaluations of Algorithm
             self.timer.startTimeEvaluation()
 
-            if ((self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0 and self.evalWhileFit) or self.explorIter + 1 == self.learningIterations:
+            if ((self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0 and self.evalWhileFit):
                 self.population.runPopAveEval(self.explorIter,self)
                 trackedAccuracy = np.sum(self.correct)/float(self.trackingFrequency)
                 self.record.addToTracking(self.explorIter,trackedAccuracy,self.population.aveGenerality,
@@ -615,6 +615,9 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         else:
             raise Exception("There is no tracking data to export, as the eLCS model has not been trained")
 
+    def exportRulePopulationAtIterationToCSV(self,iterationNumber,headerNames=np.array([]),className='phenotype'):
+        self.record.exportEvaluationToCSV(self,iterationNumber,headerNames,className)
+
     def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype"):
         if self.hasTrained:
             if self.evalWhileFitAfter:
@@ -632,6 +635,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], self.population.popSet)
                 self.evalWhileFitAfter = True #So it doesn't run this else again if this is invoked again
                 self.env.stopEvaluationMode()  # Returns to learning position in training data
+                self.record.exportFinalRulePopulationToCSV(self,headerNames, className)
         else:
             raise Exception("There is no rule population to export, as the eLCS model has not been trained")
 
