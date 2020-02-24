@@ -616,7 +616,10 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             raise Exception("There is no tracking data to export, as the eLCS model has not been trained")
 
     def exportRulePopulationAtIterationToCSV(self,iterationNumber,headerNames=np.array([]),className='phenotype'):
-        self.record.exportEvaluationToCSV(self,iterationNumber,headerNames,className)
+        if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
+            self.record.exportEvaluationToCSV(self, iterationNumber, headerNames, className)
+        else:
+            self.exportFinalRulePopulationToCSV(headerNames,className)
 
     def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype"):
         if self.hasTrained:

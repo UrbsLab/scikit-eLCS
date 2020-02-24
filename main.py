@@ -15,7 +15,8 @@ clf = eLCS(learningIterations=5000)
 clf.fit(dataFeatures,dataPhenotypes)
 
 clf.exportIterationTrackingDataToCSV()
-clf.exportFinalRulePopulationToCSV(headers,classLabel)
+clf.exportRulePopulationAtIterationToCSV(4999,headers,classLabel)
+#clf.exportFinalRulePopulationToCSV(headers,classLabel)
 
 #Standard Getters
 print(clf.getMacroPopulationSize(iterationNumber=300))
