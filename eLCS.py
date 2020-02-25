@@ -42,7 +42,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         :param upsilon:                 (u) Must be float from 0 - 1. The probability of mutating an allele within an offspring.(typically set to 0.01-0.05)
         :param theta_GA:                Must be nonnegative float. The GA threshold. The GA is applied in a set when the average time (# of iterations) since the last GA in the correct set is greater than theta_GA.
         :param theta_del:               Must be a nonnegative integer. The deletion experience threshold; The calculation of the deletion probability changes once this threshold is passed.
-        :param theta_sub:               Must be a nonnegative integer. The subsumption experience threshold;
+        :param theta_sub:               Must be a nonnegative integer. The subsumption experience threshold
         :param acc_sub:                 Must be float from 0 - 1. Subsumption accuracy requirement
         :param beta:                    Must be float. Learning parameter; Used in calculating average correct set size
         :param delta:                   Must be float. Deletion parameter; Used in determining deletion vote calculation.
@@ -377,12 +377,12 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.hasTrained = True
         return self
 
-    def predict(self, X):
+    def predict_proba(self, X):
         self.timer.startTimeEvaluation()
         """Scikit-learn required: Test Accuracy of eLCS
 
             Parameters
-               ----------
+            ----------
             X: array-like {n_samples, n_features}
                 Test instances to classify. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC
 
@@ -399,7 +399,45 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                     if not (np.isnan(value)):
                         float(value)
         except:
-            raise Exception("X and y must be fully numeric")
+            raise Exception("X must be fully numeric")
+
+        instances = X.shape[0]
+        predList = ArrayFactory.createArray(k=len(self.env.formatData.phenotypeList))
+
+        # ----------------------------------------------------------------------------------------------
+        for inst in range(instances):
+            state = X[inst]
+            self.population.makeEvalMatchSet(state, self)
+            prediction = Prediction(self, self.population)
+            probs = prediction.getProbabilities()
+            predList.append(probs)
+            self.population.clearSets(self)
+        self.timer.stopTimeEvaluation()
+        return predList.getArray()
+
+    def predict(self, X):
+        self.timer.startTimeEvaluation()
+        """Scikit-learn required: Test Accuracy of eLCS
+
+            Parameters
+            ----------
+            X: array-like {n_samples, n_features}
+                Test instances to classify. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC
+
+
+            Returns
+            __________
+            y: array-like {n_samples}
+                Classifications.
+        """
+
+        try:
+            for instance in X:
+                for value in instance:
+                    if not (np.isnan(value)):
+                        float(value)
+        except:
+            raise Exception("X must be fully numeric")
 
         instances = X.shape[0]
         predList = ArrayFactory.createArray(k=1)

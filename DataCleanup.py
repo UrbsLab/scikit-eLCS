@@ -7,6 +7,9 @@ Description: This module creates a class that takes in data, and cleans it up to
 
 import numpy as np
 import pandas as pd
+from warnings import simplefilter
+# ignore all future warnings
+simplefilter(action='ignore', category=FutureWarning)
 
 class StringEnumerator:
     def __init__(self, inputFile, classLabel):

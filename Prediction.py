@@ -4,6 +4,7 @@ from DynamicNPArray import ArrayFactory
 class Prediction():
     def __init__(self,elcs,population):
         self.decision = None
+        self.probabilities = {}
 
         #Discrete Phenotypes
         if elcs.env.formatData.discretePhenotype:
@@ -21,6 +22,14 @@ class Prediction():
                 self.vote[cl.phenotype] += cl.fitness * cl.numerosity
                 self.tieBreak_Numerosity[cl.phenotype] += cl.numerosity
                 self.tieBreak_TimeStamp[cl.phenotype] += cl.initTimeStamp
+
+            #Populate Probabilities
+            sProb = 0
+            for k,v in sorted(self.vote.items()):
+                self.probabilities[k] = v
+                sProb += v
+            for k,v in sorted(self.probabilities.items()):
+                self.probabilities[k] = v/sProb
 
             highVal = 0.0
             bestClass = []
@@ -97,3 +106,12 @@ class Prediction():
     def getDecision(self):
         """ Returns prediction decision. """
         return self.decision
+
+    def getProbabilities(self):
+        ''' Returns probabilities of each phenotype from the decision'''
+        a = np.empty(len(sorted(self.probabilities.items())))
+        counter = 0
+        for k,v in sorted(self.probabilities.items()):
+            a[counter] = v
+            counter += 1
+        return a

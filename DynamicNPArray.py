@@ -49,6 +49,7 @@ class TupleArray(GenericArray):
         if minSize < 1:
             raise Exception("minSize must be >= 1")
         if np.array_equal(a,np.array([])):
+            self.dtype = dtype
             if k < 1 or np.isnan(k):
                 raise Exception("Must specify valid dimension if you init w/ empty array")
             else:
@@ -59,6 +60,7 @@ class TupleArray(GenericArray):
             else:
                 self.emptyPrefix = None
         else:
+            self.dtype = a.dtype
             self.k = a.shape[1]
             if np.issubdtype(a.dtype, np.number):
                 self.emptyPrefix = 0
@@ -71,7 +73,7 @@ class TupleArray(GenericArray):
         while (self.lastIndex + 1 > upperBound):
             upperBound *= 2
 
-        empty = np.full((upperBound-self.lastIndex-1,self.k),self.emptyPrefix)
+        empty = np.full((upperBound-self.lastIndex-1,self.k),self.emptyPrefix,dtype=self.dtype)
         if np.array_equal(a,np.array([])):
             self.a = empty
         else:
@@ -79,7 +81,7 @@ class TupleArray(GenericArray):
 
     def append(self,value):
         if self.lastIndex == self.a.shape[0] - 1:
-            empty = np.full(self.a.shape,self.emptyPrefix)
+            empty = np.full(self.a.shape,self.emptyPrefix,dtype=self.dtype)
             self.a = np.concatenate((self.a,empty,),axis=0)
         self.lastIndex+=1
         self.a[self.lastIndex] = value

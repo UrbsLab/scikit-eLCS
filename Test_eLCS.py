@@ -6,7 +6,6 @@ from eLCS import *
 from DataCleanup import *
 from sklearn.model_selection import cross_val_score
 
-
 class Test_eLCS(unittest.TestCase):
 
     '''SECTION 1: TEST eLCS Parameters
