@@ -28,8 +28,12 @@ class Prediction():
             for k,v in sorted(self.vote.items()):
                 self.probabilities[k] = v
                 sProb += v
-            for k,v in sorted(self.probabilities.items()):
-                self.probabilities[k] = v/sProb
+            if sProb == 0: #In the case the match set doesn't exist
+                for k, v in sorted(self.probabilities.items()):
+                    self.probabilities[k] = 0
+            else:
+                for k,v in sorted(self.probabilities.items()):
+                    self.probabilities[k] = v/sProb
 
             highVal = 0.0
             bestClass = []

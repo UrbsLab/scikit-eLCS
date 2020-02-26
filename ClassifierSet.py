@@ -196,7 +196,10 @@ class ClassifierSet:
             ref = self.correctSet[i]
             sumCl += self.popSet[ref].timeStampGA * self.popSet[ref].numerosity
             numSum += self.popSet[ref].numerosity
-        return sumCl/float(numSum)
+        if numSum != 0:
+            return sumCl/float(numSum)
+        else:
+            return 0
 
     def setIterStamps(self,exploreIter):
         for i in range(len(self.correctSet)):
