@@ -331,7 +331,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             #Evaluations of Algorithm
             self.timer.startTimeEvaluation()
 
-            if ((self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0 and self.evalWhileFit):
+            if (((self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0) or self.explorIter == self.learningIterations-1) and self.evalWhileFit:
                 self.population.runPopAveEval(self.explorIter,self)
                 trackedAccuracy = np.sum(self.correct)/float(self.trackingFrequency)
                 self.record.addToTracking(self.explorIter,trackedAccuracy,self.population.aveGenerality,
@@ -669,7 +669,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype"):
         if self.hasTrained:
             if self.evalWhileFitAfter:
-                self.record.exportFinalRulePopulationToCSV(headerNames,className)
+                self.record.exportFinalRulePopulationToCSV(self,headerNames,className)
             else:
                 self.population.runPopAveEval(self.explorIter, self)
                 self.population.runAttGeneralitySum(True, self)
