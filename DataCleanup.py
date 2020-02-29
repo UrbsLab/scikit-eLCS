@@ -34,6 +34,43 @@ class StringEnumerator:
 
         self.deleteAllInstancesWithoutPhenotype()
 
+    def printInvalidAttributes(self):
+        print("ALL INVALID ATTRIBUTES & THEIR DISTINCT VALUES")
+        for attr in range(len(self.dataHeaders)):
+            distinctValues = []
+            isInvalid = False
+            for instIndex in range(len(self.dataFeatures)):
+                val = self.dataFeatures[instIndex,attr]
+                if not val in distinctValues and val != "NA":
+                    distinctValues.append(self.dataFeatures[instIndex,attr])
+                if val != "NA":
+                    try:
+                        float(val)
+                    except:
+                        isInvalid = True
+            if isInvalid:
+                print(str(self.dataHeaders[attr])+": ",end="")
+                for i in distinctValues:
+                    print(str(i)+"\t",end="")
+                print()
+
+        distinctValues = []
+        isInvalid = False
+        for instIndex in range(len(self.dataPhenotypes)):
+            val = self.dataPhenotypes[instIndex]
+            if not val in distinctValues and val != "NA":
+                distinctValues.append(self.dataPhenotypes[instIndex])
+            if val != "NA":
+                try:
+                    float(val)
+                except:
+                    isInvalid = True
+        if isInvalid:
+            print(str(self.classLabel)+" (the phenotype): ",end="")
+            for i in distinctValues:
+                print(str(i)+"\t",end="")
+            print()
+
     def changeClassName(self,newName):
         if newName in self.dataHeaders:
             raise Exception("New Class Name Cannot Be An Already Existing Data Header Name")

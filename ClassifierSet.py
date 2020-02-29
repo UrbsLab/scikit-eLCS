@@ -323,7 +323,8 @@ class ClassifierSet:
             vote = cl.getDelProp(elcs,meanFitness)
             sumCl += vote
             voteList.append(vote)
-
+        for cl in self.popSet:
+            cl.deletionProb = cl.deletionVote/sumCl
         choicePoint = sumCl * random.random()  # Determine the choice point
 
         newSum = 0.0

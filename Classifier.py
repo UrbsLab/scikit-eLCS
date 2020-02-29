@@ -19,6 +19,7 @@ class Classifier():
         self.numerosity = 1
         self.aveMatchSetSize = None
         self.deletionVote = None
+        self.deletionProb = None
 
         # Experience Management
         self.timeStampGA = None

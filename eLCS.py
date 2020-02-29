@@ -647,9 +647,9 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         resultList = [adjustedAccuracyEstimate, instanceCoverage]
         return resultList
 
-    def exportIterationTrackingDataToCSV(self):
+    def exportIterationTrackingDataToCSV(self,filename='iterationData.csv'):
         if self.hasTrained:
-            self.record.exportTrackingToCSV()
+            self.record.exportTrackingToCSV(filename)
         else:
             raise Exception("There is no tracking data to export, as the eLCS model has not been trained")
 
@@ -657,19 +657,25 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     If evalWhiteFit was turned off, as long as the iterationNumber is the final iteration, an immediate evaluation will be run
     on the population and an export will be made. Past unsaved rule populations are not obviously not valid for evaluation or export.
     '''
-    def exportRulePopulationAtIterationToCSV(self,iterationNumber,headerNames=np.array([]),className='phenotype'):
+    def exportRulePopulationAtIterationToCSV(self,iterationNumber,headerNames=np.array([]),className='phenotype',filename='populationData.csv',ALKR=False):
         if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
-            self.record.exportEvaluationToCSV(self, iterationNumber, headerNames, className)
+            if ALKR:
+                self.record.exportEvaluationToCSVALKR(self, iterationNumber, headerNames, className,filename)
+            else:
+                self.record.exportEvaluationToCSV(self, iterationNumber, headerNames, className, filename)
         else:
-            self.exportFinalRulePopulationToCSV(headerNames,className)
+            self.exportFinalRulePopulationToCSV(headerNames,className,filename,ALKR)
 
     '''
     Even if evalWhileFit was turned off, this will run an immediate evaluation and export it.
     '''
-    def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype"):
+    def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype",filename='populationData.csv',ALKR=False):
         if self.hasTrained:
             if self.evalWhileFitAfter:
-                self.record.exportFinalRulePopulationToCSV(self,headerNames,className)
+                if ALKR:
+                    self.record.exportFinalRulePopulationToCSVALKR(self,headerNames,className,filename)
+                else:
+                    self.record.exportFinalRulePopulationToCSV(self, headerNames, className, filename)
             else:
                 self.population.runPopAveEval(self.explorIter, self)
                 self.population.runAttGeneralitySum(True, self)
@@ -683,7 +689,41 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet))
                 self.evalWhileFitAfter = True #So it doesn't run this else again if this is invoked again
                 self.env.stopEvaluationMode()  # Returns to learning position in training data
-                self.record.exportFinalRulePopulationToCSV(self,headerNames, className)
+                if ALKR:
+                    self.record.exportFinalRulePopulationToCSVALKR(self,headerNames, className,filename)
+                else:
+                    self.record.exportFinalRulePopulationToCSV(self, headerNames, className, filename)
+        else:
+            raise Exception("There is no rule population to export, as the eLCS model has not been trained")
+
+    def exportPopStatsToCSV(self,iterationNumber,headerNames=np.array([]),filename='popStats.csv'):
+        if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
+            self.record.exportSumsToCSV(self, iterationNumber, headerNames,filename)
+        else:
+            self.exportFinalPopStatsToCSV(headerNames,filename)
+
+    '''
+    Even if evalWhileFit was turned off, this will run an immediate evaluation and export it.
+    '''
+    def exportFinalPopStatsToCSV(self,headerNames=np.array([]),filename='popStats.csv'):
+        if self.hasTrained:
+            if self.evalWhileFitAfter:
+                self.record.exportFinalSumsToCSV(self,headerNames,filename)
+            else:
+                self.population.runPopAveEval(self.explorIter, self)
+                self.population.runAttGeneralitySum(True, self)
+                self.env.startEvaluationMode()  # Preserves learning position in training data
+
+                if self.env.formatData.discretePhenotype:
+                    trainEval = self.doPopEvaluation()
+                else:
+                    trainEval = self.doContPopEvaluation()
+
+                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet))
+                self.evalWhileFitAfter = True #So it doesn't run this else again if this is invoked again
+                self.env.stopEvaluationMode()  # Returns to learning position in training data
+
+                self.record.exportFinalSumsToCSV(self,headerNames,filename)
         else:
             raise Exception("There is no rule population to export, as the eLCS model has not been trained")
 
@@ -724,6 +764,13 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         else:
             self.getFinalAccuracy()
 
+    def getInstanceCoverage(self,iterationNumber):
+        if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
+            return self.record.getInstanceCoverage(iterationNumber)
+        else:
+            self.getFinalInstanceCoverage()
+
+
     '''
     Even if evalWhileFit was turned off, this will run an immediate evaluation and give an accuracy.
     '''
@@ -745,6 +792,23 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             self.evalWhileFitAfter = True #So it doesn't run this again when this is invoked again
             return self.record.getFinalAccuracy()
 
+    def getFinalInstanceCoverage(self):
+        if self.evalWhileFitAfter:
+            return self.record.getFinalInstanceCoverage()
+        else:
+            self.population.runPopAveEval(self.explorIter, self)
+            self.population.runAttGeneralitySum(True, self)
+            self.env.startEvaluationMode()  # Preserves learning position in training data
+            if self.env.formatData.discretePhenotype:
+                trainEval = self.doPopEvaluation()
+            else:
+                trainEval = self.doContPopEvaluation()
+
+            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet))
+
+            self.env.stopEvaluationMode()  # Returns to learning position in training data
+            self.evalWhileFitAfter = True #So it doesn't run this again when this is invoked again
+            return self.record.getFinalInstanceCoverage()
 
     #######################################################PRINT METHODS FOR DEBUGGING################################################################################
 

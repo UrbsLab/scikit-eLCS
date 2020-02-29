@@ -215,3 +215,7 @@ class TestDataCleanup(unittest.TestCase):
         self.assertTrue(np.array_equal(cHeaders, dataHeaders))
         self.assertTrue(np.allclose(cFeatures, dataFeatures, equal_nan=True))
         self.assertTrue(np.allclose(cPhenotypes, dataPhenotypes, equal_nan=True))
+
+    def testPrintInvalids(self):
+        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData2.csv", "phenotype")
+        se.printInvalidAttributes()
