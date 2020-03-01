@@ -853,43 +853,79 @@ class Test_eLCS(unittest.TestCase):
     #####TEST AGAINST CURRENT ALGORITHM
 
     #Test performance for binary attribute/phenotype testing data (MP problems w/ CV)
-    def testMPCV(self):
-        converter = StringEnumerator("Datasets/Real/Multiplexer20.csv", "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=5000)
-        formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
-        np.random.shuffle(formatted)
-        dataFeatures = np.delete(formatted, -1, axis=1)
-        dataPhenotypes = formatted[:, -1]
-        score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes))
-        print(score)
-        self.assertTrue(self.approxEqual(0.2,score,0.6662))
+    # def testMPCV(self):
+    #     converter = StringEnumerator("Datasets/Real/Multiplexer20.csv", "class")
+    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+    #     clf = eLCS(learningIterations=5000)
+    #     formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
+    #     np.random.shuffle(formatted)
+    #     dataFeatures = np.delete(formatted, -1, axis=1)
+    #     dataPhenotypes = formatted[:, -1]
+    #     score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes))
+    #     print(score)
+    #     self.assertTrue(self.approxEqual(0.2,score,0.6662))
+    #
+    # #Test performance for continuous attribute testing data (w/ CV)
+    # def testContFull(self):
+    #     converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv", "Class")
+    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+    #     clf = eLCS(learningIterations=5000)
+    #     formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
+    #     np.random.shuffle(formatted)
+    #     dataFeatures = np.delete(formatted, -1, axis=1)
+    #     dataPhenotypes = formatted[:, -1]
+    #     score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes))
+    #     print(score)
+    #     self.assertTrue(self.approxEqual(0.2, score, 0.6456))
+    #
+    # # Test performance for continuous attribute testing data w/ missing data (w/ CV)
+    # def testContMissing(self):
+    #     converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv", "Class")
+    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+    #     clf = eLCS(learningIterations=5000)
+    #     formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
+    #     np.random.shuffle(formatted)
+    #     dataFeatures = np.delete(formatted, -1, axis=1)
+    #     dataPhenotypes = formatted[:, -1]
+    #     score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes))
+    #     print(score)
+    #     self.assertTrue(self.approxEqual(0.2, score, 0.6155))
 
-    #Test performance for continuous attribute testing data (w/ CV)
-    def testContFull(self):
-        converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv", "Class")
+    # Test random seed
+    def testRandomSeed(self):
+        converter = StringEnumerator("Datasets/Real/Multiplexer11.csv", "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=5000)
-        formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
-        np.random.shuffle(formatted)
-        dataFeatures = np.delete(formatted, -1, axis=1)
-        dataPhenotypes = formatted[:, -1]
-        score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes))
-        print(score)
-        self.assertTrue(self.approxEqual(0.2, score, 0.6456))
 
-    # Test performance for continuous attribute testing data w/ missing data (w/ CV)
-    def testContMissing(self):
-        converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv", "Class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=5000)
-        formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
-        np.random.shuffle(formatted)
-        dataFeatures = np.delete(formatted, -1, axis=1)
-        dataPhenotypes = formatted[:, -1]
-        score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes))
-        print(score)
-        self.assertTrue(self.approxEqual(0.2, score, 0.6155))
+        clf = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
+        clf.fit(dataFeatures, dataPhenotypes)
+        clf.exportIterationTrackingDataToCSV(filename='DataSets/Tests/RandomTests/track1.csv')
+        clf.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='DataSets/Tests/RandomTests/pop1.csv')
+        clf.exportFinalPopStatsToCSV(headerNames=headers, filename="DataSets/Tests/RandomTests/popStats1.csv")
+
+        clf2 = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
+        clf2.fit(dataFeatures, dataPhenotypes)
+        clf2.exportIterationTrackingDataToCSV(filename='DataSets/Tests/RandomTests/track2.csv')
+        clf2.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='DataSets/Tests/RandomTests/pop2.csv')
+        clf2.exportFinalPopStatsToCSV(headerNames=headers, filename="DataSets/Tests/RandomTests/popStats2.csv")
+
+        track1 = pd.read_csv('DataSets/Tests/RandomTests/track1.csv').values[:,:13]
+        pop1 = pd.read_csv('DataSets/Tests/RandomTests/pop1.csv').values
+        popStats1 = pd.read_csv('DataSets/Tests/RandomTests/popStats1.csv').drop('Label', axis=1).values
+
+        track2 = pd.read_csv('DataSets/Tests/RandomTests/track2.csv').values[:,:13]
+        pop2 = pd.read_csv('DataSets/Tests/RandomTests/pop2.csv').values
+        popStats2 = pd.read_csv('DataSets/Tests/RandomTests/popStats2.csv').drop('Label', axis=1).values
+
+        pop1[pop1 == "#"] = np.nan
+        pop2[pop2 == "#"] = np.nan
+
+        pop1 = np.array(list(pop1),dtype=float)
+        pop2 = np.array(list(pop2), dtype=float)
+
+        self.assertTrue(np.allclose(track1,track2,equal_nan=True))
+        self.assertTrue(np.allclose(pop1, pop2, equal_nan=True))
+        self.assertTrue(np.allclose(popStats1, popStats2, equal_nan=True))
+
 
     ###Util Functions###
     def approxEqual(self,threshold,comp,right): #threshold is % tolerance

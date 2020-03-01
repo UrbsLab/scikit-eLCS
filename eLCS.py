@@ -216,6 +216,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 if not self.checkIsInt(randomSeed):
                     raise Exception("randomSeed param must be integer or 'none'")
                 random.seed(int(randomSeed))
+                np.random.seed(int(randomSeed))
             except:
                 raise Exception("randomSeed param must be integer or 'none'")
 
