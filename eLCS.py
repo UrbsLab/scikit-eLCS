@@ -366,7 +366,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                     else:
                         trainEval = self.doContPopEvaluation()
 
-                    self.record.addToEval(self.explorIter,trainEval[0],trainEval[1],copy.deepcopy(self.population.popSet))
+                    self.record.addToEval(self.explorIter,trainEval[0],trainEval[1],copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
 
                     self.env.stopEvaluationMode()  # Returns to learning position in training data
 
@@ -687,7 +687,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 else:
                     trainEval = self.doContPopEvaluation()
 
-                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet))
+                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
                 self.evalWhileFitAfter = True #So it doesn't run this else again if this is invoked again
                 self.env.stopEvaluationMode()  # Returns to learning position in training data
                 if ALKR:
@@ -720,7 +720,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 else:
                     trainEval = self.doContPopEvaluation()
 
-                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet))
+                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
                 self.evalWhileFitAfter = True #So it doesn't run this else again if this is invoked again
                 self.env.stopEvaluationMode()  # Returns to learning position in training data
 
@@ -787,7 +787,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             else:
                 trainEval = self.doContPopEvaluation()
 
-            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet))
+            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
 
             self.env.stopEvaluationMode()  # Returns to learning position in training data
             self.evalWhileFitAfter = True #So it doesn't run this again when this is invoked again
@@ -805,7 +805,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             else:
                 trainEval = self.doContPopEvaluation()
 
-            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet))
+            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
 
             self.env.stopEvaluationMode()  # Returns to learning position in training data
             self.evalWhileFitAfter = True #So it doesn't run this again when this is invoked again

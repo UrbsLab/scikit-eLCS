@@ -33,6 +33,8 @@ class IterationRecord():
         0-evaluation accuracy (from full training data evaluation)
         1-instance coverage
         2-population set (list of population classifiers)
+        3-specificity Sum
+        4-accuracy Sum
 
     '''
 
@@ -49,8 +51,8 @@ class IterationRecord():
                                    globalTime,matchingTime,deletionTime,subsumptionTime,selectionTime,evaluationTime]
 
 
-    def addToEval(self,iterationNumber,evalAccuracy,instanceCoverage,fullPopSet):
-        self.evaluationDict[iterationNumber] = [evalAccuracy,instanceCoverage,fullPopSet]
+    def addToEval(self,iterationNumber,evalAccuracy,instanceCoverage,fullPopSet,specSum,accSum):
+        self.evaluationDict[iterationNumber] = [evalAccuracy,instanceCoverage,fullPopSet,specSum,accSum]
 
     def exportTrackingToCSV(self,filename='iterationData.csv'):
         #Exports each entry in Tracking Array as a column
@@ -92,16 +94,8 @@ class IterationRecord():
         with open(filename, mode='w') as file:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerow(["Label"]+headerNames)
-            classifiers = self.evaluationDict[iterationNumber][2]
-            accuracySums = [0]*len(headerNames)
-            specificitySums = [0]*len(headerNames)
-            for classifier in classifiers:
-                for attributeIndex in range(numAttributes):
-                    if attributeIndex in classifier.specifiedAttList:
-                        specificitySums[attributeIndex]+=1
-                        accuracySums[attributeIndex]+=classifier.accuracy
-            writer.writerow(["Specificity Sum"]+specificitySums)
-            writer.writerow(["Accuracy Sum"] + accuracySums)
+            writer.writerow(["Specificity Sum"]+self.evaluationDict[iterationNumber][3])
+            writer.writerow(["Accuracy Sum"] + self.evaluationDict[iterationNumber][4])
 
     def exportFinalSumsToCSV(self,elcs,headerNames=np.array([]),filename="popStats.csv"):
         self.exportSumsToCSV(elcs, sorted(self.evaluationDict.items())[len(self.evaluationDict.items()) - 1][0], headerNames, filename)

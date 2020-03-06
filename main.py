@@ -17,7 +17,7 @@ np.random.shuffle(formatted)
 dataFeatures = np.delete(formatted,-1,axis=1)
 dataPhenotypes = formatted[:,-1]
 
-model = eLCS(learningIterations = 5000,evalWhileFit=True,learningCheckpoints=np.array([99,999,3999]),trackingFrequency=100)
+model = eLCS(learningIterations = 1000,evalWhileFit=True,learningCheckpoints=np.array([99,999,3999]),trackingFrequency=100)
 model.fit(dataFeatures,dataPhenotypes)
 
-model.exportFinalRulePopulationToCSV(ALKR=True)
+model.exportFinalPopStatsToCSV(headers,filename="popStats2.csv")
