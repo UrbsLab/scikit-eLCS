@@ -191,11 +191,37 @@ class IterationRecord():
         with open(filename, mode='w') as file:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
-            writer.writerow(["Fitness","Accuracy","Numerosity","Avg Match Set Size","TimeStamp GA","Iteration Initialized","Specificity","Deletion Probability","Correct Count","Match Count"]+[className])
+            writer.writerow(["Specified Values","Specified Attribute Names"]+[className]+["Fitness","Accuracy","Numerosity","Avg Match Set Size","TimeStamp GA","Iteration Initialized","Specificity","Deletion Probability","Correct Count","Match Count"])
 
             classifiers = self.evaluationDict[iterationNumber][2]
             for classifier in classifiers:
                 a = []
+
+                #Add attribute information
+                headerString = ""
+                valueString = ""
+                for attributeIndex in range(numAttributes):
+                    if attributeIndex in classifier.specifiedAttList:
+                        specifiedLocation = classifier.specifiedAttList.index(attributeIndex)
+                        headerString+=str(headerNames[attributeIndex])+", "
+                        if classifier.conditionType[specifiedLocation] == 0: #if discrete
+                            valueString+= str(classifier.conditionDiscrete[specifiedLocation])+", "
+                        else: #if continuous
+                            conditionCont = classifier.conditionContinuous[specifiedLocation] #cont array [min,max]
+                            s = "["+str(conditionCont[0])+","+str(conditionCont[1])+"]"
+                            valueString+= s+", "
+
+                a.append(valueString[:-2])
+                a.append(headerString[:-2])
+
+                #Add phenotype information
+                if isinstance(classifier.phenotype, list):
+                    s = str(classifier.phenotype[0]) + "," + str(classifier.phenotype[1])
+                    a.append(s)
+                else:
+                    a.append(classifier.phenotype)
+
+                #Add statistics
                 a.append(classifier.fitness)
                 a.append(classifier.accuracy)
                 a.append(classifier.numerosity)
@@ -206,29 +232,7 @@ class IterationRecord():
                 a.append(classifier.deletionProb)
                 a.append(classifier.correctCount)
                 a.append(classifier.matchCount)
-
-                b = [""]*11
-
-                if isinstance(classifier.phenotype, list):
-                    s = str(classifier.phenotype[0]) + "," + str(classifier.phenotype[1])
-                    a.append(s)
-                else:
-                    a.append(classifier.phenotype)
-
-                for attributeIndex in range(numAttributes):
-                    if attributeIndex in classifier.specifiedAttList:
-                        specifiedLocation = classifier.specifiedAttList.index(attributeIndex)
-                        b.append(headerNames[attributeIndex])
-                        if classifier.conditionType[specifiedLocation] == 0: #if discrete
-                            a.append(classifier.conditionDiscrete[specifiedLocation])
-                        else: #if continuous
-                            conditionCont = classifier.conditionContinuous[specifiedLocation] #cont array [min,max]
-                            s = str(conditionCont[0])+","+str(conditionCont[1])
-                            a.append(s)
-
-                writer.writerow(b)
                 writer.writerow(a)
-                writer.writerow([]) #Empty Row
 
     def exportFinalRulePopulationToCSV(self,elcs,headerNames=np.array([]),className='phenotype',filename="populationData.csv"):
         self.exportEvaluationToCSV(elcs,sorted(self.evaluationDict.items())[len(self.evaluationDict.items()) - 1][0],headerNames,className,filename)

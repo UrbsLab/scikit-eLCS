@@ -650,7 +650,7 @@ class Test_eLCS(unittest.TestCase):
     '''SECTION 3: TEST eLCS Performance
         Testing for
         -Final balanced accuracy
-        -Final time to train
+        -Final time to train (REMOVED)
         -Final macro & micro population sizes
         -Final Average Generality
 
@@ -678,25 +678,17 @@ class Test_eLCS(unittest.TestCase):
 
     #####TEST AGAINST OLD ALGORITHM
     #Test performance for binary attribute/phenotype training data (MP problems)
-    # def test6BitMultiplexer1000Iterations(self):
-    #     converter = StringEnumerator("Datasets/Real/Multiplexer6.csv", "class")
-    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-    #     clf = eLCS(learningIterations=1000)
-    #     clf.fit(dataFeatures,dataPhenotypes)
-    #     answerKey = [147,312,0.5577,2.099,0.921875]
-    #     print("6B 1000")
-    #     print(clf.getFinalMacroPopulationSize())
-    #     print(clf.getFinalMicroPopulationSize())
-    #     print(clf.getFinalPopAvgGenerality())
-    #     print(clf.getFinalTimeToTrain())
-    #     print(clf.getFinalAccuracy())
-    #     print()
-    #     self.assertTrue(self.approxEqual(0.5,clf.getFinalMacroPopulationSize(),answerKey[0]))
-    #     self.assertTrue(self.approxEqual(0.5, clf.getFinalMicroPopulationSize(), answerKey[1]))
-    #     self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
-    #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalTimeToTrain(), answerKey[3],False))
-    #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
-    #
+    def test6BitMultiplexer1000Iterations(self):
+        converter = StringEnumerator("Datasets/Real/Multiplexer6.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=1000,evalWhileFit=True)
+        clf.fit(dataFeatures,dataPhenotypes)
+        answerKey = [147,312,0.5577,2.099,0.921875]
+        self.assertTrue(self.approxEqual(0.5,clf.getFinalMacroPopulationSize(),answerKey[0]))
+        self.assertTrue(self.approxEqual(0.5, clf.getFinalMicroPopulationSize(), answerKey[1]))
+        self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
+        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
+
     # def test6BitMultiplexer5000Iterations(self):
     #     converter = StringEnumerator("Datasets/Real/Multiplexer6.csv", "class")
     #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
@@ -707,7 +699,6 @@ class Test_eLCS(unittest.TestCase):
     #     print(clf.getFinalMacroPopulationSize())
     #     print(clf.getFinalMicroPopulationSize())
     #     print(clf.getFinalPopAvgGenerality())
-    #     print(clf.getFinalTimeToTrain())
     #     print(clf.getFinalAccuracy())
     #     print()
     #     self.assertTrue(self.approxEqual(0.2,clf.getFinalMacroPopulationSize(),answerKey[0]))
@@ -715,7 +706,7 @@ class Test_eLCS(unittest.TestCase):
     #     self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
     #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalTimeToTrain(), answerKey[3],False))
     #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
-    #
+
     # def test11BitMultiplexer1000Iterations(self):
     #     converter = StringEnumerator("Datasets/Real/Multiplexer11.csv", "class")
     #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
@@ -735,25 +726,17 @@ class Test_eLCS(unittest.TestCase):
     #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalTimeToTrain(), answerKey[3],False))
     #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
     #
-    # def test11BitMultiplexer5000Iterations(self):
-    #     converter = StringEnumerator("Datasets/Real/Multiplexer11.csv", "class")
-    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-    #     clf = eLCS(learningIterations=5000)
-    #     clf.fit(dataFeatures,dataPhenotypes)
-    #     answerKey = [460,1000,0.6338,13.2861,1]
-    #     print("11B 5000")
-    #     print(clf.getFinalMacroPopulationSize())
-    #     print(clf.getFinalMicroPopulationSize())
-    #     print(clf.getFinalPopAvgGenerality())
-    #     print(clf.getFinalTimeToTrain())
-    #     print(clf.getFinalAccuracy())
-    #     print()
-    #     self.assertTrue(self.approxEqual(0.2,clf.getFinalMacroPopulationSize(),answerKey[0]))
-    #     self.assertTrue(self.approxEqual(0.2, clf.getFinalMicroPopulationSize(), answerKey[1]))
-    #     self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
-    #     self.assertTrue(self.approxEqualOrBetter(0.3, clf.getFinalTimeToTrain(), answerKey[3],False))
-    #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
-    #
+    def test11BitMultiplexer5000Iterations(self):
+        converter = StringEnumerator("Datasets/Real/Multiplexer11.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=5000,evalWhileFit=True)
+        clf.fit(dataFeatures,dataPhenotypes)
+        answerKey = [460,1000,0.6338,13.2861,1]
+        self.assertTrue(self.approxEqual(0.2,clf.getFinalMacroPopulationSize(),answerKey[0]))
+        self.assertTrue(self.approxEqual(0.2, clf.getFinalMicroPopulationSize(), answerKey[1]))
+        self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
+        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
+
     # def test20BitMultiplexer5000Iterations(self):
     #     converter = StringEnumerator("Datasets/Real/Multiplexer20.csv", "class")
     #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
@@ -793,25 +776,17 @@ class Test_eLCS(unittest.TestCase):
     #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
 
     #Test performance for continuous attribute training data
-    # def testContinuous1000Iterations(self):
-    #     converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv", "Class")
-    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-    #     clf = eLCS(learningIterations=1000)
-    #     clf.fit(dataFeatures,dataPhenotypes)
-    #     answerKey = [852,978,0.6230,5.8408,0.61]
-    #     print("C 1000")
-    #     print(clf.getFinalMacroPopulationSize())
-    #     print(clf.getFinalMicroPopulationSize())
-    #     print(clf.getFinalPopAvgGenerality())
-    #     print(clf.getFinalTimeToTrain())
-    #     print(clf.getFinalAccuracy())
-    #     print()
-    #     self.assertTrue(self.approxEqual(0.5,clf.getFinalMacroPopulationSize(),answerKey[0]))
-    #     self.assertTrue(self.approxEqual(0.5, clf.getFinalMicroPopulationSize(), answerKey[1]))
-    #     self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
-    #     self.assertTrue(self.approxEqualOrBetter(0.6, clf.getFinalTimeToTrain(), answerKey[3],False))
-    #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
-    #
+    def testContinuous1000Iterations(self):
+        converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv", "Class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=1000,evalWhileFit=True)
+        clf.fit(dataFeatures,dataPhenotypes)
+        answerKey = [852,978,0.6230,5.8408,0.61]
+        self.assertTrue(self.approxEqual(0.5,clf.getFinalMacroPopulationSize(),answerKey[0]))
+        self.assertTrue(self.approxEqual(0.5, clf.getFinalMicroPopulationSize(), answerKey[1]))
+        self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
+        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
+
     # def testContinuous5000Iterations(self):
     #     converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv", "Class")
     #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
@@ -853,18 +828,17 @@ class Test_eLCS(unittest.TestCase):
     #####TEST AGAINST CURRENT ALGORITHM
 
     #Test performance for binary attribute/phenotype testing data (MP problems w/ CV)
-    # def testMPCV(self):
-    #     converter = StringEnumerator("Datasets/Real/Multiplexer20.csv", "class")
-    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-    #     clf = eLCS(learningIterations=5000)
-    #     formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
-    #     np.random.shuffle(formatted)
-    #     dataFeatures = np.delete(formatted, -1, axis=1)
-    #     dataPhenotypes = formatted[:, -1]
-    #     score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes))
-    #     print(score)
-    #     self.assertTrue(self.approxEqual(0.2,score,0.6662))
-    #
+    def testMPCV(self):
+        converter = StringEnumerator("Datasets/Real/Multiplexer6.csv", "class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=2000,evalWhileFit=True)
+        formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
+        np.random.shuffle(formatted)
+        dataFeatures = np.delete(formatted, -1, axis=1)
+        dataPhenotypes = formatted[:, -1]
+        score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes,cv=3))
+        self.assertTrue(self.approxEqual(0.2,score,0.8452))
+
     # #Test performance for continuous attribute testing data (w/ CV)
     # def testContFull(self):
     #     converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv", "Class")
