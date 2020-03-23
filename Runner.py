@@ -12,3 +12,5 @@ suite.addTests(loader.loadTestsFromModule(Test_eLCS))
 
 runner = unittest.TextTestRunner(verbosity=3)
 result = runner.run(suite)
+
+print(result)

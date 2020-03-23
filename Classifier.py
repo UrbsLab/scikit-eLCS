@@ -117,20 +117,36 @@ class Classifier():
             # Continuous
             if attributeInfoType:
                 instanceValue = state[specifiedIndex]
-                if np.isnan(instanceValue):
-                    pass
-                elif self.conditionContinuous[i][0] < instanceValue < self.conditionContinuous[i][1]:
-                    pass
+                if elcs.matchForMissingness:
+                    if np.isnan(instanceValue):
+                        pass
+                    elif self.conditionContinuous[i][0] < instanceValue < self.conditionContinuous[i][1]:
+                        pass
+                    else:
+                        return False
                 else:
-                    return False
+                    if np.isnan(instanceValue):
+                        return False
+                    elif self.conditionContinuous[i][0] < instanceValue < self.conditionContinuous[i][1]:
+                        pass
+                    else:
+                        return False
 
             # Discrete
             else:
                 stateRep = state[specifiedIndex]
-                if stateRep == self.conditionDiscrete[i] or np.isnan(stateRep):
-                    pass
+                if elcs.matchForMissingness:
+                    if stateRep == self.conditionDiscrete[i] or np.isnan(stateRep):
+                        pass
+                    else:
+                        return False
                 else:
-                    return False
+                    if stateRep == self.conditionDiscrete[i]:
+                        pass
+                    elif np.isnan(stateRep):
+                        return False
+                    else:
+                        return False
         return True
 
     def equals(self, elcs, cl):

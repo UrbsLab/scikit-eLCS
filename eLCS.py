@@ -16,7 +16,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([]), evalWhileFit = False, N=1000,
                  p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]), discretePhenotypeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
-                 doSubsumption=True, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none"):
+                 doSubsumption=True, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none",matchForMissingness=False):
 
         '''
         :param learningIterations:      Must be nonnegative integer. The number of training cycles to run.
@@ -52,6 +52,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         :param selectionMethod:         Must be either "tournament" or "roulette". Determines GA selection method. Recommended: tournament
         :param theta_sel:               Must be float from 0 - 1. The fraction of the correct set to be included in tournament selection.
         :param randomSeed:              Must be an integer or "none". Set a constant random seed value to some integer (in order to obtain reproducible results). Put 'none' if none (for pseudo-random algorithm runs).
+        :param matchForMissingness:     Must be boolean. Determines if eLCS matches for missingness (i.e. if a missing value can match w/ a specified value)
         '''
 
         '''
@@ -220,6 +221,10 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             except:
                 raise Exception("randomSeed param must be integer or 'none'")
 
+        #matchForMissingness
+        if not (isinstance(matchForMissingness, bool)):
+            raise Exception("matchForMissingness param must be boolean")
+
         '''
         Set params
         '''
@@ -247,6 +252,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.trackingFrequency = trackingFrequency
         self.learningCheckpoints = learningCheckpoints
         self.randomSeed = randomSeed
+        self.matchForMissingness = matchForMissingness
 
         '''
         Set tracking tools
