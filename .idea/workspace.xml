@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/test/test_DataCleanup.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_DataCleanup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_eLCS.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/test_DataCleanup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="179" column="33" lean-forward="true" selection-start-line="179" selection-start-column="33" selection-end-line="179" selection-end-column="33" />
+            <state relative-caret-position="218">
+              <caret line="178" column="41" lean-forward="true" selection-start-line="178" selection-start-column="41" selection-end-line="178" selection-end-column="41" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -31,8 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="88" lean-forward="true" selection-start-line="10" selection-start-column="88" selection-end-line="10" selection-end-column="88" />
+            <state relative-caret-position="255">
+              <caret line="17" column="52" lean-forward="true" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -517,7 +516,7 @@
       <workItem from="1584965655901" duration="1559000" />
       <workItem from="1585007034102" duration="1464000" />
       <workItem from="1585009010992" duration="26000" />
-      <workItem from="1585009078288" duration="5691000" />
+      <workItem from="1585009078288" duration="5915000" />
     </task>
     <servers />
   </component>
@@ -554,10 +553,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="498942000" />
+    <option name="totallyTimeSpent" value="499166000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="50" y="23" width="1610" height="975" extended-state="0" />
+    <frame x="18" y="23" width="1610" height="975" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17091836" />
@@ -859,8 +858,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="88" lean-forward="true" selection-start-line="10" selection-start-column="88" selection-end-line="10" selection-end-column="88" />
+        <state relative-caret-position="255">
+          <caret line="17" column="52" lean-forward="true" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
@@ -869,8 +868,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test_DataCleanup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="179" column="33" lean-forward="true" selection-start-line="179" selection-start-column="33" selection-end-line="179" selection-end-column="33" />
+        <state relative-caret-position="218">
+          <caret line="178" column="41" lean-forward="true" selection-start-line="178" selection-start-column="41" selection-end-line="178" selection-end-column="41" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>

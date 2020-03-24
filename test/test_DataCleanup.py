@@ -176,6 +176,9 @@ class TestDataCleanup(unittest.TestCase):
     def testNumericCheck(self):
         # Checks non missing numeric
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        print("DATAPATH333: " + dataPath)
+        print(os.pardir)
+        print(THIS_DIR)
         se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         self.assertFalse(se.checkIsFullNumeric())
         se.addAttributeConverterRandom("N1")
