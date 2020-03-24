@@ -553,7 +553,7 @@ class Test_eLCS(unittest.TestCase):
 
     #Check X and Y must be numeric for fit method
     def testFullInts(self):
-        dataPath = os.path.join(THIS_DIR,"test/Datasets/Tests/NumericTests/numericInts.csv")
+        dataPath = os.path.join(THIS_DIR,"test/DataSets/Tests/NumericTests/numericInts.csv")
         converter = StringEnumerator(dataPath, "class")
         #converter = StringEnumerator("Datasets/Tests/NumericTests/numericInts.csv", "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
@@ -562,7 +562,7 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.explorIter,2)
 
     def testFullFloats(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/NumericTests/numericFloats.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/NumericTests/numericFloats.csv")
         converter = StringEnumerator(dataPath, "class")
         #converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloats.csv", "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
@@ -571,7 +571,7 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.explorIter, 2)
 
     def testFullFloatsMissing(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/NumericTests/numericFloatsMissing.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/NumericTests/numericFloatsMissing.csv")
         converter = StringEnumerator(dataPath, "class")
         #converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloatsMissing.csv", "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
@@ -580,7 +580,7 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.explorIter, 2)
 
     def testStringExists(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/NumericTests/numericFloatsString.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/NumericTests/numericFloatsString.csv")
         data = pd.read_csv(dataPath, sep=',')
         #data = pd.read_csv("Datasets/Tests/NumericTests/numericFloatsString.csv", sep=',')  # Puts data from csv into indexable np arrays
         data = data.fillna("NA")
@@ -594,7 +594,7 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue("X and y must be fully numeric" in str(context.exception))
 
     def testNANPhenotypeExists(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/NumericTests/numericFloatsNAN.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/NumericTests/numericFloatsNAN.csv")
         data = pd.read_csv(dataPath, sep=',')  # Puts data from csv into indexable np arrays
         data = data.fillna("NA")
         dataFeatures = data.drop("class", axis=1).values  # splits into an array of instances
@@ -607,7 +607,7 @@ class Test_eLCS(unittest.TestCase):
 
     #Test Specified and Default Phenotype and Attribute Types
     def testDefault(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0)
@@ -616,7 +616,7 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
     def testDefault2(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0,discreteAttributeLimit=9)
@@ -625,7 +625,7 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
     def testDiscreteSpec(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0,discreteAttributeLimit="d",specifiedAttributes=np.array([0,2,3]))
@@ -634,7 +634,7 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
     def testContSpec(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0,discreteAttributeLimit="c",specifiedAttributes=np.array([0,2,3]))
@@ -644,7 +644,7 @@ class Test_eLCS(unittest.TestCase):
 
     #Check Y must be discrete for fit method (eLCS works best only on classification problems)
     def testContSpec2(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0,discreteAttributeLimit="c",specifiedAttributes=np.array([0,2,3]),discretePhenotypeLimit="d")
@@ -653,7 +653,7 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
     def testContPhenotype(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0, discretePhenotypeLimit=9)
@@ -693,7 +693,7 @@ class Test_eLCS(unittest.TestCase):
     #####TEST AGAINST OLD ALGORITHM
     #Test performance for binary attribute/phenotype training data (MP problems)
     def test6BitMultiplexer1000Iterations(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/Multiplexer6.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer6.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=1000,evalWhileFit=True)
@@ -742,7 +742,7 @@ class Test_eLCS(unittest.TestCase):
     #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
     #
     def test11BitMultiplexer5000Iterations(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/Multiplexer11.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer11.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=5000,evalWhileFit=True)
@@ -793,7 +793,7 @@ class Test_eLCS(unittest.TestCase):
 
     #Test performance for continuous attribute training data
     def testContinuous1000Iterations(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv")
         converter = StringEnumerator(dataPath, "Class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=1000,evalWhileFit=True)
@@ -846,7 +846,7 @@ class Test_eLCS(unittest.TestCase):
 
     #Test performance for binary attribute/phenotype testing data (MP problems w/ CV)
     def testMPCV(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/Multiplexer6.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer6.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=2000,evalWhileFit=True)
