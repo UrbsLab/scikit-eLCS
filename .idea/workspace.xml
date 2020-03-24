@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_DataCleanup.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_DataCleanup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_eLCS.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,11 +15,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test_DataCleanup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2601">
+            <state relative-caret-position="270">
               <caret line="22" selection-start-line="22" selection-end-line="22" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="237">
+              <caret line="706" column="97" selection-start-line="706" selection-start-column="97" selection-end-line="706" selection-end-column="97" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -31,7 +42,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DataCleanup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
+            <state relative-caret-position="570">
               <caret line="40" column="29" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
               <folding>
                 <element signature="e#241#259#0" expanded="true" />
@@ -126,8 +137,8 @@
         <option value="$PROJECT_DIR$/test/DataSets/Tests/SpecificityTests/__init__.py" />
         <option value="$PROJECT_DIR$/test/Arb.py" />
         <option value="$PROJECT_DIR$/test/test_ListArray.py" />
-        <option value="$PROJECT_DIR$/test/test_eLCS.py" />
         <option value="$PROJECT_DIR$/test/test_DataCleanup.py" />
+        <option value="$PROJECT_DIR$/test/test_eLCS.py" />
       </list>
     </option>
   </component>
@@ -475,6 +486,7 @@
       <workItem from="1585009010992" duration="26000" />
       <workItem from="1585009078288" duration="6378000" />
       <workItem from="1585084748431" duration="68000" />
+      <workItem from="1585090424239" duration="16000" />
     </task>
     <servers />
   </component>
@@ -511,13 +523,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="499697000" />
+    <option name="totallyTimeSpent" value="499713000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="18" y="23" width="1610" height="975" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17283164" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1747449" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -536,9 +548,9 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.5141563" side_tool="true" visible="true" weight="0.019132653" />
+      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.5152888" side_tool="true" visible="true" weight="0.019132653" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info active="true" anchor="right" id="SciView" order="5" sideWeight="0.48584372" visible="true" weight="0.019132653" />
+      <window_info active="true" anchor="right" id="SciView" order="5" sideWeight="0.4847112" visible="true" weight="0.019132653" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -745,16 +757,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="50" selection-start-line="19" selection-start-column="50" selection-end-line="19" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/test_ListArray.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
@@ -775,9 +777,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_DataCleanup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DataCleanup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
+        <state relative-caret-position="570">
           <caret line="40" column="29" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
           <folding>
             <element signature="e#241#259#0" expanded="true" />
@@ -785,10 +797,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_DataCleanup.py">
+    <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2601">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        <state relative-caret-position="237">
+          <caret line="706" column="97" selection-start-line="706" selection-start-column="97" selection-end-line="706" selection-end-column="97" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
