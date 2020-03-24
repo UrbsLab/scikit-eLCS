@@ -14,14 +14,12 @@ class TestDataCleanup(unittest.TestCase):
         # Tests if init filters missing data into NAs
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/MissingFeatureData.csv")
         se = DataCleanup.StringEnumerator(dataPath, "phenotype")
-        #se = DataCleanup.StringEnumerator("DataSets/Tests/MissingFeatureData.csv","phenotype")
         cFeatures = np.array([["1.0","NA","1.0","4.0"],["2.0","0.0","1.0","NA"],["4.0","NA","1.0","2.0"],["NA","1.0","NA","1.0"],["6.0","NA","1.0","1.0"]])
         self.assertTrue(np.array_equal(cFeatures,se.dataFeatures))
 
     def testInitHeaders(self):
         # Tests if init gets the headers correct
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/MissingFeatureData.csv")
-        #se = DataCleanup.StringEnumerator("DataSets/Tests/MissingFeatureData.csv", "phenotype")
         se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         cHeaders = np.array(["N1","N2","N3","N4"])
         self.assertTrue(np.array_equal(cHeaders, se.dataHeaders))
@@ -176,7 +174,6 @@ class TestDataCleanup(unittest.TestCase):
     def testNumericCheck(self):
         # Checks non missing numeric
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
-        
         se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         self.assertFalse(se.checkIsFullNumeric())
         se.addAttributeConverterRandom("N1")
