@@ -2,24 +2,32 @@ import unittest
 import DataCleanup
 import pandas as pd
 import numpy as np
+import os
+
+THIS_DIR = os.path.dirname(os.path.abspath("test_eLCS.py"))
 
 class TestDataCleanup(unittest.TestCase):
 
     def testInitMissingData(self):
         # Tests if init filters missing data into NAs
-        se = DataCleanup.StringEnumerator("DataSets/Tests/MissingFeatureData.csv","phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/MissingFeatureData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
+        #se = DataCleanup.StringEnumerator("DataSets/Tests/MissingFeatureData.csv","phenotype")
         cFeatures = np.array([["1.0","NA","1.0","4.0"],["2.0","0.0","1.0","NA"],["4.0","NA","1.0","2.0"],["NA","1.0","NA","1.0"],["6.0","NA","1.0","1.0"]])
         self.assertTrue(np.array_equal(cFeatures,se.dataFeatures))
 
     def testInitHeaders(self):
         # Tests if init gets the headers correct
-        se = DataCleanup.StringEnumerator("DataSets/Tests/MissingFeatureData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/MissingFeatureData.csv")
+        #se = DataCleanup.StringEnumerator("DataSets/Tests/MissingFeatureData.csv", "phenotype")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         cHeaders = np.array(["N1","N2","N3","N4"])
         self.assertTrue(np.array_equal(cHeaders, se.dataHeaders))
 
     def testInitFeaturesAndClass(self):
         # Tests if init gets the features and class arrays correct
-        se = DataCleanup.StringEnumerator("DataSets/Tests/MissingFeatureData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/MissingFeatureData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         cFeatures = np.array([["1.0", "NA", "1.0", "4.0"], ["2.0", "0.0", "1.0", "NA"], ["4.0", "NA", "1.0", "2.0"], ["NA", "1.0", "NA", "1.0"],["6.0", "NA", "1.0", "1.0"]])
         cClasses = np.array(["1", "0", "1", "0", "1"])
         self.assertTrue(np.array_equal(cFeatures, se.dataFeatures))
@@ -27,7 +35,8 @@ class TestDataCleanup(unittest.TestCase):
 
     def testInitFeaturesAndClassRemoval(self):
         # Tests if init gets the features and class arrays correct given missing phenotype data
-        se = DataCleanup.StringEnumerator("DataSets/Tests/MissingFeatureAndPhenotypeData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/MissingFeatureAndPhenotypeData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         cFeatures = np.array([["1.0", "NA", "1.0", "4.0"], ["NA", "1.0", "NA", "1.0"], ["6.0", "NA", "1.0", "1.0"]])
         cClasses = np.array(["1.0", "0.0", "1.0"])
         self.assertTrue(np.array_equal(cFeatures, se.dataFeatures))
@@ -35,7 +44,8 @@ class TestDataCleanup(unittest.TestCase):
 
     def testChangeClassAndHeaderNames(self):
         # Changes header and class names. Checks map, and classLabel/dataHeaders correctness
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         se.changeClassName("country")
         se.changeHeaderName("N1","gender")
         se.changeHeaderName("N2","N1")
@@ -48,7 +58,8 @@ class TestDataCleanup(unittest.TestCase):
 
     def testChangeClassAndHeaderNames2(self):
         # Changes header and class names. Checks map, and classLabel/dataHeaders correctness
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         se.addClassConverterRandom()
         se.changeHeaderName("N1","gender")
         se.addAttributeConverterRandom("gender")
@@ -67,7 +78,8 @@ class TestDataCleanup(unittest.TestCase):
 
     def testChangeClassNameInvalid(self):
         # Changes class name to an existing header name should raise exception
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         with self.assertRaises(Exception) as context:
             se.changeClassName("N1")
 
@@ -76,7 +88,8 @@ class TestDataCleanup(unittest.TestCase):
 
     def testChangeHeaderNameInvalid(self):
         # Changes header name to an existing header or class name should raise exception
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         with self.assertRaises(Exception) as context:
             se.changeHeaderName("N1","N2")
 
@@ -84,14 +97,16 @@ class TestDataCleanup(unittest.TestCase):
 
     def testChangeHeaderNameInvalid2(self):
         # Changes non existing header name should raise exception
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         with self.assertRaises(Exception) as context:
             se.changeHeaderName("N", "N5")
         self.assertTrue("Current Header Doesn't Exist" in str(context.exception))
 
     def testDeleteAttribute(self):
         # Deletes attributes and checks map, headers, and arrays for correctness
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         se.changeHeaderName("N1","gender")
         se.addAttributeConverterRandom("gender")
         se.addAttributeConverterRandom("N3")
@@ -104,14 +119,16 @@ class TestDataCleanup(unittest.TestCase):
 
     def testDeleteNonexistentAttribute(self):
         # Deletes nonexistent attribute
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         with self.assertRaises(Exception) as context:
             se.deleteAttribute("N")
         self.assertTrue("Header Doesn't Exist" in str(context.exception))
 
     def testDeleteInstancesWithMissing(self):
         # Deletes instances and checks arrays for correctness
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         se.changeHeaderName("N1","gender")
         se.addAttributeConverterRandom("gender")
         se.addAttributeConverterRandom("N3")
@@ -132,7 +149,8 @@ class TestDataCleanup(unittest.TestCase):
 
     def testDeleteInstancesWithMissing2(self):
         # Deletes instances and checks arrays for correctness
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         se.changeHeaderName("N1","gender")
         se.deleteAllInstancesWithoutHeaderData("gender")
         se.deleteAllInstancesWithoutHeaderData("N2")
@@ -155,7 +173,8 @@ class TestDataCleanup(unittest.TestCase):
 
     def testNumericCheck(self):
         # Checks non missing numeric
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         self.assertFalse(se.checkIsFullNumeric())
         se.addAttributeConverterRandom("N1")
         se.convertAllAttributes()
@@ -165,19 +184,22 @@ class TestDataCleanup(unittest.TestCase):
         se.convertAllAttributes()
         self.assertTrue(se.checkIsFullNumeric())
 
-        se2 = DataCleanup.StringEnumerator("DataSets/Tests/MissingFeatureData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/MissingFeatureData.csv")
+        se2 = DataCleanup.StringEnumerator(dataPath, "phenotype")
         self.assertTrue(se2.checkIsFullNumeric())
 
     def testGetParamsFail(self):
         # Get params when not all features/class have been enumerated
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         with self.assertRaises(Exception) as context:
             se.getParams()
         self.assertTrue("Features and Phenotypes must be fully numeric" in str(context.exception))
 
     def testGetParams1(self):
         # Get Params Test
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         se.changeHeaderName("N1","gender")
         se.changeHeaderName("N2","floats")
         se.changeHeaderName("N3","age")
@@ -198,7 +220,8 @@ class TestDataCleanup(unittest.TestCase):
 
     def testGetParams2(self):
         # Get Params Test
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         se.changeHeaderName("N1", "gender")
         se.changeHeaderName("N2", "floats")
         se.changeHeaderName("N3", "age")
@@ -217,5 +240,6 @@ class TestDataCleanup(unittest.TestCase):
         self.assertTrue(np.allclose(cPhenotypes, dataPhenotypes, equal_nan=True))
 
     def testPrintInvalids(self):
-        se = DataCleanup.StringEnumerator("DataSets/Tests/StringData2.csv", "phenotype")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData2.csv")
+        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         se.printInvalidAttributes()

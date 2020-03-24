@@ -1,7 +1,16 @@
 import unittest
 import numpy as np
 from DynamicNPArray import ListArray
-from Test_TupleArray import Arb
+
+class Arb(): #Test Object
+    def __init__(self,num):
+        self.num = 5
+
+    def __eq__(self, other):
+        if not isinstance(other,Arb):
+            return False
+
+        return other.num == self.num
 
 class TestListArray(unittest.TestCase):
 

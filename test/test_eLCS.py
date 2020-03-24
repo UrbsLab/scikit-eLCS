@@ -5,6 +5,9 @@ import numpy as np
 from eLCS import *
 from DataCleanup import *
 from sklearn.model_selection import cross_val_score
+import os
+
+THIS_DIR = os.path.dirname(os.path.abspath("test_eLCS.py"))
 
 class Test_eLCS(unittest.TestCase):
 
@@ -534,10 +537,6 @@ class Test_eLCS(unittest.TestCase):
             clf = eLCS(randomSeed=1.2)
         self.assertTrue("randomSeed param must be integer or 'none'" in str(context.exception))
 
-    def testRandomSeed(self):
-        clf = eLCS(randomSeed=-100)
-        self.assertEqual(clf.randomSeed,-100)
-
     def testRandomSeed2(self):
         clf = eLCS(randomSeed=200)
         self.assertEqual(clf.randomSeed,200)
@@ -554,28 +553,36 @@ class Test_eLCS(unittest.TestCase):
 
     #Check X and Y must be numeric for fit method
     def testFullInts(self):
-        converter = StringEnumerator("Datasets/Tests/NumericTests/numericInts.csv", "class")
+        dataPath = os.path.join(THIS_DIR,"test/Datasets/Tests/NumericTests/numericInts.csv")
+        converter = StringEnumerator(dataPath, "class")
+        #converter = StringEnumerator("Datasets/Tests/NumericTests/numericInts.csv", "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=2)
         clf.fit(dataFeatures,dataPhenotypes)
         self.assertTrue(clf.explorIter,2)
 
     def testFullFloats(self):
-        converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloats.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/NumericTests/numericFloats.csv")
+        converter = StringEnumerator(dataPath, "class")
+        #converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloats.csv", "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=2)
         clf.fit(dataFeatures, dataPhenotypes)
         self.assertTrue(clf.explorIter, 2)
 
     def testFullFloatsMissing(self):
-        converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloatsMissing.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/NumericTests/numericFloatsMissing.csv")
+        converter = StringEnumerator(dataPath, "class")
+        #converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloatsMissing.csv", "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=2)
         clf.fit(dataFeatures, dataPhenotypes)
         self.assertTrue(clf.explorIter, 2)
 
     def testStringExists(self):
-        data = pd.read_csv("Datasets/Tests/NumericTests/numericFloatsString.csv", sep=',')  # Puts data from csv into indexable np arrays
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/NumericTests/numericFloatsString.csv")
+        data = pd.read_csv(dataPath, sep=',')
+        #data = pd.read_csv("Datasets/Tests/NumericTests/numericFloatsString.csv", sep=',')  # Puts data from csv into indexable np arrays
         data = data.fillna("NA")
         dataFeatures = data.drop("class", axis=1).values  # splits into an array of instances
         dataPhenotypes = data["class"].values
@@ -587,7 +594,8 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue("X and y must be fully numeric" in str(context.exception))
 
     def testNANPhenotypeExists(self):
-        data = pd.read_csv("Datasets/Tests/NumericTests/numericFloatsNAN.csv", sep=',')  # Puts data from csv into indexable np arrays
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/NumericTests/numericFloatsNAN.csv")
+        data = pd.read_csv(dataPath, sep=',')  # Puts data from csv into indexable np arrays
         data = data.fillna("NA")
         dataFeatures = data.drop("class", axis=1).values  # splits into an array of instances
         dataPhenotypes = data["class"].values
@@ -599,7 +607,8 @@ class Test_eLCS(unittest.TestCase):
 
     #Test Specified and Default Phenotype and Attribute Types
     def testDefault(self):
-        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0)
         clf.fit(dataFeatures,dataPhenotypes)
@@ -607,7 +616,8 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
     def testDefault2(self):
-        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0,discreteAttributeLimit=9)
         clf.fit(dataFeatures,dataPhenotypes)
@@ -615,7 +625,8 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
     def testDiscreteSpec(self):
-        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0,discreteAttributeLimit="d",specifiedAttributes=np.array([0,2,3]))
         clf.fit(dataFeatures,dataPhenotypes)
@@ -623,7 +634,8 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
     def testContSpec(self):
-        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0,discreteAttributeLimit="c",specifiedAttributes=np.array([0,2,3]))
         clf.fit(dataFeatures,dataPhenotypes)
@@ -632,7 +644,8 @@ class Test_eLCS(unittest.TestCase):
 
     #Check Y must be discrete for fit method (eLCS works best only on classification problems)
     def testContSpec2(self):
-        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0,discreteAttributeLimit="c",specifiedAttributes=np.array([0,2,3]),discretePhenotypeLimit="d")
         clf.fit(dataFeatures,dataPhenotypes)
@@ -640,7 +653,8 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
     def testContPhenotype(self):
-        converter = StringEnumerator("Datasets/Tests/SpecificityTests/Specifics.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Tests/SpecificityTests/Specifics.csv")
+        converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=0, discretePhenotypeLimit=9)
         with self.assertRaises(Exception) as context:
@@ -679,7 +693,8 @@ class Test_eLCS(unittest.TestCase):
     #####TEST AGAINST OLD ALGORITHM
     #Test performance for binary attribute/phenotype training data (MP problems)
     def test6BitMultiplexer1000Iterations(self):
-        converter = StringEnumerator("Datasets/Real/Multiplexer6.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/Multiplexer6.csv")
+        converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=1000,evalWhileFit=True)
         clf.fit(dataFeatures,dataPhenotypes)
@@ -727,7 +742,8 @@ class Test_eLCS(unittest.TestCase):
     #     self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
     #
     def test11BitMultiplexer5000Iterations(self):
-        converter = StringEnumerator("Datasets/Real/Multiplexer11.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/Multiplexer11.csv")
+        converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=5000,evalWhileFit=True)
         clf.fit(dataFeatures,dataPhenotypes)
@@ -777,7 +793,8 @@ class Test_eLCS(unittest.TestCase):
 
     #Test performance for continuous attribute training data
     def testContinuous1000Iterations(self):
-        converter = StringEnumerator("Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv", "Class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv")
+        converter = StringEnumerator(dataPath, "Class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=1000,evalWhileFit=True)
         clf.fit(dataFeatures,dataPhenotypes)
@@ -829,7 +846,8 @@ class Test_eLCS(unittest.TestCase):
 
     #Test performance for binary attribute/phenotype testing data (MP problems w/ CV)
     def testMPCV(self):
-        converter = StringEnumerator("Datasets/Real/Multiplexer6.csv", "class")
+        dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/Multiplexer6.csv")
+        converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=2000,evalWhileFit=True)
         formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
@@ -865,40 +883,41 @@ class Test_eLCS(unittest.TestCase):
     #     print(score)
     #     self.assertTrue(self.approxEqual(0.2, score, 0.6355))
 
-    # Test random seed
-    def testRandomSeed(self):
-        converter = StringEnumerator("Datasets/Real/Multiplexer11.csv", "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-
-        clf = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
-        clf.fit(dataFeatures, dataPhenotypes)
-        clf.exportIterationTrackingDataToCSV(filename='DataSets/Tests/RandomTests/track1.csv')
-        clf.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='DataSets/Tests/RandomTests/pop1.csv')
-        clf.exportFinalPopStatsToCSV(headerNames=headers, filename="DataSets/Tests/RandomTests/popStats1.csv")
-
-        clf2 = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
-        clf2.fit(dataFeatures, dataPhenotypes)
-        clf2.exportIterationTrackingDataToCSV(filename='DataSets/Tests/RandomTests/track2.csv')
-        clf2.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='DataSets/Tests/RandomTests/pop2.csv')
-        clf2.exportFinalPopStatsToCSV(headerNames=headers, filename="DataSets/Tests/RandomTests/popStats2.csv")
-
-        track1 = pd.read_csv('DataSets/Tests/RandomTests/track1.csv').values[:,:13]
-        pop1 = pd.read_csv('DataSets/Tests/RandomTests/pop1.csv').values
-        popStats1 = pd.read_csv('DataSets/Tests/RandomTests/popStats1.csv').drop('Label', axis=1).values
-
-        track2 = pd.read_csv('DataSets/Tests/RandomTests/track2.csv').values[:,:13]
-        pop2 = pd.read_csv('DataSets/Tests/RandomTests/pop2.csv').values
-        popStats2 = pd.read_csv('DataSets/Tests/RandomTests/popStats2.csv').drop('Label', axis=1).values
-
-        pop1[pop1 == "#"] = np.nan
-        pop2[pop2 == "#"] = np.nan
-
-        pop1 = np.array(list(pop1),dtype=float)
-        pop2 = np.array(list(pop2), dtype=float)
-
-        self.assertTrue(np.allclose(track1,track2,equal_nan=True))
-        self.assertTrue(np.allclose(pop1, pop2, equal_nan=True))
-        self.assertTrue(np.allclose(popStats1, popStats2, equal_nan=True))
+    # # Test random seed
+    # def testRandomSeed(self):
+    #     dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/Multiplexer11.csv")
+    #     converter = StringEnumerator(dataPath, "class")
+    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+    #
+    #     clf = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
+    #     clf.fit(dataFeatures, dataPhenotypes)
+    #     clf.exportIterationTrackingDataToCSV(filename='DataSets/Tests/RandomTests/track1.csv')
+    #     clf.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='DataSets/Tests/RandomTests/pop1.csv')
+    #     clf.exportFinalPopStatsToCSV(headerNames=headers, filename="DataSets/Tests/RandomTests/popStats1.csv")
+    #
+    #     clf2 = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
+    #     clf2.fit(dataFeatures, dataPhenotypes)
+    #     clf2.exportIterationTrackingDataToCSV(filename='DataSets/Tests/RandomTests/track2.csv')
+    #     clf2.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='DataSets/Tests/RandomTests/pop2.csv')
+    #     clf2.exportFinalPopStatsToCSV(headerNames=headers, filename="DataSets/Tests/RandomTests/popStats2.csv")
+    #
+    #     track1 = pd.read_csv('DataSets/Tests/RandomTests/track1.csv').values[:,:13]
+    #     pop1 = pd.read_csv('DataSets/Tests/RandomTests/pop1.csv').values
+    #     popStats1 = pd.read_csv('DataSets/Tests/RandomTests/popStats1.csv').drop('Label', axis=1).values
+    #
+    #     track2 = pd.read_csv('DataSets/Tests/RandomTests/track2.csv').values[:,:13]
+    #     pop2 = pd.read_csv('DataSets/Tests/RandomTests/pop2.csv').values
+    #     popStats2 = pd.read_csv('DataSets/Tests/RandomTests/popStats2.csv').drop('Label', axis=1).values
+    #
+    #     pop1[pop1 == "#"] = np.nan
+    #     pop2[pop2 == "#"] = np.nan
+    #
+    #     pop1 = np.array(list(pop1),dtype=float)
+    #     pop2 = np.array(list(pop2), dtype=float)
+    #
+    #     self.assertTrue(np.allclose(track1,track2,equal_nan=True))
+    #     self.assertTrue(np.allclose(pop1, pop2, equal_nan=True))
+    #     self.assertTrue(np.allclose(popStats1, popStats2, equal_nan=True))
 
 
     ###Util Functions###
