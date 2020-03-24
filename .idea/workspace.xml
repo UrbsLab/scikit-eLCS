@@ -2,61 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/test/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Real/MulticlassPhenotype.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Real/Multiplexer11.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Real/Multiplexer20.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Real/Multiplexer6.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/ContinuousPhenotype.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/ContinuousPhenotype.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/MissingFeatureAndPhenotypeData.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/MissingFeatureAndPhenotypeData.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/MissingFeatureData.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/MissingFeatureData.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericFloats.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericFloats.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericFloatsMissing.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericFloatsMissing.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericFloatsNAN.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericFloatsNAN.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericFloatsString.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericFloatsString.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericInts.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/NumericTests/numericInts.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/RandomTests/pop1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/RandomTests/pop2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/RandomTests/popStats1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/RandomTests/popStats2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/RandomTests/track1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/RandomTests/track2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/SpecificityTests/Specifics.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/SpecificityTests/Specifics.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/StringData.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/StringData.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/StringData2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataSets/Tests/StringData2.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunctionalityTests/IterationRecordTests.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunctionalityTests/IterationRecordTests.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunctionalityTests/OldeLCSEvalForPerformanceTests.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FunctionalityTests/~$IterationRecordTests.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Runner.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test_DataCleanup.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test_ListArray.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test_TupleArray.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test_eLCS.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/ClassAccuracy.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Classifier.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/ClassifierSet.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/DataManagement.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Prediction.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Timer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/eLCS.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_ListArray.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_ListArray.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -96,8 +42,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/test_ListArray.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+            <state relative-caret-position="57">
+              <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -553,7 +499,7 @@
       <workItem from="1584965655901" duration="1559000" />
       <workItem from="1585007034102" duration="1464000" />
       <workItem from="1585009010992" duration="26000" />
-      <workItem from="1585009078288" duration="3182000" />
+      <workItem from="1585009078288" duration="3690000" />
     </task>
     <servers />
   </component>
@@ -590,7 +536,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="496433000" />
+    <option name="totallyTimeSpent" value="496941000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="50" y="23" width="1610" height="975" extended-state="0" />
@@ -904,8 +850,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test_ListArray.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="57">
+          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>

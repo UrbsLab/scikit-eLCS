@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from DynamicNPArray import ListArray
 
-class Arb(): #Test Object
+class Arb():
     def __init__(self,num):
         self.num = 5
 
