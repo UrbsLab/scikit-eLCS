@@ -185,6 +185,7 @@ class TestDataCleanup(unittest.TestCase):
         self.assertTrue(se.checkIsFullNumeric())
 
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/MissingFeatureData.csv")
+        print("DATAPATH333: "+dataPath)
         se2 = DataCleanup.StringEnumerator(dataPath, "phenotype")
         self.assertTrue(se2.checkIsFullNumeric())
 
