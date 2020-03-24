@@ -8,7 +8,7 @@ from sklearn.model_selection import cross_val_score
 import os
 
 THIS_DIR = os.path.dirname(os.path.abspath("test_eLCS.py"))
-if THIS_DIR[-6:] != 'Scikit': #Patch that ensures testing from Scikit not test directory
+if THIS_DIR[-4:] == 'test': #Patch that ensures testing from Scikit not test directory
     THIS_DIR = THIS_DIR[:-5]
 
 class Test_eLCS(unittest.TestCase):

@@ -5,7 +5,7 @@ import numpy as np
 import os
 
 THIS_DIR = os.path.dirname(os.path.abspath("test_eLCS.py"))
-if THIS_DIR[-6:] != 'Scikit': #Patch that ensures testing from Scikit not test directory
+if THIS_DIR[-4:] == "test": #Patch that ensures testing from Scikit not test directory
     THIS_DIR = THIS_DIR[:-5]
 
 class TestDataCleanup(unittest.TestCase):
@@ -176,9 +176,7 @@ class TestDataCleanup(unittest.TestCase):
     def testNumericCheck(self):
         # Checks non missing numeric
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData.csv")
-        print("DATAPATH333: " + dataPath)
-        print(os.pardir)
-        print(THIS_DIR)
+        
         se = DataCleanup.StringEnumerator(dataPath, "phenotype")
         self.assertFalse(se.checkIsFullNumeric())
         se.addAttributeConverterRandom("N1")
