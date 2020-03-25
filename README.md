@@ -47,7 +47,7 @@ Scikit eLCS is an open source project and we'd love if you could suggest changes
   <li> Fork the project repository to your personal account and clone this copy to your local disk</li>
   <li> Create a branch from master to hold your changes: (e.g. <b>git checkout -b my-contribution-branch</b>) </li>
   <li> Commit changes on your branch. Remember to never work on any other branch but your own! </li>
-  <li> When you are done, push your changes to your forked GitHub repository with git push -u origin my-contribution-branch** </li>
+  <li> When you are done, push your changes to your forked GitHub repository with <b>git push -u origin my-contribution-branch</b> </li>
   <li> Create a pull request to send your changes to the eLCS maintainers for review. </li>
 </ol>
 
