@@ -53,8 +53,8 @@ Scikit eLCS is an open source project and we'd love if you could suggest changes
 
 **Before submitting your pull request**
 
-If your contribution changes eLCS in any way, make sure you update the Jupyter Notebook documentation and the README with relevant details. If your contribution involes any code changes, update the project unit tests to test your code changes, and make sure your code is properly commented to explain your rationale behind non-obvious coding practices.
+If your contribution changes eLCS in any way, make sure you update the Jupyter Notebook documentation and the README with relevant details. If your contribution involves any code changes, update the project unit tests to test your code changes, and make sure your code is properly commented to explain your rationale behind non-obvious coding practices.
 
-**Before submitting your pull request**
+**After submitting your pull request**
 
 After submitting your pull request, Travis CI will run all of the project's unit tests. Check back shortly after submitting to make sure your code passes these checks. If any checks come back failed, do your best to address the errors.
