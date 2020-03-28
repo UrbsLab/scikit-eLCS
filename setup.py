@@ -1,0 +1,27 @@
+from distutils.core import setup
+setup(
+  name = 'scikit-eLCS',
+  packages = ['skeLCS'],
+  version = '1.0',
+  license='License :: OSI Approved :: GNU GPL v3.0',
+  description = 'Educational Learning Classifier System',
+  author = 'Robert Zhang, Ryan J. Urbanowicz',
+  author_email = 'robertzh@seas.upenn.edu,ryanurb@upenn.edu',
+  url = 'https://github.com/UrbsLab/scikit-eLCS',
+  download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',
+  keywords = ['machine learning','data analysis','data science','learning classifier systems'],
+  install_requires=['numpy','pandas'],
+  classifiers=[
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'Intended Audience :: Science/Research',
+    'Topic :: Utilities',
+    'License :: OSI Approved :: GNU GPL v3.0',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+  ],
+)
