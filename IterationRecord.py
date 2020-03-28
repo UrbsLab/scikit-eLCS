@@ -54,7 +54,7 @@ class IterationRecord():
     def addToEval(self,iterationNumber,evalAccuracy,instanceCoverage,fullPopSet,specSum,accSum):
         self.evaluationDict[iterationNumber] = [evalAccuracy,instanceCoverage,fullPopSet,specSum,accSum]
 
-    def exportTrackingToCSV(self,filename='iterationData.csv'):
+    def exportTrackingToCSV(self,filename='defaultExportDir/iterationData.csv'):
         #Exports each entry in Tracking Array as a column
         with open(filename,mode='w') as file:
             writer = csv.writer(file,delimiter=',',quotechar='"',quoting=csv.QUOTE_MINIMAL)
@@ -68,7 +68,7 @@ class IterationRecord():
             for k,v in sorted(self.trackingDict.items()):
                 writer.writerow([k,v[0],v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8],v[9],v[10],v[11],v[12],v[13],v[14],v[15],v[16],v[17]])
 
-    def exportSumsToCSV(self,elcs,iterationNumber,headerNames=np.array([]),filename="popStats.csv"):
+    def exportSumsToCSV(self,elcs,iterationNumber,headerNames=np.array([]),filename="defaultExportDir/popStats.csv"):
         '''
         Assumes at least 1 classifier is in population.
         :param iterationNumber: Which iteration to export evaluation data for
@@ -97,10 +97,10 @@ class IterationRecord():
             writer.writerow(["Specificity Sum"]+self.evaluationDict[iterationNumber][3])
             writer.writerow(["Accuracy Sum"] + self.evaluationDict[iterationNumber][4])
 
-    def exportFinalSumsToCSV(self,elcs,headerNames=np.array([]),filename="popStats.csv"):
+    def exportFinalSumsToCSV(self,elcs,headerNames=np.array([]),filename="defaultExportDir/popStats.csv"):
         self.exportSumsToCSV(elcs, sorted(self.evaluationDict.items())[len(self.evaluationDict.items()) - 1][0], headerNames, filename)
 
-    def exportEvaluationToCSV(self,elcs,iterationNumber,headerNames=np.array([]),className='phenotype',filename='populationData.csv'):
+    def exportEvaluationToCSV(self,elcs,iterationNumber,headerNames=np.array([]),className='phenotype',filename='defaultExportDir/populationData.csv'):
         '''
         Assumes at least 1 classifier is in population.
         :param iterationNumber: Which iteration to export evaluation data for
@@ -159,7 +159,7 @@ class IterationRecord():
                 a.append(classifier.matchCount)
                 writer.writerow(a)
 
-    def exportEvaluationToCSVALKR(self,elcs,iterationNumber,headerNames=np.array([]),className='phenotype',filename='populationData.csv'):
+    def exportEvaluationToCSVALKR(self,elcs,iterationNumber,headerNames=np.array([]),className='phenotype',filename='defaultExportDir/populationData.csv'):
         '''
         Assumes at least 1 classifier is in population.
         :param iterationNumber: Which iteration to export evaluation data for
@@ -228,10 +228,10 @@ class IterationRecord():
                 a.append(classifier.matchCount)
                 writer.writerow(a)
 
-    def exportFinalRulePopulationToCSV(self,elcs,headerNames=np.array([]),className='phenotype',filename="populationData.csv"):
+    def exportFinalRulePopulationToCSV(self,elcs,headerNames=np.array([]),className='phenotype',filename="defaultExportDir/populationData.csv"):
         self.exportEvaluationToCSV(elcs,sorted(self.evaluationDict.items())[len(self.evaluationDict.items()) - 1][0],headerNames,className,filename)
 
-    def exportFinalRulePopulationToCSVALKR(self,elcs,headerNames=np.array([]),className='phenotype',filename="populationData.csv"):
+    def exportFinalRulePopulationToCSVALKR(self,elcs,headerNames=np.array([]),className='phenotype',filename="defaultExportDir/populationData.csv"):
         self.exportEvaluationToCSVALKR(elcs,sorted(self.evaluationDict.items())[len(self.evaluationDict.items()) - 1][0],headerNames,className,filename)
 
 

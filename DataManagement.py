@@ -1,6 +1,5 @@
 from eLCS import *
 import numpy as np
-from DynamicNPArray import ArrayFactory
 
 class DataManagement:
     def __init__(self, dataFeatures, dataPhenotypes, elcs):

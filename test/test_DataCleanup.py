@@ -238,8 +238,8 @@ class TestDataCleanup(unittest.TestCase):
         self.assertTrue(np.array_equal(cHeaders, dataHeaders))
         self.assertTrue(np.allclose(cFeatures, dataFeatures, equal_nan=True))
         self.assertTrue(np.allclose(cPhenotypes, dataPhenotypes, equal_nan=True))
-
-    def testPrintInvalids(self):
-        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData2.csv")
-        se = DataCleanup.StringEnumerator(dataPath, "phenotype")
-        se.printInvalidAttributes()
+    #
+    # def testPrintInvalids(self):
+    #     dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/StringData2.csv")
+    #     se = DataCleanup.StringEnumerator(dataPath, "phenotype")
+    #     se.printInvalidAttributes()
