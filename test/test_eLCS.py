@@ -1,6 +1,6 @@
 import unittest
-from eLCS import *
-from DataCleanup import *
+from skeLCS.eLCS import *
+from skeLCS.DataCleanup import *
 from sklearn.model_selection import cross_val_score
 import os
 

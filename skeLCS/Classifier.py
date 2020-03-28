@@ -1,11 +1,10 @@
-from eLCS import *
 import random
 import copy
 import math
 import numpy as np
-from DynamicNPArray import ArrayFactory, GenericArray
+from skeLCS.DynamicNPArray import ArrayFactory, GenericArray
 
-class Classifier():
+class Classifier:
     def __init__(self,elcs,a=None,b=None,c=None,d=None):
         #Major Parameters
         self.specifiedAttList = []

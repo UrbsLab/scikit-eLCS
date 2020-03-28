@@ -1,10 +1,10 @@
-from OfflineEnvironment import *
-from ClassifierSet import *
-from Prediction import *
-from Timer import *
-from ClassAccuracy import *
-from DynamicNPArray import ArrayFactory
-from IterationRecord import *
+from skeLCS.OfflineEnvironment import OfflineEnvironment
+from skeLCS.ClassifierSet import ClassifierSet
+from skeLCS.Prediction import Prediction
+from skeLCS.Timer import Timer
+from skeLCS.ClassAccuracy import ClassAccuracy
+from skeLCS.DynamicNPArray import ArrayFactory
+from skeLCS.IterationRecord import IterationRecord
 
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.metrics import balanced_accuracy_score
@@ -655,7 +655,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         resultList = [adjustedAccuracyEstimate, instanceCoverage]
         return resultList
 
-    def exportIterationTrackingDataToCSV(self,filename='defaultExportDir/iterationData.csv'):
+    def exportIterationTrackingDataToCSV(self,filename='iterationData.csv'):
         if self.hasTrained:
             self.record.exportTrackingToCSV(filename)
         else:
@@ -665,7 +665,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     If evalWhiteFit was turned off, as long as the iterationNumber is the final iteration, an immediate evaluation will be run
     on the population and an export will be made. Past unsaved rule populations are not obviously not valid for evaluation or export.
     '''
-    def exportRulePopulationAtIterationToCSV(self,iterationNumber,headerNames=np.array([]),className='phenotype',filename='defaultExportDir/populationData.csv',ALKR=False):
+    def exportRulePopulationAtIterationToCSV(self,iterationNumber,headerNames=np.array([]),className='phenotype',filename='populationData.csv',ALKR=False):
         if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
             if ALKR:
                 self.record.exportEvaluationToCSVALKR(self, iterationNumber, headerNames, className,filename)
@@ -677,7 +677,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     '''
     Even if evalWhileFit was turned off, this will run an immediate evaluation and export it.
     '''
-    def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype",filename='defaultExportDir/populationData.csv',ALKR=False):
+    def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype",filename='populationData.csv',ALKR=False):
         if self.hasTrained:
             if self.evalWhileFitAfter:
                 if ALKR:
@@ -704,7 +704,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         else:
             raise Exception("There is no rule population to export, as the eLCS model has not been trained")
 
-    def exportPopStatsToCSV(self,iterationNumber,headerNames=np.array([]),filename='defaultExportDir/popStats.csv'):
+    def exportPopStatsToCSV(self,iterationNumber,headerNames=np.array([]),filename='popStats.csv'):
         if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
             self.record.exportSumsToCSV(self, iterationNumber, headerNames,filename)
         else:
@@ -713,7 +713,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     '''
     Even if evalWhileFit was turned off, this will run an immediate evaluation and export it.
     '''
-    def exportFinalPopStatsToCSV(self,headerNames=np.array([]),filename='defaultExportDir/popStats.csv'):
+    def exportFinalPopStatsToCSV(self,headerNames=np.array([]),filename='popStats.csv'):
         if self.hasTrained:
             if self.evalWhileFitAfter:
                 self.record.exportFinalSumsToCSV(self,headerNames,filename)
