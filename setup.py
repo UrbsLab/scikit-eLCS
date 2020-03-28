@@ -8,7 +8,7 @@ setup(
   author = 'Robert Zhang, Ryan J. Urbanowicz',
   author_email = 'robertzh@seas.upenn.edu,ryanurb@upenn.edu',
   url = 'https://github.com/UrbsLab/scikit-eLCS',
-  download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',
+  download_url = 'https://github.com/UrbsLab/scikit-eLCS/archive/v_1.tar.gz',
   keywords = ['machine learning','data analysis','data science','learning classifier systems'],
   install_requires=['numpy','pandas'],
   classifiers=[
