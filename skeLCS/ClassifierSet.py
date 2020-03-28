@@ -1,4 +1,6 @@
-from skeLCS.Classifier import *
+from skeLCS.Classifier import Classifier
+import random
+import copy
 
 class ClassifierSet:
     def __init__(self,elcs):

@@ -1,4 +1,4 @@
-from skeLCS.DataManagement import *
+from skeLCS.DataManagement import DataManagement
 
 class OfflineEnvironment:
     def __init__(self,features,phenotypes,eLCS):

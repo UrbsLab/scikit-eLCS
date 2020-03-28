@@ -1,10 +1,10 @@
-from skeLCS.OfflineEnvironment import *
-from skeLCS.ClassifierSet import *
-from skeLCS.Prediction import *
-from skeLCS.Timer import *
-from skeLCS.ClassAccuracy import *
+from skeLCS.OfflineEnvironment import OfflineEnvironment
+from skeLCS.ClassifierSet import ClassifierSet
+from skeLCS.Prediction import Prediction
+from skeLCS.Timer import Timer
+from skeLCS.ClassAccuracy import ClassAccuracy
 from skeLCS.DynamicNPArray import ArrayFactory
-from skeLCS.IterationRecord import *
+from skeLCS.IterationRecord import IterationRecord
 
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.metrics import balanced_accuracy_score
