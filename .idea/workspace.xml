@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/skeLCS/Classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/Classifier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/ClassifierSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/ClassifierSet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/DataManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/DataManagement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/OfflineEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/OfflineEnvironment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/eLCS.py" afterDir="false" />
-    </list>
+    <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +17,7 @@
         <entry file="file://$PROJECT_DIR$/skeLCS/Classifier.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
-              <caret line="9" column="17" lean-forward="true" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+              <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -35,7 +29,7 @@
         <entry file="file://$PROJECT_DIR$/skeLCS/ClassifierSet.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
-              <caret line="2" column="11" lean-forward="true" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+              <caret line="2" column="11" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -47,7 +41,7 @@
         <entry file="file://$PROJECT_DIR$/skeLCS/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
-              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+              <caret line="21" selection-start-line="21" selection-end-line="21" />
               <folding>
                 <element signature="e#1251#1291#0" expanded="true" />
               </folding>
@@ -59,7 +53,7 @@
         <entry file="file://$PROJECT_DIR$/skeLCS/DataCleanup.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
-              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
               <folding>
                 <element signature="e#241#259#0" expanded="true" />
               </folding>
@@ -206,7 +200,6 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-6" />
     <option name="y" value="23" />
     <option name="width" value="1610" />
     <option name="height" value="975" />
@@ -503,14 +496,11 @@
       <workItem from="1585084748431" duration="68000" />
       <workItem from="1585090424239" duration="16000" />
       <workItem from="1585411677654" duration="3777000" />
-      <workItem from="1585416656680" duration="5319000" />
+      <workItem from="1585416656680" duration="5829000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.03.28 at 15h 02m 55s.xml">
-      <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.03.28 at 15h 04m 21s.xml">
       <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
@@ -538,12 +528,15 @@
     <history-entry file="Unittests_for_test_DataCleanup_TestDataCleanup - 2020.03.28 at 15h 09m 36s.xml">
       <configuration name="Unittests for test_DataCleanup.TestDataCleanup" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_in_test - 2020.03.28 at 15h 10m 23s.xml">
+      <configuration name="Unittests in test" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="508809000" />
+    <option name="totallyTimeSpent" value="509319000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="23" width="1610" height="975" extended-state="0" />
+    <frame x="0" y="23" width="1610" height="975" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17857143" />
@@ -806,7 +799,7 @@
     <entry file="file://$PROJECT_DIR$/skeLCS/DataCleanup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
           <folding>
             <element signature="e#241#259#0" expanded="true" />
           </folding>
@@ -819,7 +812,7 @@
     <entry file="file://$PROJECT_DIR$/skeLCS/Classifier.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
-          <caret line="9" column="17" lean-forward="true" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
@@ -829,7 +822,7 @@
     <entry file="file://$PROJECT_DIR$/skeLCS/ClassifierSet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
-          <caret line="2" column="11" lean-forward="true" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+          <caret line="2" column="11" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>
@@ -839,7 +832,7 @@
     <entry file="file://$PROJECT_DIR$/skeLCS/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
           <folding>
             <element signature="e#1251#1291#0" expanded="true" />
           </folding>
