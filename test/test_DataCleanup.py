@@ -1,5 +1,5 @@
 import unittest
-import DataCleanup
+import skeLCS.DataCleanup as DataCleanup
 import pandas as pd
 import numpy as np
 import os

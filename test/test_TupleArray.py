@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from DynamicNPArray import TupleArray
+from skeLCS.DynamicNPArray import TupleArray
 
 class Arb(): #Test Object
     def __init__(self,num):

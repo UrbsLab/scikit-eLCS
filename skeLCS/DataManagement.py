@@ -1,4 +1,4 @@
-from eLCS import *
+from skeLCS.eLCS import *
 import numpy as np
 
 class DataManagement:

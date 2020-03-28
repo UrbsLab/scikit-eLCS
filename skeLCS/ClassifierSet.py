@@ -1,4 +1,4 @@
-from Classifier import *
+from skeLCS.Classifier import *
 
 class ClassifierSet:
     def __init__(self,elcs):
