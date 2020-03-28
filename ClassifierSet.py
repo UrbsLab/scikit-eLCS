@@ -1,6 +1,4 @@
 from Classifier import *
-import numpy as np
-from DynamicNPArray import ArrayFactory
 
 class ClassifierSet:
     def __init__(self,elcs):

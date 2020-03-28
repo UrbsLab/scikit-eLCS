@@ -57,7 +57,6 @@ class RuleCompacter():
             scoreDiff = self.baseTestScore - newScore
             for j in removedIndexes:
                 self.ranking[j] += scoreDiff
-            print(str(i)+": "+str(scoreDiff))
         LCS.population.popSet = self.originalPopulation
         self.ranking /= amountRemove #Normalize rankings
         self.indexes = np.argsort(self.ranking) #indexes of worst to best rules
@@ -84,11 +83,6 @@ class RuleCompacter():
         newScore = LCS.score(self.testX, self.testY)
         print("Score after taking away best: "+str(newScore))
 
-        print()
-
         LCS.population.popSet = copy.deepcopy(self.originalPopulation)
 
-        #for i in self.indexes:
-            #print(LCS.population.popSet[i].fitness)
-            #LCS.printClassifier(self.originalPopulation[i])
 

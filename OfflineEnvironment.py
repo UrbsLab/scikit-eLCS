@@ -1,5 +1,4 @@
 from DataManagement import *
-from DynamicNPArray import ArrayFactory
 
 class OfflineEnvironment:
     def __init__(self,features,phenotypes,eLCS):
