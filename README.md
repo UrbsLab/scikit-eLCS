@@ -45,14 +45,16 @@ Scikit eLCS is an open source project and we'd love if you could suggest changes
 
 <ol>
   <li> Fork the project repository to your personal account and clone this copy to your local disk</li>
-  <li> Create a branch to hold your changes: (e.g. **git checkout -b my-contribution-branch**) </li>
+  <li> Create a branch from master to hold your changes: (e.g. <b>git checkout -b my-contribution-branch</b>) </li>
   <li> Commit changes on your branch. Remember to never work on any other branch but your own! </li>
-  <li> When you are done, push your changes to your forked GitHub repository with **git push -u origin my-contribution-branch** </li>
+  <li> When you are done, push your changes to your forked GitHub repository with <b>git push -u origin my-contribution-branch</b> </li>
   <li> Create a pull request to send your changes to the eLCS maintainers for review. </li>
 </ol>
 
 **Before submitting your pull request**
-If your contribution changes eLCS in any way, make sure you update the Jupyter Notebook documentation and the README with relevant details. If your contribution involes any code changes, update the project unit tests to test your code changes, and make sure your code is properly commented to explain your rationale behind non-obvious coding practices.
 
-**Before submitting your pull request**
+If your contribution changes eLCS in any way, make sure you update the Jupyter Notebook documentation and the README with relevant details. If your contribution involves any code changes, update the project unit tests to test your code changes, and make sure your code is properly commented to explain your rationale behind non-obvious coding practices.
+
+**After submitting your pull request**
+
 After submitting your pull request, Travis CI will run all of the project's unit tests. Check back shortly after submitting to make sure your code passes these checks. If any checks come back failed, do your best to address the errors.
