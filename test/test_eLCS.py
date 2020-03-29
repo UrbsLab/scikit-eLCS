@@ -763,23 +763,23 @@ class Test_eLCS(unittest.TestCase):
     #
     #     clf = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
     #     clf.fit(dataFeatures, dataPhenotypes)
-    #     clf.exportIterationTrackingDataToCSV(filename='DataSets/Tests/RandomTests/track1.csv')
-    #     clf.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='DataSets/Tests/RandomTests/pop1.csv')
-    #     clf.exportFinalPopStatsToCSV(headerNames=headers, filename="DataSets/Tests/RandomTests/popStats1.csv")
+    #     clf.exportIterationTrackingDataToCSV(filename='track1.csv')
+    #     clf.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='pop1.csv')
+    #     clf.exportFinalPopStatsToCSV(headerNames=headers, filename="popStats1.csv")
     #
     #     clf2 = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
     #     clf2.fit(dataFeatures, dataPhenotypes)
-    #     clf2.exportIterationTrackingDataToCSV(filename='DataSets/Tests/RandomTests/track2.csv')
-    #     clf2.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='DataSets/Tests/RandomTests/pop2.csv')
-    #     clf2.exportFinalPopStatsToCSV(headerNames=headers, filename="DataSets/Tests/RandomTests/popStats2.csv")
+    #     clf2.exportIterationTrackingDataToCSV(filename='track2.csv')
+    #     clf2.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='pop2.csv')
+    #     clf2.exportFinalPopStatsToCSV(headerNames=headers, filename="popStats2.csv")
     #
-    #     track1 = pd.read_csv('DataSets/Tests/RandomTests/track1.csv').values[:,:13]
-    #     pop1 = pd.read_csv('DataSets/Tests/RandomTests/pop1.csv').values
-    #     popStats1 = pd.read_csv('DataSets/Tests/RandomTests/popStats1.csv').drop('Label', axis=1).values
+    #     track1 = pd.read_csv('track1.csv').values[:,:13]
+    #     pop1 = pd.read_csv('pop1.csv').values
+    #     popStats1 = pd.read_csv('popStats1.csv').drop('Label', axis=1).values
     #
-    #     track2 = pd.read_csv('DataSets/Tests/RandomTests/track2.csv').values[:,:13]
-    #     pop2 = pd.read_csv('DataSets/Tests/RandomTests/pop2.csv').values
-    #     popStats2 = pd.read_csv('DataSets/Tests/RandomTests/popStats2.csv').drop('Label', axis=1).values
+    #     track2 = pd.read_csv('track2.csv').values[:,:13]
+    #     pop2 = pd.read_csv('pop2.csv').values
+    #     popStats2 = pd.read_csv('popStats2.csv').drop('Label', axis=1).values
     #
     #     pop1[pop1 == "#"] = np.nan
     #     pop2[pop2 == "#"] = np.nan
