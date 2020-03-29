@@ -2,7 +2,7 @@ Master Status: [![Build Status](https://travis-ci.com/UrbsLab/scikit-eLCS.svg?br
 
 # scikit-eLCS
 
-This package includes a sci-kit compatible Python implementation of eLCS, a supervised learning variant of the Learning Classifier System. In general, Learning Classifier Systems (LCSs) are a classification of Rule Based Machine Learning Algorithms that have been shown to perform well on problems involving high amounts of heterogeneity and epistasis. Well designed LCSs are also highly human interpretable. LCS variants have been shown to adeptly handle supervised and reinforced, classification and regression, online and offline learning problems, as well as missing or unbalanced data. These characteristics of versatility and interpretability give LCSs a wide range of potential applications, notably those in biomedicine. This package is **still under active development** and we encourage you to check back on this repository for updates.
+The scikit-eLCS package includes a sklearn-compatible Python implementation of eLCS, a supervised learning variant of the Learning Classifier System, based off of UCS. In general, Learning Classifier Systems (LCSs) are a classification of Rule Based Machine Learning Algorithms that have been shown to perform well on problems involving high amounts of heterogeneity and epistasis. Well designed LCSs are also highly human interpretable. LCS variants have been shown to adeptly handle supervised and reinforced, classification and regression, online and offline learning problems, as well as missing or unbalanced data. These characteristics of versatility and interpretability give LCSs a wide range of potential applications, notably those in biomedicine. This package is **still under active development** and we encourage you to check back on this repository for updates.
 
 eLCS, or Educational Learning Classifier System, implements the core components of a Michigan-Style Learning Classifier System (where the system's genetic algorithm operates on a rule level, evolving a population of rules with each their own parameters) in an easy to understand way, while still being highly functional in solving ML problems.
 
@@ -41,14 +41,14 @@ Please see the repository [license](https://github.com/UrbsLab/scikit-eLCS/blob/
 Generally, we have licensed scikit-eLCS to make it as widely usable as possible.
 
 ## Contributing to scikit-eLCS
-Scikit eLCS is an open source project and we'd love if you could suggest changes!
+scikit-eLCS is an open source project and we'd love if you could suggest changes!
 
 <ol>
   <li> Fork the project repository to your personal account and clone this copy to your local disk</li>
   <li> Create a branch from master to hold your changes: (e.g. <b>git checkout -b my-contribution-branch</b>) </li>
   <li> Commit changes on your branch. Remember to never work on any other branch but your own! </li>
   <li> When you are done, push your changes to your forked GitHub repository with <b>git push -u origin my-contribution-branch</b> </li>
-  <li> Create a pull request to send your changes to the eLCS maintainers for review. </li>
+  <li> Create a pull request to send your changes to the scikit-eLCS maintainers for review. </li>
 </ol>
 
 **Before submitting your pull request**
