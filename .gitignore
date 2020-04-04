@@ -2,3 +2,4 @@
 __pycache__/
 MANIFEST
 dist/
+testTrackingData.csv

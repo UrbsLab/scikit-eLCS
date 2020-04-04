@@ -251,12 +251,7 @@ class ClassifierSet:
             tSize = int(len(setList) * elcs.theta_sel)
 
             #Select tSize elements from correctSet
-            copyList = copy.deepcopy(self.correctSet)
-            posList = []
-            for i in range(tSize):
-                choice = random.choice(copyList)
-                posList.append(choice)
-                copyList.remove(choice)
+            posList = random.sample(setList,tSize)
 
             bestF = 0
             bestC = self.correctSet[0]
@@ -359,7 +354,7 @@ class ClassifierSet:
         genSum = 0
         agedCount = 0
         for cl in self.popSet:
-            genSum += ((elcs.env.formatData.numAttributes - len(cl.conditionType))/float(elcs.env.formatData.numAttributes))*cl.numerosity
+            genSum += ((elcs.env.formatData.numAttributes - len(cl.condition))/float(elcs.env.formatData.numAttributes))*cl.numerosity
         if self.microPopSize == 0:
             self.aveGenerality = 'NA'
         else:
