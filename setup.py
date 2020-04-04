@@ -15,7 +15,7 @@ setup(
   url = 'https://github.com/UrbsLab/scikit-eLCS',
   download_url = 'https://github.com/UrbsLab/scikit-eLCS/archive/v_1.tar.gz',
   keywords = ['machine learning','data analysis','data science','learning classifier systems'],
-  install_requires=['numpy','pandas'],
+  install_requires=['numpy','pandas','scikit-learn'],
   classifiers=[
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
