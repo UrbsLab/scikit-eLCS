@@ -827,14 +827,14 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             if attribute in classifier.specifiedAttList:
                 specifiedLocation = classifier.specifiedAttList.index(attribute)
                 if self.env.formatData.attributeInfoType[attributeCounter] == 0:  # isDiscrete
-                    print(classifier.conditionDiscrete[specifiedLocation], end="\t\t\t\t")
+                    print(classifier.condition[specifiedLocation], end="\t\t\t\t")
                 else:
                     print("[", end="")
                     print(
-                        round(classifier.conditionContinuous[specifiedLocation][0] * 10) / 10,
+                        round(classifier.condition[specifiedLocation][0] * 10) / 10,
                         end=", ")
                     print(
-                        round(classifier.conditionContinuous[specifiedLocation][1] * 10) / 10,
+                        round(classifier.condition[specifiedLocation][1] * 10) / 10,
                         end="")
                     print("]", end="\t\t")
             else:

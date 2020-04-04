@@ -8,9 +8,7 @@ class Classifier:
     def __init__(self,elcs,a=None,b=None,c=None,d=None):
         #Major Parameters
         self.specifiedAttList = []
-        self.conditionType = [] #0 for discrete, 1 for continuous
-        self.conditionDiscrete = [] #discrete values
-        self.conditionContinuous = [] #continouous values
+        self.condition = []
         self.phenotype = None #arbitrary
 
         self.fitness = elcs.init_fit
@@ -64,9 +62,7 @@ class Classifier:
 
     def classifierCopy(self, toCopy, exploreIter):
         self.specifiedAttList = copy.deepcopy(toCopy.specifiedAttList)
-        self.conditionType = copy.deepcopy(toCopy.conditionType)
-        self.conditionDiscrete = copy.deepcopy(toCopy.conditionDiscrete)
-        self.conditionContinuous = copy.deepcopy(toCopy.conditionContinuous)
+        self.condition = copy.deepcopy(toCopy.condition)
 
         self.phenotype = copy.deepcopy(toCopy.phenotype)
         self.timeStampGA = exploreIter
@@ -90,28 +86,18 @@ class Classifier:
             Low = ar - rangeRadius
             High = ar + rangeRadius
             condList = [Low, High]
-
-            self.conditionContinuous.append(condList)
-            self.conditionDiscrete.append(np.nan)
-            self.conditionType.append(1)
+            self.condition.append(condList)
 
         # Discrete attribute
         else:
             condList = state[attRef]
-
-            self.conditionContinuous.append([np.nan,np.nan])
-            self.conditionDiscrete.append(condList)
-            self.conditionType.append(0)
+            self.condition.append(condList)
 
     # Matching
     def match(self, state, elcs):
-        for i in range(len(self.conditionDiscrete)):
+        for i in range(len(self.condition)):
             specifiedIndex = self.specifiedAttList[i]
             attributeInfoType = elcs.env.formatData.attributeInfoType[specifiedIndex]
-            if not (attributeInfoType):  # Discrete
-                attributeInfoValue = elcs.env.formatData.attributeInfoDiscrete[specifiedIndex]
-            else:
-                attributeInfoValue = elcs.env.formatData.attributeInfoContinuous[specifiedIndex]
 
             # Continuous
             if attributeInfoType:
@@ -119,14 +105,14 @@ class Classifier:
                 if elcs.matchForMissingness:
                     if np.isnan(instanceValue):
                         pass
-                    elif self.conditionContinuous[i][0] < instanceValue < self.conditionContinuous[i][1]:
+                    elif self.condition[i][0] < instanceValue < self.condition[i][1]:
                         pass
                     else:
                         return False
                 else:
                     if np.isnan(instanceValue):
                         return False
-                    elif self.conditionContinuous[i][0] < instanceValue < self.conditionContinuous[i][1]:
+                    elif self.condition[i][0] < instanceValue < self.condition[i][1]:
                         pass
                     else:
                         return False
@@ -135,12 +121,12 @@ class Classifier:
             else:
                 stateRep = state[specifiedIndex]
                 if elcs.matchForMissingness:
-                    if stateRep == self.conditionDiscrete[i] or np.isnan(stateRep):
+                    if stateRep == self.condition[i] or np.isnan(stateRep):
                         pass
                     else:
                         return False
                 else:
-                    if stateRep == self.conditionDiscrete[i]:
+                    if stateRep == self.condition[i]:
                         pass
                     elif np.isnan(stateRep):
                         return False
@@ -155,8 +141,7 @@ class Classifier:
             if clRefs == selfRefs:
                 for i in range(len(cl.specifiedAttList)):
                     tempIndex = self.specifiedAttList.index(cl.specifiedAttList[i])
-                    if not (cl.conditionType[i] == 1 and self.conditionType[tempIndex] == 1 and cl.conditionContinuous[i] == self.conditionContinuous[tempIndex] or
-                            (cl.conditionType[i] == 0 and self.conditionType[tempIndex] == 0 and cl.conditionDiscrete[i] == self.conditionDiscrete[tempIndex])):
+                    if not (cl.condition[i] == self.condition[tempIndex]):
                         return False
                 return True
         return False
@@ -213,9 +198,9 @@ class Classifier:
             # Continuous
             if attributeInfoType:
                 otherRef = cl.specifiedAttList.index(self.specifiedAttList[i])
-                if self.conditionContinuous[i][0] < cl.conditionContinuous[otherRef][0]:
+                if self.condition[i][0] < cl.condition[otherRef][0]:
                     return False
-                if self.conditionContinuous[i][1] > cl.conditionContinuous[otherRef][1]:
+                if self.condition[i][1] > cl.condition[otherRef][1]:
                     return False
         return True
 
@@ -250,28 +235,18 @@ class Classifier:
                 elif ref == 1:
                     if attRef in p_self_specifiedAttList and random.random() > probability:
                         i = self.specifiedAttList.index(attRef)
-                        cl.conditionType.append(self.conditionType[i])
-                        cl.conditionDiscrete.append(self.conditionDiscrete[i])
-                        cl.conditionContinuous.append(self.conditionContinuous[i])
-                        del self.conditionType[i]
-                        del self.conditionDiscrete[i]
-                        del self.conditionContinuous[i]
+                        cl.condition.append(self.condition.pop(i))
 
                         cl.specifiedAttList.append(attRef)
-                        del self.specifiedAttList[i]
+                        self.specifiedAttList.remove(attRef)
                         changed = True
 
                     if attRef in p_cl_specifiedAttList and random.random() < probability:
                         i = cl.specifiedAttList.index(attRef)
-                        self.conditionType.append(cl.conditionType[i])
-                        self.conditionDiscrete.append(cl.conditionDiscrete[i])
-                        self.conditionContinuous.append(cl.conditionContinuous[i])
-                        del cl.conditionType[i]
-                        del cl.conditionDiscrete[i]
-                        del cl.conditionContinuous[i]
+                        self.condition.append(cl.condition.pop(i))
 
                         self.specifiedAttList.append(attRef)
-                        del cl.specifiedAttList[i]
+                        cl.specifiedAttList.remove(attRef)
                         changed = True
                 else:
                     # Continuous Attribute
@@ -280,29 +255,25 @@ class Classifier:
                         i_cl2 = cl.specifiedAttList.index(attRef)
                         tempKey = random.randint(0, 3)
                         if tempKey == 0:
-                            temp = self.conditionContinuous[i_cl1][0]
-                            self.conditionContinuous[i_cl1][0] = cl.conditionContinuous[i_cl2][0]
-                            cl.conditionContinuous[i_cl2][0] = temp
+                            temp = self.condition[i_cl1][0]
+                            self.condition[i_cl1][0] = cl.condition[i_cl2][0]
+                            cl.condition[i_cl2][0] = temp
                         elif tempKey == 1:
-                            temp = self.conditionContinuous[i_cl1][1]
-                            self.conditionContinuous[i_cl1][1] = cl.conditionContinuous[i_cl2][1]
-                            cl.conditionContinuous[i_cl2][1] = temp
+                            temp = self.condition[i_cl1][1]
+                            self.condition[i_cl1][1] = cl.condition[i_cl2][1]
+                            cl.condition[i_cl2][1] = temp
                         else:
-                            allList = self.conditionContinuous[i_cl1] + cl.conditionContinuous[i_cl2]
+                            allList = self.condition[i_cl1] + cl.condition[i_cl2]
                             newMin = min(allList)
                             newMax = max(allList)
                             if tempKey == 2:
-                                self.conditionContinuous[i_cl1] = [newMin, newMax]
-                                del cl.conditionType[i_cl2]
-                                del cl.conditionContinuous[i_cl2]
-                                del cl.conditionDiscrete[i_cl2]
+                                self.condition[i_cl1] = [newMin, newMax]
+                                cl.condition.pop(i_cl2)
 
                                 cl.specifiedAttList.remove(attRef)
                             else:
-                                cl.conditionContinuous[i_cl2] = [newMin, newMax]
-                                del self.conditionType[i_cl1]
-                                del self.conditionContinuous[i_cl1]
-                                del self.conditionDiscrete[i_cl1]
+                                cl.condition[i_cl2] = [newMin, newMax]
+                                self.condition.pop(i_cl1)
 
                                 self.specifiedAttList.remove(attRef)
 
@@ -362,24 +333,22 @@ class Classifier:
 
                     if not attributeInfoType or random.random() > 0.5:
                         del self.specifiedAttList[i]
-                        del self.conditionType[i]
-                        del self.conditionDiscrete[i]
-                        del self.conditionContinuous[i]
+                        del self.condition[i]
                         changed = True
                     else:
                         attRange = float(attributeInfoValue[1]) - float(attributeInfoValue[0])
                         mutateRange = random.random() * 0.5 * attRange
                         if random.random() > 0.5:
                             if random.random() > 0.5:
-                                self.conditionContinuous[i][0] += mutateRange
+                                self.condition[i][0] += mutateRange
                             else:
-                                self.conditionContinuous[i][0] -= mutateRange
+                                self.condition[i][0] -= mutateRange
                         else:
                             if random.random() > 0.5:
-                                self.conditionContinuous[i][1] += mutateRange
+                                self.condition[i][1] += mutateRange
                             else:
-                                self.conditionContinuous[i][1] -= mutateRange
-                        self.conditionContinuous[i] = sorted(self.conditionContinuous[i])
+                                self.condition[i][1] -= mutateRange
+                        self.condition[i] = sorted(self.condition[i])
                         changed = True
 
                 else:
@@ -398,8 +367,7 @@ class Classifier:
         changed = False
         if random.random() < elcs.upsilon:
             phenotypeList = copy.deepcopy(elcs.env.formatData.phenotypeList)
-            index = phenotypeList.index(self.phenotype)
-            del phenotypeList[index]
+            phenotypeList.remove(self.phenotype)
             newPhenotype = random.choice(phenotypeList)
             self.phenotype = newPhenotype
             changed = True

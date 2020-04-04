@@ -87,8 +87,6 @@ class DataManagement:
         self.phenotypeRange = self.phenotypeList[1] - self.phenotypeList[0]
 
     def discriminateAttributes(self,features,elcs):
-        self.discreteCount = 0
-        self.continuousCount = 0
         for att in range(self.numAttributes):
             attIsDiscrete = True
             if self.isDefault:
@@ -119,10 +117,8 @@ class DataManagement:
 
             if attIsDiscrete:
                 self.attributeInfoType[att] = False
-                self.discreteCount += 1
             else:
                 self.attributeInfoType[att] = True
-                self.continuousCount += 1
 
     def characterizeAttributes(self,features,elcs):
         for currentFeatureIndexInAttributeInfo in range(self.numAttributes):

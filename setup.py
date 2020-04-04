@@ -1,11 +1,15 @@
-from distutils.core import setup
+from setuptools import setup
+
+with open("README.md","r") as fh:
+  ld = fh.read()
+
 setup(
   name = 'scikit-eLCS',
   packages = ['skeLCS'],
-  version = '1.0.4',
+  version = '1.0.6',
   license='License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
   description = 'Educational Learning Classifier System',
-  long_description='''A sklearn-compatible Python implementation of eLCS, a supervised learning variant of the Learning Classifier System, based off of UCS.''',
+  long_description_content_type="text/markdown",
   author = 'Robert Zhang, Ryan J. Urbanowicz',
   author_email = 'robertzh@seas.upenn.edu,ryanurb@upenn.edu',
   url = 'https://github.com/UrbsLab/scikit-eLCS',
@@ -23,6 +27,7 @@ setup(
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
-    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.7'
   ],
+  long_description=ld
 )

@@ -133,10 +133,10 @@ class IterationRecord():
                 for attributeIndex in range(numAttributes):
                     if attributeIndex in classifier.specifiedAttList:
                         specifiedLocation = classifier.specifiedAttList.index(attributeIndex)
-                        if classifier.conditionType[specifiedLocation] == 0: #if discrete
-                            a.append(classifier.conditionDiscrete[specifiedLocation])
+                        if not isinstance(classifier.condition[specifiedLocation],list): #if discrete
+                            a.append(classifier.condition[specifiedLocation])
                         else: #if continuous
-                            conditionCont = classifier.conditionContinuous[specifiedLocation] #cont array [min,max]
+                            conditionCont = classifier.condition[specifiedLocation] #cont array [min,max]
                             s = str(conditionCont[0])+","+str(conditionCont[1])
                             a.append(s)
                     else:
@@ -198,10 +198,10 @@ class IterationRecord():
                     if attributeIndex in classifier.specifiedAttList:
                         specifiedLocation = classifier.specifiedAttList.index(attributeIndex)
                         headerString+=str(headerNames[attributeIndex])+", "
-                        if classifier.conditionType[specifiedLocation] == 0: #if discrete
-                            valueString+= str(classifier.conditionDiscrete[specifiedLocation])+", "
+                        if not isinstance(classifier.condition[specifiedLocation],list): #if discrete
+                            valueString+= str(classifier.condition[specifiedLocation])+", "
                         else: #if continuous
-                            conditionCont = classifier.conditionContinuous[specifiedLocation] #cont array [min,max]
+                            conditionCont = classifier.condition[specifiedLocation] #cont array [min,max]
                             s = "["+str(conditionCont[0])+","+str(conditionCont[1])+"]"
                             valueString+= s+", "
 
