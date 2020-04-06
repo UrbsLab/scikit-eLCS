@@ -136,7 +136,8 @@ class ClassifierSet:
         #GA Run Requirement
         if (exploreIter - self.getIterStampAverage()) < elcs.theta_GA:
             return
-        elcs.timer.startTimeSelection()
+        if not elcs.hasTrained:
+            elcs.timer.startTimeSelection()
 
         self.setIterStamps(exploreIter)
         changed = False
@@ -175,7 +176,8 @@ class ClassifierSet:
         #Mutation Operator
         nowchanged = cl1.Mutation(elcs,state,phenotype)
         howaboutnow = cl2.Mutation(elcs,state,phenotype)
-        elcs.timer.stopTimeSelection()
+        if not elcs.hasTrained:
+            elcs.timer.stopTimeSelection()
 
         #Add offspring to population
         if changed or nowchanged or howaboutnow:
@@ -185,9 +187,11 @@ class ClassifierSet:
                 elcs.trackingObj.mutationCount += 1
             if changed:
                 elcs.trackingObj.crossOverCount += 1
-            elcs.timer.startTimeSubsumption()
+            if not elcs.hasTrained:
+                elcs.timer.startTimeSubsumption()
             self.insertDiscoveredClassifiers(elcs,cl1, cl2, clP1, clP2, exploreIter)  # Subsumption
-            elcs.timer.stopTimeSubsumption()
+            if not elcs.hasTrained:
+                elcs.timer.stopTimeSubsumption()
 
     def getIterStampAverage(self):
         sumCl = 0.0
@@ -267,12 +271,14 @@ class ClassifierSet:
 
     def insertDiscoveredClassifiers(self,elcs,cl1,cl2,clP1,clP2,exploreIter):
         if elcs.doSubsumption:
-            elcs.timer.startTimeSubsumption()
+            if not elcs.hasTrained:
+                elcs.timer.startTimeSubsumption()
             if len(cl1.specifiedAttList) > 0:
                 self.subsumeClassifier(elcs,cl1,clP1,clP2)
             if len(cl2.specifiedAttList) > 0:
                 self.subsumeClassifier(elcs,cl2, clP1, clP2)
-            elcs.timer.stopTimeSubsumption()
+            if not elcs.hasTrained:
+                elcs.timer.stopTimeSubsumption()
         else:
             if len(cl1.specifiedAttList) > 0:
                 self.addClassifierToPopulation(elcs,cl1,False)

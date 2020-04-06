@@ -142,7 +142,9 @@ class DataManagement:
     def formatData(self,features,phenotypes,elcs):
         formatted = np.insert(features,self.numAttributes,phenotypes,1) #Combines features and phenotypes into one array
         np.random.shuffle(formatted)
-        return formatted
+        shuffledFeatures = formatted[:,:-1].tolist()
+        shuffledLabels = formatted[:,self.numAttributes].tolist()
+        return [shuffledFeatures,shuffledLabels]
 
 class AttributeInfoDiscreteElement():
     def __init__(self):

@@ -79,25 +79,25 @@ print("append list: "+str(time.time()-t))
 print()
 d = TupleArray(k=1,dtype=Arb)
 t = time.time()
-for i in range(100000):
+for i in range(10000):
     d.append(Arb(random.randint(1,1000)))
 print("appendObj ta: "+str(time.time()-t))
 
 d = ListArray(k=1)
 t = time.time()
-for i in range(100000):
+for i in range(10000):
     d.append(Arb(random.randint(1,1000)))
 print("appendObj la: "+str(time.time()-t))
 
 d = np.array([])
 t = time.time()
-for i in range(100000):
+for i in range(10000):
     d = np.append(d,Arb(random.randint(1,1000)))
 print("appendObj npa: "+str(time.time()-t))
 
 d = []
 t = time.time()
-for i in range(100000):
+for i in range(10000):
     d.append(Arb(random.randint(1,1000)))
 print("appendObj list: "+str(time.time()-t))
 

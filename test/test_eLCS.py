@@ -742,19 +742,19 @@ class Test_eLCS(unittest.TestCase):
         score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes,cv=3))
         self.assertTrue(self.approxEqual(0.3,score,0.8452))
 
-    # # Test performance for continuous attribute testing data w/ missing data (w/ CV)
-    # def testContMissing(self):
-    #     dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv")
-    #     converter = StringEnumerator(dataPath, "Class")
-    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-    #     clf = eLCS(learningIterations=5000)
-    #     formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
-    #     np.random.shuffle(formatted)
-    #     dataFeatures = np.delete(formatted, -1, axis=1)
-    #     dataPhenotypes = formatted[:, -1]
-    #     score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes))
-    #     self.assertTrue(self.approxEqual(0.2, score, 0.6355))
-    #
+    # Test performance for continuous attribute testing data w/ missing data (w/ CV)
+    def testContMissing(self):
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv")
+        converter = StringEnumerator(dataPath, "Class")
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+        clf = eLCS(learningIterations=5000)
+        formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
+        np.random.shuffle(formatted)
+        dataFeatures = np.delete(formatted, -1, axis=1)
+        dataPhenotypes = formatted[:, -1]
+        score = np.mean(cross_val_score(clf, dataFeatures, dataPhenotypes))
+        self.assertTrue(self.approxEqual(0.2, score, 0.6355))
+
     # # Test random seed
     # def testRandomSeed(self):
     #     dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer11.csv")
