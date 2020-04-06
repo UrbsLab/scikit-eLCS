@@ -502,11 +502,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.trackingObj.resetAll()
 
         #Form [M]
-        if not self.hasTrained:
-            self.timer.startTimeMatching()
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
-        if not self.hasTrained:
-            self.timer.stopTimeMatching()
 
         if self.evalWhileFit:
             #Make a Prediction

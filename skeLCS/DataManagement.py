@@ -144,6 +144,12 @@ class DataManagement:
         np.random.shuffle(formatted)
         shuffledFeatures = formatted[:,:-1].tolist()
         shuffledLabels = formatted[:,self.numAttributes].tolist()
+        for i in range(len(shuffledFeatures)):
+            for j in range(len(shuffledFeatures[i])):
+                if np.isnan(shuffledFeatures[i][j]):
+                    shuffledFeatures[i][j] = None
+            if np.isnan(shuffledLabels[i]):
+                shuffledLabels[i] = None
         return [shuffledFeatures,shuffledLabels]
 
 class AttributeInfoDiscreteElement():
