@@ -744,7 +744,7 @@ class Test_eLCS(unittest.TestCase):
 
     # Test performance for continuous attribute testing data w/ missing data (w/ CV)
     def testContMissing(self):
-        dataPath = os.path.join(THIS_DIR, "test/Datasets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv")
+        dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv")
         converter = StringEnumerator(dataPath, "Class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
         clf = eLCS(learningIterations=5000)

@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DynamicNPArraySpeedTests.py" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicNPArraySpeedTests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/Classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/Classifier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/ClassifierSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/ClassifierSet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/DataManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/DataManagement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/OfflineEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/OfflineEnvironment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/eLCS.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/test_eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_eLCS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/testMain.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,7 +19,7 @@
         <entry file="file://$PROJECT_DIR$/skeLCS/OfflineEnvironment.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="357">
-              <caret line="26" column="84" lean-forward="true" selection-start-line="26" selection-start-column="84" selection-end-line="26" selection-end-column="84" />
+              <caret line="26" column="84" selection-start-line="26" selection-start-column="84" selection-end-line="26" selection-end-column="84" />
             </state>
           </provider>
         </entry>
@@ -44,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testMain.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+            <state relative-caret-position="210">
+              <caret line="14" column="55" selection-start-line="14" selection-start-column="55" selection-end-line="14" selection-end-column="55" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -56,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="755" column="61" lean-forward="true" selection-start-line="755" selection-start-column="61" selection-end-line="755" selection-end-column="61" />
+            <state relative-caret-position="204">
+              <caret line="746" column="58" selection-start-line="746" selection-start-column="58" selection-end-line="746" selection-end-column="58" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -72,7 +64,7 @@
         <entry file="file://$PROJECT_DIR$/skeLCS/DataManagement.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="403">
-              <caret line="145" column="65" lean-forward="true" selection-start-line="145" selection-start-column="65" selection-end-line="145" selection-end-column="65" />
+              <caret line="145" column="65" selection-start-line="145" selection-start-column="65" selection-end-line="145" selection-end-column="65" />
             </state>
           </provider>
         </entry>
@@ -88,7 +80,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>attributeinfotype</find>
       <find>conditioncontinuous</find>
       <find>conditioncont</find>
       <find>conditioncontin</find>
@@ -118,6 +109,7 @@
       <find>size</find>
       <find>.size</find>
       <find>np</find>
+      <find>timesubsump</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -174,9 +166,9 @@
         <option value="$PROJECT_DIR$/DynamicNPArraySpeedTests.py" />
         <option value="$PROJECT_DIR$/skeLCS/DataManagement.py" />
         <option value="$PROJECT_DIR$/skeLCS/OfflineEnvironment.py" />
-        <option value="$PROJECT_DIR$/test/test_eLCS.py" />
         <option value="$PROJECT_DIR$/skeLCS/Classifier.py" />
         <option value="$PROJECT_DIR$/testMain.py" />
+        <option value="$PROJECT_DIR$/test/test_eLCS.py" />
       </list>
     </option>
   </component>
@@ -505,14 +497,11 @@
       <workItem from="1586017432633" duration="6606000" />
       <workItem from="1586094853330" duration="6988000" />
       <workItem from="1586123955341" duration="5880000" />
-      <workItem from="1586134338886" duration="2244000" />
+      <workItem from="1586134338886" duration="2897000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.03.28 at 15h 04m 21s.xml">
-      <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.03.28 at 15h 04m 49s.xml">
       <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
@@ -540,20 +529,23 @@
     <history-entry file="Unittests_in_test - 2020.03.28 at 15h 10m 23s.xml">
       <configuration name="Unittests in test" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.04.05 at 22h 13m 14s.xml">
+      <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="538406000" />
+    <option name="totallyTimeSpent" value="539059000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="22" y="23" width="1610" height="975" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1945153" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1945153" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.36240092" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.22197056" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997735" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -561,15 +553,15 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Python Console" order="10" visible="true" weight="0.4835787" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.4835787" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.53289473" side_tool="true" visible="true" weight="0.019132653" />
+      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.5312955" side_tool="true" visible="true" weight="0.019132653" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="SciView" order="5" sideWeight="0.46710527" visible="true" weight="0.019132653" />
+      <window_info anchor="right" id="SciView" order="5" sideWeight="0.46870452" visible="true" weight="0.019132653" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -785,24 +777,14 @@
     <entry file="file://$PROJECT_DIR$/skeLCS/DataManagement.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="403">
-          <caret line="145" column="65" lean-forward="true" selection-start-line="145" selection-start-column="65" selection-end-line="145" selection-end-column="65" />
+          <caret line="145" column="65" selection-start-line="145" selection-start-column="65" selection-end-line="145" selection-end-column="65" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/skeLCS/OfflineEnvironment.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
-          <caret line="26" column="84" lean-forward="true" selection-start-line="26" selection-start-column="84" selection-end-line="26" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="755" column="61" lean-forward="true" selection-start-line="755" selection-start-column="61" selection-end-line="755" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+          <caret line="26" column="84" selection-start-line="26" selection-start-column="84" selection-end-line="26" selection-end-column="84" />
         </state>
       </provider>
     </entry>
@@ -818,10 +800,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/testMain.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        <state relative-caret-position="210">
+          <caret line="14" column="55" selection-start-line="14" selection-start-column="55" selection-end-line="14" selection-end-column="55" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="746" column="58" selection-start-line="746" selection-start-column="58" selection-end-line="746" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
