@@ -26,7 +26,7 @@ class Classifier:
         self.matchCount = 0  # Known in many LCS implementations as experience i.e. the total number of times this classifier was in a match set
         self.correctCount = 0  # The total number of times this classifier was in a correct set
 
-        if isinstance(c, np.ndarray):
+        if isinstance(c, list):
             self.classifierCovering(elcs, a, b, c, d)
         elif isinstance(a, Classifier):
             self.classifierCopy(a, b)
@@ -55,7 +55,7 @@ class Classifier:
             self.phenotype = [Low, High]
 
         while len(self.specifiedAttList) < 1:
-            for attRef in range(state.size):
+            for attRef in range(len(state)):
                 if random.random() < elcs.p_spec and not(np.isnan(state[attRef])):
                     self.specifiedAttList.append(attRef)
                     self.buildMatch(elcs, attRef, state)  # Add classifierConditionElement

@@ -337,28 +337,33 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
 
             #Evaluations of Algorithm
-            self.timer.startTimeEvaluation()
+            if not self.hasTrained:
+                self.timer.startTimeEvaluation()
 
             if (((self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0) or self.explorIter == self.learningIterations-1) and self.evalWhileFit:
                 self.population.runPopAveEval(self.explorIter,self)
                 trackedAccuracy = np.sum(self.correct)/float(self.trackingFrequency)
+                if not self.hasTrained:
+                    self.timer.returnGlobalTimer()
                 self.record.addToTracking(self.explorIter,trackedAccuracy,self.population.aveGenerality,
                                             self.trackingObj.macroPopSize,self.trackingObj.microPopSize,
                                             self.trackingObj.matchSetSize,self.trackingObj.correctSetSize,
                                             self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
                                             self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
                                             self.trackingObj.coveringCount,self.trackingObj.deletionCount,
-                                            self.timer.returnGlobalTimer(),self.timer.globalMatching,
+                                            self.timer.globalTime,self.timer.globalMatching,
                                             self.timer.globalDeletion,self.timer.globalSubsumption,
                                             self.timer.globalSelection,self.timer.globalEvaluation)
             else: #If not detailed track, record regular easy to track data every iteration
+                if not self.hasTrained:
+                    self.timer.returnGlobalTimer()
                 self.record.addToTracking(self.explorIter, "", "",
                                             self.trackingObj.macroPopSize, self.trackingObj.microPopSize,
                                             self.trackingObj.matchSetSize, self.trackingObj.correctSetSize,
                                             self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
                                             self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
                                             self.trackingObj.coveringCount, self.trackingObj.deletionCount,
-                                            self.timer.returnGlobalTimer(), self.timer.globalMatching,
+                                            self.timer.globalTime, self.timer.globalMatching,
                                             self.timer.globalDeletion, self.timer.globalSubsumption,
                                             self.timer.globalSelection, self.timer.globalEvaluation)
 
@@ -376,8 +381,8 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                     self.record.addToEval(self.explorIter,trainEval[0],trainEval[1],copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
 
                     self.env.stopEvaluationMode()  # Returns to learning position in training data
-
-            self.timer.stopTimeEvaluation()
+            if not self.hasTrained:
+                self.timer.stopTimeEvaluation()
 
             #Incremenet Instance & Iteration
             self.explorIter+=1
@@ -386,7 +391,8 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         return self
 
     def predict_proba(self, X):
-        self.timer.startTimeEvaluation()
+        if not self.hasTrained:
+            self.timer.startTimeEvaluation()
         """Scikit-learn required: Test Accuracy of eLCS
 
             Parameters
@@ -420,11 +426,13 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             probs = prediction.getProbabilities()
             predList.append(probs)
             self.population.clearSets(self)
-        self.timer.stopTimeEvaluation()
+        if not self.hasTrained:
+            self.timer.stopTimeEvaluation()
         return predList.getArray()
 
     def predict(self, X):
-        self.timer.startTimeEvaluation()
+        if not self.hasTrained:
+            self.timer.startTimeEvaluation()
         """Scikit-learn required: Test Accuracy of eLCS
 
             Parameters
@@ -461,7 +469,8 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 phenotypeSelection = random.choice(l)
             predList.append(phenotypeSelection) #What to do if None or Tie?
             self.population.clearSets(self)
-        self.timer.stopTimeEvaluation()
+        if not self.hasTrained:
+            self.timer.stopTimeEvaluation()
         return predList.getArray()
 
 
@@ -493,13 +502,16 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.trackingObj.resetAll()
 
         #Form [M]
-        self.timer.startTimeMatching()
+        if not self.hasTrained:
+            self.timer.startTimeMatching()
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
-        self.timer.stopTimeMatching()
+        if not self.hasTrained:
+            self.timer.stopTimeMatching()
 
         if self.evalWhileFit:
             #Make a Prediction
-            self.timer.startTimeEvaluation()
+            if not self.hasTrained:
+                self.timer.startTimeEvaluation()
             prediction = Prediction(self,self.population)
             phenotypePrediction = prediction.getDecision()
 
@@ -519,8 +531,8 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                     phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
                     accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
                     self.correct[exploreIter%self.trackingFrequency] = accuracyEstimate
-
-            self.timer.stopTimeEvaluation()
+            if not self.hasTrained:
+                self.timer.stopTimeEvaluation()
 
         #Form [C]
         self.population.makeCorrectSet(self,state_phenotype[1])
@@ -530,17 +542,21 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
         #Perform Subsumption
         if self.doSubsumption:
-            self.timer.startTimeSubsumption()
+            if not self.hasTrained:
+                self.timer.startTimeSubsumption()
             self.population.doCorrectSetSubsumption(self)
-            self.timer.stopTimeSubsumption()
+            if not self.hasTrained:
+                self.timer.stopTimeSubsumption()
 
         #Perform GA
         self.population.runGA(self,exploreIter,state_phenotype[0],state_phenotype[1])
 
         #Run Deletion
-        self.timer.startTimeDeletion()
+        if not self.hasTrained:
+            self.timer.startTimeDeletion()
         self.population.deletion(self,exploreIter)
-        self.timer.stopTimeDeletion()
+        if not self.hasTrained:
+            self.timer.stopTimeDeletion()
 
         self.trackingObj.macroPopSize = len(self.population.popSet)
         self.trackingObj.microPopSize = self.population.microPopSize
