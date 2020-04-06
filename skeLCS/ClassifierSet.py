@@ -24,6 +24,8 @@ class ClassifierSet:
         setNumerositySum = 0
 
         #Matching
+        if not elcs.hasTrained:
+            elcs.timer.startTimeMatching()
         for i in range(len(self.popSet)):
             cl = self.popSet[i]
             if cl.match(state,elcs):
@@ -37,6 +39,8 @@ class ClassifierSet:
                 else:
                     if float(cl.phenotype[0]) <= float(phenotype) <= float(cl.phenotype[1]):
                         doCovering = False
+        if not elcs.hasTrained:
+            elcs.timer.stopTimeMatching()
 
         #Covering
         while doCovering:
@@ -152,6 +156,9 @@ class ClassifierSet:
             clP1 = selectList[0]
             clP2 = selectList[1]
 
+        if not elcs.hasTrained:
+            elcs.timer.stopTimeSelection()
+
         #Initialize Offspring
         cl1 = Classifier(elcs,clP1,exploreIter)
         if clP2 == None:
@@ -176,8 +183,6 @@ class ClassifierSet:
         #Mutation Operator
         nowchanged = cl1.Mutation(elcs,state,phenotype)
         howaboutnow = cl2.Mutation(elcs,state,phenotype)
-        if not elcs.hasTrained:
-            elcs.timer.stopTimeSelection()
 
         #Add offspring to population
         if changed or nowchanged or howaboutnow:
@@ -187,11 +192,8 @@ class ClassifierSet:
                 elcs.trackingObj.mutationCount += 1
             if changed:
                 elcs.trackingObj.crossOverCount += 1
-            if not elcs.hasTrained:
-                elcs.timer.startTimeSubsumption()
+
             self.insertDiscoveredClassifiers(elcs,cl1, cl2, clP1, clP2, exploreIter)  # Subsumption
-            if not elcs.hasTrained:
-                elcs.timer.stopTimeSubsumption()
 
     def getIterStampAverage(self):
         sumCl = 0.0

@@ -56,7 +56,7 @@ class Classifier:
 
         while len(self.specifiedAttList) < 1:
             for attRef in range(len(state)):
-                if random.random() < elcs.p_spec and not(np.isnan(state[attRef])):
+                if random.random() < elcs.p_spec and not(state[attRef] == None):
                     self.specifiedAttList.append(attRef)
                     self.buildMatch(elcs, attRef, state)  # Add classifierConditionElement
 
@@ -103,14 +103,14 @@ class Classifier:
             if attributeInfoType:
                 instanceValue = state[specifiedIndex]
                 if elcs.matchForMissingness:
-                    if np.isnan(instanceValue):
+                    if instanceValue == None:
                         pass
                     elif self.condition[i][0] < instanceValue < self.condition[i][1]:
                         pass
                     else:
                         return False
                 else:
-                    if np.isnan(instanceValue):
+                    if instanceValue == None:
                         return False
                     elif self.condition[i][0] < instanceValue < self.condition[i][1]:
                         pass
@@ -121,14 +121,14 @@ class Classifier:
             else:
                 stateRep = state[specifiedIndex]
                 if elcs.matchForMissingness:
-                    if stateRep == self.condition[i] or np.isnan(stateRep):
+                    if stateRep == self.condition[i] or stateRep == None:
                         pass
                     else:
                         return False
                 else:
                     if stateRep == self.condition[i]:
                         pass
-                    elif np.isnan(stateRep):
+                    elif stateRep == None:
                         return False
                     else:
                         return False
@@ -322,7 +322,7 @@ class Classifier:
             else:
                 attributeInfoValue = elcs.env.formatData.attributeInfoContinuous[attRef]
 
-            if random.random() < elcs.upsilon and not(np.isnan(state[attRef])):
+            if random.random() < elcs.upsilon and not(state[attRef] == None):
                 # Mutation
                 if attRef not in self.specifiedAttList:
                     self.specifiedAttList.append(attRef)
