@@ -46,8 +46,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
+            <state relative-caret-position="30">
+              <caret line="2" column="33" lean-forward="true" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -497,7 +497,7 @@
       <workItem from="1586123955341" duration="5880000" />
       <workItem from="1586134338886" duration="3345000" />
       <workItem from="1586186092473" duration="8044000" />
-      <workItem from="1586731772753" duration="1712000" />
+      <workItem from="1586731772753" duration="1952000" />
     </task>
     <servers />
   </component>
@@ -534,7 +534,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="549263000" />
+    <option name="totallyTimeSpent" value="549503000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1990" y="91" width="1610" height="975" extended-state="0" />
@@ -867,8 +867,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
+        <state relative-caret-position="30">
+          <caret line="2" column="33" lean-forward="true" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
         </state>
       </provider>
     </entry>
