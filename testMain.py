@@ -2,20 +2,16 @@ import pandas as pd
 from skeLCS.eLCS import eLCS
 from skeLCS.DataCleanup import StringEnumerator
 import time
+import random
+import numpy as np
+from sklearn.model_selection import cross_val_score
 
-converter = StringEnumerator("test/DataSets/Real/Multiplexer20.csv","class")
+converter = StringEnumerator("test/DataSets/Real/Multiplexer6.csv","class")
 headers,classLabel,dataFeatures,dataPhenotypes = converter.getParams()
 
-model = eLCS(learningIterations=10000,randomSeed=0)
-t = time.time()
-model.fit(dataFeatures,dataPhenotypes)
-print(time.time()-t)
-print("Total Time:"+str(model.timer.globalTime))
-model.exportIterationTrackingDataToCSV("testTrackingData.csv")
-print("Deletion Time:"+str(model.timer.globalDeletion))
-print("Evaluation Time:"+str(model.timer.globalEvaluation))
-print("Matching Time:"+str(model.timer.globalMatching))
-print("Selection Time:"+str(model.timer.globalSelection))
-print("Subsumption Time:"+str(model.timer.globalSubsumption))
-print("Total Time:"+str(model.timer.globalTime))
-print(model.score(dataFeatures,dataPhenotypes))
+model = eLCS(learningIterations=5000,randomSeed=0)
+formatted = np.insert(dataFeatures,dataFeatures.shape[1],dataPhenotypes,1)
+random.shuffle(formatted)
+dataFeatures = np.delete(formatted,-1,axis=1)
+dataPhenotypes = formatted[:,-1]
+print(np.mean(cross_val_score(model,dataFeatures,dataPhenotypes,cv=3)))
