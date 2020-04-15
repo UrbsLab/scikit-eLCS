@@ -33,12 +33,26 @@ These values can then be exported as a csv after training is complete for analys
 
 In addition, the package includes functionality that allows detailed training evaluation to be done at given iterations during the training process. At each interval, the package saves a snapshot of the rule population, along with evaluation accuracy and instance coverage. These snapshots of the rule population (including the final rule population) can then be exported as a csv after training is complete for analysis using the built in "exportRulePopulationAtIterationToCSV" and "exportFinalRulePopulationToCSV" methods.
 
-For more information on the eLCS algorithm and how to use it, please refer to the Jupyter Notebook inside this repository.
+## Usage
+For more information on the eLCS algorithm and how to use it, please refer to the "eLCS User Guide" Jupyter Notebook inside this repository.
 
 ## License
 Please see the repository [license](https://github.com/UrbsLab/scikit-eLCS/blob/master/LICENSE) for the licensing and usage information for scikit-eLCS.
 
 Generally, we have licensed scikit-eLCS to make it as widely usable as possible.
+
+## Installation
+scikit-eLCS is built on top of the following Python packages:
+<ol>
+  <li> numpy </li>
+  <li> pandas </li>
+  <li> scikit-learn </li>
+</ol>
+
+Once the prerequisites are installed, you can install scikit-eLCS with a pip command:
+```
+pip install scikit-elcs
+```
 
 ## Contributing to scikit-eLCS
 scikit-eLCS is an open source project and we'd love if you could suggest changes!
