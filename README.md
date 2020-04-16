@@ -34,7 +34,7 @@ These values can then be exported as a csv after training is complete for analys
 In addition, the package includes functionality that allows detailed training evaluation to be done at given iterations during the training process. At each interval, the package saves a snapshot of the rule population, along with evaluation accuracy and instance coverage. These snapshots of the rule population (including the final rule population) can then be exported as a csv after training is complete for analysis using the built in "exportRulePopulationAtIterationToCSV" and "exportFinalRulePopulationToCSV" methods.
 
 ## Usage
-For more information on the eLCS algorithm and how to use it, please refer to the "eLCS User Guide" Jupyter Notebook inside this repository.
+For more information on the eLCS algorithm and how to use it, please refer to the ["eLCS User Guide"](https://github.com/UrbsLab/scikit-eLCS/blob/master/eLCS%20User%20Guide.ipynb) Jupyter Notebook inside this repository.
 
 ## Usage TLDR
 ```python
