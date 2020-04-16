@@ -77,7 +77,11 @@ scikit-eLCS is built on top of the following Python packages:
 
 Once the prerequisites are installed, you can install scikit-eLCS with a pip command:
 ```
-pip install scikit-elcs
+pip/pip3 install scikit-elcs
+```
+We strongly recommend you use Python 3. scikit-eLCS does not support Python 2, given its depreciation in Jan 1 2020. If something goes wrong during installation, make sure that your pip is up to date and try again.
+```
+pip/pip3 install --upgrade pip
 ```
 
 ## Contributing to scikit-eLCS
