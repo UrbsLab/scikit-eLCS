@@ -207,6 +207,18 @@ class ClassifierSet:
         else:
             return 0
 
+    def getInitStampAverage(self):
+        sumCl = 0.0
+        numSum = 0.0
+        for i in range(len(self.correctSet)):
+            ref = self.correctSet[i]
+            sumCl += self.popSet[ref].initTimeStamp * self.popSet[ref].numerosity
+            numSum += self.popSet[ref].numerosity
+        if numSum != 0:
+            return sumCl / float(numSum)
+        else:
+            return 0
+
     def setIterStamps(self,exploreIter):
         for i in range(len(self.correctSet)):
             ref = self.correctSet[i]
@@ -297,7 +309,9 @@ class ClassifierSet:
             cl2P.updateNumerosity(1)
             elcs.trackingObj.subsumptionCount += 1
         else:
-            self.subsumeClassifier2(elcs,cl)  # Try to subsume in the correct set.
+            if len(cl.specifiedAttList) > 0:
+                self.addClassifierToPopulation(elcs, cl, False)
+            #self.subsumeClassifier2(elcs,cl)  # Try to subsume in the correct set.
 
     def subsumeClassifier2(self,elcs,cl):
         choices = []
