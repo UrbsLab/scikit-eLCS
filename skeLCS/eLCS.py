@@ -558,7 +558,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.trackingObj.microPopSize = self.population.microPopSize
         self.trackingObj.matchSetSize = len(self.population.matchSet)
         self.trackingObj.correctSetSize = len(self.population.correctSet)
-        self.trackingObj.avgIterAge = self.population.getIterStampAverage()
+        self.trackingObj.avgIterAge = self.population.getInitStampAverage()
 
         #Clear [M] and [C]
         self.population.clearSets(self)
