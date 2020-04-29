@@ -3,19 +3,12 @@ import random
 import copy
 
 class ClassifierSet:
-    def __init__(self,elcs):
+    def __init__(self):
         #Major Parameters
         self.popSet = []
         self.matchSet = []
         self.correctSet = []
         self.microPopSize = 0
-
-        #Evaluation Parameters
-        self.aveGenerality = 0.0
-        self.expRules = 0.0
-        self.attributeSpecList = None
-        self.attributeAccList = None
-        self.avePhenotypeRange = 0.0
 
     def makeMatchSet(self,state_phenotype,exploreIter,elcs):
         state = state_phenotype[0]
@@ -24,8 +17,7 @@ class ClassifierSet:
         setNumerositySum = 0
 
         #Matching
-        if not elcs.hasTrained:
-            elcs.timer.startTimeMatching()
+        elcs.timer.startTimeMatching()
         for i in range(len(self.popSet)):
             cl = self.popSet[i]
             if cl.match(state,elcs):
@@ -39,8 +31,7 @@ class ClassifierSet:
                 else:
                     if float(cl.phenotype[0]) <= float(phenotype) <= float(cl.phenotype[1]):
                         doCovering = False
-        if not elcs.hasTrained:
-            elcs.timer.stopTimeMatching()
+        elcs.timer.stopTimeMatching()
 
         #Covering
         while doCovering:
@@ -140,8 +131,7 @@ class ClassifierSet:
         #GA Run Requirement
         if (exploreIter - self.getIterStampAverage()) < elcs.theta_GA:
             return
-        if not elcs.hasTrained:
-            elcs.timer.startTimeSelection()
+        elcs.timer.startTimeSelection()
 
         self.setIterStamps(exploreIter)
         changed = False
@@ -156,8 +146,7 @@ class ClassifierSet:
             clP1 = selectList[0]
             clP2 = selectList[1]
 
-        if not elcs.hasTrained:
-            elcs.timer.stopTimeSelection()
+        elcs.timer.stopTimeSelection()
 
         #Initialize Offspring
         cl1 = Classifier(elcs,clP1,exploreIter)
@@ -285,14 +274,12 @@ class ClassifierSet:
 
     def insertDiscoveredClassifiers(self,elcs,cl1,cl2,clP1,clP2,exploreIter):
         if elcs.doGASubsumption:
-            if not elcs.hasTrained:
-                elcs.timer.startTimeSubsumption()
+            elcs.timer.startTimeSubsumption()
             if len(cl1.specifiedAttList) > 0:
                 self.subsumeClassifier(elcs,cl1,clP1,clP2)
             if len(cl2.specifiedAttList) > 0:
                 self.subsumeClassifier(elcs,cl2, clP1, clP2)
-            if not elcs.hasTrained:
-                elcs.timer.stopTimeSubsumption()
+            elcs.timer.stopTimeSubsumption()
         else:
             if len(cl1.specifiedAttList) > 0:
                 self.addClassifierToPopulation(elcs,cl1,False)
@@ -311,21 +298,6 @@ class ClassifierSet:
         else:
             if len(cl.specifiedAttList) > 0:
                 self.addClassifierToPopulation(elcs, cl, False)
-            #self.subsumeClassifier2(elcs,cl)  # Try to subsume in the correct set.
-
-    def subsumeClassifier2(self,elcs,cl):
-        choices = []
-        for ref in self.correctSet:
-            if self.popSet[ref].subsumes(elcs,cl):
-                choices.append(ref)
-
-        if len(choices) > 0:
-            choice = int(random.random()*len(choices))
-            self.popSet[int(choices[choice])].updateNumerosity(1)
-            self.microPopSize += 1
-            elcs.trackingObj.subsumptionCount += 1
-            return
-        self.addClassifierToPopulation(elcs,cl,False)
 
     def deletion(self,elcs,exploreIter):
         while (self.microPopSize > elcs.N):
@@ -340,8 +312,10 @@ class ClassifierSet:
             vote = cl.getDelProp(elcs,meanFitness)
             sumCl += vote
             voteList.append(vote)
+        i = 0
         for cl in self.popSet:
-            cl.deletionProb = cl.deletionVote/sumCl
+            cl.deletionProb = voteList[i]/sumCl
+            i+=1
         choicePoint = sumCl * random.random()  # Determine the choice point
 
         newSum = 0.0
@@ -367,39 +341,38 @@ class ClassifierSet:
             sumCl += cl.fitness * cl.numerosity
         return sumCl
 
-    def clearSets(self,elcs):
+    def clearSets(self):
         """ Clears out references in the match and correct sets for the next learning iteration. """
         self.matchSet = []
         self.correctSet = []
 
-    def runPopAveEval(self,exploreIter,elcs):
+    def getAveGenerality(self,elcs):
         genSum = 0
-        agedCount = 0
         for cl in self.popSet:
             genSum += ((elcs.env.formatData.numAttributes - len(cl.condition))/float(elcs.env.formatData.numAttributes))*cl.numerosity
         if self.microPopSize == 0:
-            self.aveGenerality = 'NA'
+            aveGenerality = 0
         else:
-            self.aveGenerality = genSum/float(self.microPopSize)
+            aveGenerality = genSum/float(self.microPopSize)
+        return aveGenerality
 
-        if not elcs.env.formatData.discretePhenotype:
-            sumRuleRange = 0
-            for cl in self.popSet:
-                sumRuleRange += (cl.phenotype[1]-cl.phenotype[0])*cl.numerosity
-            phenotypeRange = elcs.env.formatData.phenotypeList[1]-elcs.env.formatData.phenotypeList[0]
-            self.avePhenotypeRange = (sumRuleRange / float(self.microPopSize)) / float(phenotypeRange)
+    def getAttributeSpecificityList(self,elcs):
+        attributeSpecList = []
+        for i in range(elcs.env.formatData.numAttributes):
+            attributeSpecList.append(0)
+        for cl in self.popSet:
+            for ref in cl.specifiedAttList:
+                attributeSpecList[ref] += cl.numerosity
+        return attributeSpecList
 
-    def runAttGeneralitySum(self,isEvaluationSummary,elcs):
-        if isEvaluationSummary:
-            self.attributeSpecList = []
-            self.attributeAccList = []
-            for i in range(elcs.env.formatData.numAttributes):
-                self.attributeSpecList.append(0)
-                self.attributeAccList.append(0.0)
-            for cl in self.popSet:
-                for ref in cl.specifiedAttList:
-                    self.attributeSpecList[ref] += cl.numerosity
-                    self.attributeAccList[ref] += cl.numerosity * cl.accuracy
+    def getAttributeAccuracyList(self,elcs):
+        attributeAccList = []
+        for i in range(elcs.env.formatData.numAttributes):
+            attributeAccList.append(0.0)
+        for cl in self.popSet:
+            for ref in cl.specifiedAttList:
+                attributeAccList[ref] += cl.numerosity * cl.accuracy
+        return attributeAccList
 
     def makeEvalMatchSet(self,state,elcs):
         for i in range(len(self.popSet)):

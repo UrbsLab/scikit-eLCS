@@ -31,59 +31,15 @@ class Test_eLCS(unittest.TestCase):
         clf = eLCS(learningIterations=2000)
         self.assertEqual(clf.learningIterations,2000)
 
-    def testParamTrackingFrequencyNonnumeric(self):
+
+    def testTrackAccuracyWhileFitInvalid(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(trackingFrequency="hello")
-        self.assertTrue("trackingFrequency param must be nonnegative integer" in str(context.exception))
+            clf = eLCS(trackAccuracyWhileFit=2)
+        self.assertTrue("trackAccuracyWhileFit param must be boolean" in str(context.exception))
 
-    def testParamTrackingFrequencyInvalidNumeric(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(trackingFrequency=3.3)
-        self.assertTrue("trackingFrequency param must be nonnegative integer" in str(context.exception))
-
-    def testParamTrackingFrequencyInvalidNumeric2(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(trackingFrequency=-2)
-        self.assertTrue("trackingFrequency param must be nonnegative integer" in str(context.exception))
-
-    def testParamTrackFrequency(self):
-        clf = eLCS(trackingFrequency=200)
-        self.assertEqual(clf.trackingFrequency,200)
-
-
-    def testParamLearningCheckpointsNonarray(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(learningCheckpoints=2)
-        self.assertTrue("learningCheckpoints param must be ndarray" in str(context.exception))
-
-    def testParamLearningCheckpointsNonnumeric(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(learningCheckpoints=np.array([2,100,"hi",200]))
-        self.assertTrue("All learningCheckpoints elements param must be nonnegative integers" in str(context.exception))
-
-    def testParamLearningCheckpointsInvalidNumeric(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(learningCheckpoints=np.array([2,100,200.2,200]))
-        self.assertTrue("All learningCheckpoints elements param must be nonnegative integers" in str(context.exception))
-
-    def testParamLearningCheckpointsInvalidNumeric2(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(learningCheckpoints=np.array([2,100,-200,200]))
-        self.assertTrue("All learningCheckpoints elements param must be nonnegative integers" in str(context.exception))
-
-    def testParamLearningCheckpoints(self):
-        clf = eLCS(learningCheckpoints=np.array([2, 100, 200, 300]))
-        self.assertTrue(np.array_equal(clf.learningCheckpoints,np.array([2, 100, 200, 300])))
-
-
-    def testEvalWhileFitInvalid(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(evalWhileFit=2)
-        self.assertTrue("evalWhileFit param must be boolean" in str(context.exception))
-
-    def testEvalWhileFit(self):
-        clf = eLCS(evalWhileFit=True)
-        self.assertEqual(clf.evalWhileFit,True)
+    def testTrackAccuracyWhileFit(self):
+        clf = eLCS(trackAccuracyWhileFit=True)
+        self.assertEqual(clf.trackAccuracyWhileFit,True)
 
 
     def testParamNNonnumeric(self):
@@ -185,37 +141,6 @@ class Test_eLCS(unittest.TestCase):
     def testParamSpecAttr(self):
         clf = eLCS(specifiedAttributes=np.array([2, 100, 200, 300]))
         self.assertTrue(np.array_equal(clf.specifiedAttributes,np.array([2, 100, 200, 300])))
-
-
-    def testDiscretePhenotypeLimitInv1(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(discretePhenotypeLimit="h")
-        self.assertTrue(
-            "discretePhenotypeLimit param must be nonnegative integer or 'c' or 'd'" in str(context.exception))
-
-    def testDiscretePhenotypeLimitInv2(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(discretePhenotypeLimit=-10)
-        self.assertTrue(
-            "discretePhenotypeLimit param must be nonnegative integer or 'c' or 'd'" in str(context.exception))
-
-    def testDiscretePhenotypeLimitInv3(self):
-        with self.assertRaises(Exception) as context:
-            clf = eLCS(discretePhenotypeLimit=1.2)
-        self.assertTrue(
-            "discretePhenotypeLimit param must be nonnegative integer or 'c' or 'd'" in str(context.exception))
-
-    def testDiscretePhenotypeLimit1(self):
-        clf = eLCS(discretePhenotypeLimit=10)
-        self.assertEqual(clf.discretePhenotypeLimit, 10)
-
-    def testDiscretePhenotypeLimit2(self):
-        clf = eLCS(discretePhenotypeLimit="c")
-        self.assertEqual(clf.discretePhenotypeLimit, "c")
-
-    def testDiscretePhenotypeLimit3(self):
-        clf = eLCS(discretePhenotypeLimit="d")
-        self.assertEqual(clf.discretePhenotypeLimit, "d")
 
 
     def testNuInv1(self):
@@ -650,25 +575,6 @@ class Test_eLCS(unittest.TestCase):
         self.assertEqual(clf.env.formatData.attributeInfoType,[True,False,True])
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
-    #Check Y must be discrete for fit method (eLCS works best only on classification problems)
-    def testContSpec2(self):
-        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
-        converter = StringEnumerator(dataPath, "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=0,discreteAttributeLimit="c",specifiedAttributes=np.array([0,2,3]),discretePhenotypeLimit="d")
-        clf.fit(dataFeatures,dataPhenotypes)
-        self.assertEqual(clf.env.formatData.attributeInfoType,[True,False,True])
-        self.assertTrue(clf.env.formatData.discretePhenotype)
-
-    def testContPhenotype(self):
-        dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
-        converter = StringEnumerator(dataPath, "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=0, discretePhenotypeLimit=9)
-        with self.assertRaises(Exception) as context:
-            clf.fit(dataFeatures, dataPhenotypes)
-        self.assertTrue("eLCS works best with classification problems. While we have the infrastructure to support continuous phenotypes, we have disabled it for this version." in str(context.exception))
-
     '''SECTION 3: TEST eLCS Performance
         Testing for
         -Final balanced accuracy
@@ -705,38 +611,29 @@ class Test_eLCS(unittest.TestCase):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer6.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=1000,evalWhileFit=True)
+        clf = eLCS(learningIterations=1000)
         clf.fit(dataFeatures,dataPhenotypes)
-        answerKey = [147,312,0.5577,2.099,0.921875]
-        self.assertTrue(self.approxEqual(0.5,clf.getFinalMacroPopulationSize(),answerKey[0]))
-        self.assertTrue(self.approxEqual(0.5, clf.getFinalMicroPopulationSize(), answerKey[1]))
-        self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
-        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
+        answerKey = 0.921875
+        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey,True))
 
     def test11BitMultiplexer5000Iterations(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer11.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=5000,evalWhileFit=True)
+        clf = eLCS(learningIterations=5000)
         clf.fit(dataFeatures,dataPhenotypes)
-        answerKey = [460,1000,0.6338,13.2861,1]
-        self.assertTrue(self.approxEqual(0.4,clf.getFinalMacroPopulationSize(),answerKey[0]))
-        self.assertTrue(self.approxEqual(0.4, clf.getFinalMicroPopulationSize(), answerKey[1]))
-        self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
-        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
+        answerKey = 1
+        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey,True))
 
     #Test performance for continuous attribute training data
     def testContinuous1000Iterations(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv")
         converter = StringEnumerator(dataPath, "Class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=1000,evalWhileFit=True)
+        clf = eLCS(learningIterations=1000)
         clf.fit(dataFeatures,dataPhenotypes)
-        answerKey = [852,978,0.6230,5.8408,0.61]
-        self.assertTrue(self.approxEqual(0.5,clf.getFinalMacroPopulationSize(),answerKey[0]))
-        self.assertTrue(self.approxEqual(0.5, clf.getFinalMicroPopulationSize(), answerKey[1]))
-        self.assertTrue(self.approxEqual(0.2, clf.getFinalPopAvgGenerality(), answerKey[2]))
-        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey[4],True))
+        answerKey = 0.61
+        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey,True))
 
     #####TEST AGAINST CURRENT ALGORITHM
 
@@ -745,7 +642,7 @@ class Test_eLCS(unittest.TestCase):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer6.csv")
         converter = StringEnumerator(dataPath, "class")
         headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=2000,evalWhileFit=True)
+        clf = eLCS(learningIterations=2000)
         formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
         np.random.shuffle(formatted)
         dataFeatures = np.delete(formatted, -1, axis=1)
@@ -772,25 +669,21 @@ class Test_eLCS(unittest.TestCase):
     #     converter = StringEnumerator(dataPath, "class")
     #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
     #
-    #     clf = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
+    #     clf = eLCS(learningIterations=1000, randomSeed=100)
     #     clf.fit(dataFeatures, dataPhenotypes)
     #     clf.exportIterationTrackingDataToCSV(filename='track1.csv')
     #     clf.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='pop1.csv')
-    #     clf.exportFinalPopStatsToCSV(headerNames=headers, filename="popStats1.csv")
     #
-    #     clf2 = eLCS(learningIterations=1000, evalWhileFit=True, trackingFrequency=100, randomSeed=100)
+    #     clf2 = eLCS(learningIterations=1000, randomSeed=100)
     #     clf2.fit(dataFeatures, dataPhenotypes)
     #     clf2.exportIterationTrackingDataToCSV(filename='track2.csv')
     #     clf2.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='pop2.csv')
-    #     clf2.exportFinalPopStatsToCSV(headerNames=headers, filename="popStats2.csv")
     #
     #     track1 = pd.read_csv('track1.csv').values[:,:13]
     #     pop1 = pd.read_csv('pop1.csv').values
-    #     popStats1 = pd.read_csv('popStats1.csv').drop('Label', axis=1).values
     #
     #     track2 = pd.read_csv('track2.csv').values[:,:13]
     #     pop2 = pd.read_csv('pop2.csv').values
-    #     popStats2 = pd.read_csv('popStats2.csv').drop('Label', axis=1).values
     #
     #     pop1[pop1 == "#"] = np.nan
     #     pop2[pop2 == "#"] = np.nan
@@ -800,7 +693,6 @@ class Test_eLCS(unittest.TestCase):
     #
     #     self.assertTrue(np.allclose(track1,track2,equal_nan=True))
     #     self.assertTrue(np.allclose(pop1, pop2, equal_nan=True))
-    #     self.assertTrue(np.allclose(popStats1, popStats2, equal_nan=True))
 
     ###Util Functions###
     def approxEqual(self,threshold,comp,right): #threshold is % tolerance

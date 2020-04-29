@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from skeLCS.DynamicNPArray import ListArray
+from DynamicNPArray import ListArray
 
 class Arb():
     def __init__(self,num):

@@ -1,5 +1,5 @@
 
-from skeLCS.DynamicNPArray import TupleArray,ListArray
+from DynamicNPArray import TupleArray,ListArray
 import numpy as np
 import time
 import random

@@ -1,31 +1,29 @@
 from skeLCS.OfflineEnvironment import OfflineEnvironment
 from skeLCS.ClassifierSet import ClassifierSet
+from skeLCS.Classifier import Classifier
 from skeLCS.Prediction import Prediction
 from skeLCS.Timer import Timer
-from skeLCS.ClassAccuracy import ClassAccuracy
-from skeLCS.DynamicNPArray import ArrayFactory
 from skeLCS.IterationRecord import IterationRecord
 
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.metrics import balanced_accuracy_score
-import copy
 import random
 import numpy as np
 import math
+import time
+import pickle
+import copy
 
 class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
-    def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([]), evalWhileFit = False, N=1000,
-                 p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]), discretePhenotypeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
-                 theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
-                 doCorrectSetSubsumption=False, doGASubsumption=True, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none",matchForMissingness=False):
+    def __init__(self, learningIterations=10000, trackAccuracyWhileFit = False, N=1000, p_spec=0.5, discreteAttributeLimit=10,
+                 specifiedAttributes = np.array([]), nu=5, chi=0.8, upsilon=0.04, theta_GA=25, theta_del=20, theta_sub=20,
+                 acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1, doCorrectSetSubsumption=False,
+                 doGASubsumption=True, selectionMethod='tournament', theta_sel=0.5, randomSeed = "none",matchForMissingness=False,
+                 rebootFilename=None):
 
         '''
         :param learningIterations:      Must be nonnegative integer. The number of training cycles to run.
-        :param trackingFrequency:       Must be nonnegative integer. Relevant only if evalWhileFit param is true. Conducts accuracy approximations and population measurements every trackingFrequency iterations.
-                                        If param == 0, tracking done once every epoch.
-        :param learningCheckpoints:     Must be ndarray of nonnegative integers. Relevant only if evalWhileFit param is true. Conducts detailed evaluation of model performance by finding precise training accuracy
-                                        at the specified iteration count. Iterations are 0 indexed.
-        :param evalWhileFit:            Must be boolean. Determines if live tracking and evaluation is done during model training
+        :param trackAccuracyWhileFit:   Must be boolean. Determines if accuracy is tracked during model training
         :param N:                       Must be nonnegative integer. Maximum micro classifier population size (sum of classifier numerosities).
         :param p_spec:                  Must be float from 0 - 1. Probability of specifying an attribute during the covering procedure. Advised: larger amounts of attributes => lower p_spec values
         :param discreteAttributeLimit:  Must be nonnegative integer OR "c" OR "d". Multipurpose param. If it is a nonnegative integer, discreteAttributeLimit determines the threshold that determines
@@ -36,8 +34,6 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                                         If "c", attributes specified by index in this param will be continuous and the rest will be discrete. If "d", attributes specified by index in this
                                         param will be discrete and the rest will be continuous.
                                         If this value is given, and discreteAttributeLimit is not "c" or "d", discreteAttributeLimit overrides this specification
-        :param discretePhenotypeLimit:  Must be nonnegative integer OR "c" OR "d". Works similarly to discreteAttributeLimit. Multipurpose param. If it is a nonnegative integer, this param determines the
-                                        continuous/discrete threshold for the phenotype. If it is "c" or "d", the phenotype is explicitly defined as continuous or discrete.
         :param nu:                      (v) Must be a float. Power parameter used to determine the importance of high accuracy when calculating fitness. (typically set to 5, recommended setting of 1 in noisy data)
         :param chi:                     (X) Must be float from 0 - 1. The probability of applying crossover in the GA. (typically set to 0.5-1.0)
         :param upsilon:                 (u) Must be float from 0 - 1. The probability of mutating an allele within an offspring.(typically set to 0.01-0.05)
@@ -55,6 +51,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         :param theta_sel:               Must be float from 0 - 1. The fraction of the correct set to be included in tournament selection.
         :param randomSeed:              Must be an integer or "none". Set a constant random seed value to some integer (in order to obtain reproducible results). Put 'none' if none (for pseudo-random algorithm runs).
         :param matchForMissingness:     Must be boolean. Determines if eLCS matches for missingness (i.e. if a missing value can match w/ a specified value)
+        :param rebootFilename:          Must be String or None. Filename of pickled model to be rebooted
         '''
 
         '''
@@ -68,27 +65,9 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         if learningIterations < 0:
             raise Exception("learningIterations param must be nonnegative integer")
 
-        #trackingFrequency
-        if not self.checkIsInt(trackingFrequency):
-            raise Exception("trackingFrequency param must be nonnegative integer")
-
-        if trackingFrequency < 0:
-            raise Exception("trackingFrequency param must be nonnegative integer")
-
-        #learningCheckpoints
-        if not (isinstance(learningCheckpoints,np.ndarray)):
-            raise Exception("learningCheckpoints param must be ndarray")
-
-        for learningCheckpt in learningCheckpoints:
-            if not self.checkIsInt(learningCheckpt):
-                raise Exception("All learningCheckpoints elements param must be nonnegative integers")
-            if int(learningCheckpt) < 0:
-                raise Exception("All learningCheckpoints elements param must be nonnegative integers")
-
-
-        #evalWhileFit
-        if not(isinstance(evalWhileFit,bool)):
-            raise Exception("evalWhileFit param must be boolean")
+        #trackAccuracyWhileFit
+        if not(isinstance(trackAccuracyWhileFit,bool)):
+            raise Exception("trackAccuracyWhileFit param must be boolean")
 
         #N
         if not self.checkIsInt(N):
@@ -124,17 +103,6 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
                 raise Exception("All specifiedAttributes elements param must be nonnegative integers")
             if int(spAttr) < 0:
                 raise Exception("All specifiedAttributes elements param must be nonnegative integers")
-
-        #discretePhenotypeLimit
-        if discretePhenotypeLimit != "c" and discretePhenotypeLimit != "d":
-            try:
-                dpl = int(discretePhenotypeLimit)
-                if not self.checkIsInt(discretePhenotypeLimit):
-                    raise Exception("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'")
-                if dpl < 0:
-                    raise Exception("discretePhenotypeLimit param must be nonnegative integer or 'c' or 'd'")
-            except:
-                raise Exception("discretePhenotypeLimit param must be nonnegative integer or 'c' or 'd'")
 
         #nu
         if not self.checkIsFloat(nu):
@@ -231,6 +199,9 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         if not (isinstance(matchForMissingness, bool)):
             raise Exception("matchForMissingness param must be boolean")
 
+        # rebootPopulationFilename
+        if rebootFilename != None and not isinstance(rebootFilename, str):
+            raise Exception("rebootFilename param must be None or String from pickle")
         '''
         Set params
         '''
@@ -238,9 +209,8 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.N = N
         self.p_spec = p_spec
         self.discreteAttributeLimit = discreteAttributeLimit
-        self.discretePhenotypeLimit = discretePhenotypeLimit
         self.specifiedAttributes = specifiedAttributes
-        self.evalWhileFit = evalWhileFit
+        self.trackAccuracyWhileFit = trackAccuracyWhileFit
         self.nu = nu
         self.chi = chi
         self.upsilon = upsilon
@@ -256,8 +226,6 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.doGASubsumption = doGASubsumption
         self.selectionMethod = selectionMethod
         self.theta_sel = theta_sel
-        self.trackingFrequency = trackingFrequency
-        self.learningCheckpoints = learningCheckpoints
         self.randomSeed = randomSeed
         self.matchForMissingness = matchForMissingness
 
@@ -267,7 +235,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.trackingObj = tempTrackingObj()
         self.record = IterationRecord()
         self.hasTrained = False
-        self.evalWhileFitAfter = self.evalWhileFit
+        self.rebootFilename = rebootFilename
 
     def checkIsInt(self,num):
         try:
@@ -286,19 +254,15 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         except:
             return False
 
+    ##*************** Fit ****************
     def fit(self, X, y):
         """Scikit-learn required: Supervised training of eLCS
 
         Parameters
-        ----------
-        X: array-like {n_samples, n_features}
-            Training instances. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC or NAN
-        y: array-like {n_samples}
-            Training labels. ALL INSTANCE PHENOTYPES MUST BE NUMERIC NOT NAN OR OTHER TYPE
+        X: array-like {n_samples, n_features} Training instances. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC or NAN
+        y: array-like {n_samples} Training labels. ALL INSTANCE PHENOTYPES MUST BE NUMERIC NOT NAN OR OTHER TYPE
 
-        Returns
-        __________
-        self
+        Returns self
         """
         #If trained already, raise Exception
         if self.hasTrained:
@@ -319,21 +283,18 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         #Set up environment
         self.env = OfflineEnvironment(X,y,self)
 
-        if not self.env.formatData.discretePhenotype:
-            raise Exception("eLCS works best with classification problems. While we have the infrastructure to support continuous phenotypes, we have disabled it for this version.")
-
-        # Modify certain params to default values
-        if not (self.learningIterations - 1 in self.learningCheckpoints):
-            self.learningCheckpoints = np.append(self.learningCheckpoints,self.learningIterations - 1)
-
-        if self.trackingFrequency == 0:
-            self.trackingFrequency = self.env.formatData.numTrainInstances
-
-        self.timer = Timer()
-        self.population = ClassifierSet(self)
         self.explorIter = 0
-        self.correct = np.empty(self.trackingFrequency)
-        self.correct.fill(0)
+
+        self.trackingAccuracy = []
+        self.movingAvgCount = 50
+        aveGenerality = 0
+        aveGeneralityFreq = min(self.env.formatData.numTrainInstances,int(self.learningIterations/20)+1)
+
+        if self.rebootFilename == None:
+            self.timer = Timer()
+            self.population = ClassifierSet()
+        else:
+            self.rebootPopulation()
 
         while self.explorIter < self.learningIterations:
             #Get New Instance and Run a learning algorithm
@@ -341,168 +302,36 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
             self.runIteration(state_phenotype,self.explorIter)
 
+            #Basic Evaluations of Algorithm
+            self.timer.startTimeEvaluation()
 
-            #Evaluations of Algorithm
-            if not self.hasTrained:
-                self.timer.startTimeEvaluation()
+            if self.explorIter%aveGeneralityFreq == aveGeneralityFreq-1:
+                aveGenerality = self.population.getAveGenerality(self)
 
-            if (((self.explorIter%self.trackingFrequency) == (self.trackingFrequency-1) and self.explorIter > 0) or self.explorIter == self.learningIterations-1) and self.evalWhileFit:
-                self.population.runPopAveEval(self.explorIter,self)
-                trackedAccuracy = np.sum(self.correct)/float(self.trackingFrequency)
-                if not self.hasTrained:
-                    self.timer.returnGlobalTimer()
-                self.record.addToTracking(self.explorIter,trackedAccuracy,self.population.aveGenerality,
-                                            self.trackingObj.macroPopSize,self.trackingObj.microPopSize,
-                                            self.trackingObj.matchSetSize,self.trackingObj.correctSetSize,
-                                            self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
-                                            self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
-                                            self.trackingObj.coveringCount,self.trackingObj.deletionCount,
-                                            self.timer.globalTime,self.timer.globalMatching,
-                                            self.timer.globalDeletion,self.timer.globalSubsumption,
-                                            self.timer.globalSelection,self.timer.globalEvaluation)
-            else: #If not detailed track, record regular easy to track data every iteration
-                if not self.hasTrained:
-                    self.timer.returnGlobalTimer()
-                self.record.addToTracking(self.explorIter, "", "",
-                                            self.trackingObj.macroPopSize, self.trackingObj.microPopSize,
-                                            self.trackingObj.matchSetSize, self.trackingObj.correctSetSize,
-                                            self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
-                                            self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
-                                            self.trackingObj.coveringCount, self.trackingObj.deletionCount,
-                                            self.timer.globalTime, self.timer.globalMatching,
-                                            self.timer.globalDeletion, self.timer.globalSubsumption,
-                                            self.timer.globalSelection, self.timer.globalEvaluation)
+            if len(self.trackingAccuracy) != 0:
+                accuracy = sum(self.trackingAccuracy)/len(self.trackingAccuracy)
+            else:
+                accuracy = 0
 
-            if self.evalWhileFit:
-                if (self.explorIter) in self.learningCheckpoints: #0 indexed learning Checkpoints
-                    self.population.runPopAveEval(self.explorIter,self)
-                    self.population.runAttGeneralitySum(True,self)
-                    self.env.startEvaluationMode()  #Preserves learning position in training data
+            self.timer.updateGlobalTime()
+            self.record.addToTracking(self.explorIter,accuracy,aveGenerality,
+                                      self.trackingObj.macroPopSize,self.trackingObj.microPopSize,
+                                      self.trackingObj.matchSetSize,self.trackingObj.correctSetSize,
+                                      self.trackingObj.avgIterAge, self.trackingObj.subsumptionCount,
+                                      self.trackingObj.crossOverCount, self.trackingObj.mutationCount,
+                                      self.trackingObj.coveringCount,self.trackingObj.deletionCount,
+                                      self.timer.globalTime,self.timer.globalMatching,
+                                      self.timer.globalDeletion,self.timer.globalSubsumption,
+                                      self.timer.globalSelection,self.timer.globalEvaluation)
+            self.timer.stopTimeEvaluation()
 
-                    if self.env.formatData.discretePhenotype:
-                        trainEval = self.doPopEvaluation()
-                    else:
-                        trainEval = self.doContPopEvaluation()
-
-                    self.record.addToEval(self.explorIter,trainEval[0],trainEval[1],copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
-
-                    self.env.stopEvaluationMode()  # Returns to learning position in training data
-            if not self.hasTrained:
-                self.timer.stopTimeEvaluation()
-
-            #Incremenet Instance & Iteration
+            #Increment Instance & Iteration
             self.explorIter+=1
             self.env.newInstance()
+        self.saveFinalMetrics()
         self.hasTrained = True
         return self
 
-    def predict_proba(self, X):
-        if not self.hasTrained:
-            self.timer.startTimeEvaluation()
-        """Scikit-learn required: Test Accuracy of eLCS
-
-            Parameters
-            ----------
-            X: array-like {n_samples, n_features}
-                Test instances to classify. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC
-
-
-            Returns
-            __________
-            y: array-like {n_samples}
-                Classifications.
-        """
-
-        try:
-            for instance in X:
-                for value in instance:
-                    if not (np.isnan(value)):
-                        float(value)
-        except:
-            raise Exception("X must be fully numeric")
-
-        instances = X.shape[0]
-        predList = ArrayFactory.createArray(k=len(self.env.formatData.phenotypeList))
-
-        # ----------------------------------------------------------------------------------------------
-        for inst in range(instances):
-            state = X[inst]
-            self.population.makeEvalMatchSet(state, self)
-            prediction = Prediction(self, self.population)
-            probs = prediction.getProbabilities()
-            predList.append(probs)
-            self.population.clearSets(self)
-        if not self.hasTrained:
-            self.timer.stopTimeEvaluation()
-        return predList.getArray()
-
-    def predict(self, X):
-        if not self.hasTrained:
-            self.timer.startTimeEvaluation()
-        """Scikit-learn required: Test Accuracy of eLCS
-
-            Parameters
-            ----------
-            X: array-like {n_samples, n_features}
-                Test instances to classify. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC
-
-
-            Returns
-            __________
-            y: array-like {n_samples}
-                Classifications.
-        """
-
-        try:
-            for instance in X:
-                for value in instance:
-                    if not (np.isnan(value)):
-                        float(value)
-        except:
-            raise Exception("X must be fully numeric")
-
-        instances = X.shape[0]
-        predList = ArrayFactory.createArray(k=1)
-
-        # ----------------------------------------------------------------------------------------------
-        for inst in range(instances):
-            state = X[inst]
-            self.population.makeEvalMatchSet(state, self)
-            prediction = Prediction(self, self.population)
-            phenotypeSelection = prediction.getDecision()
-            if phenotypeSelection == None or phenotypeSelection == "Tie":
-                l = self.env.formatData.phenotypeList
-                phenotypeSelection = random.choice(l)
-            predList.append(phenotypeSelection) #What to do if None or Tie?
-            self.population.clearSets(self)
-        if not self.hasTrained:
-            self.timer.stopTimeEvaluation()
-        return predList.getArray()
-
-
-    '''Having this score method is not mandatory, since the eLCS inherits from ClassifierMixin, which by default has a parent score method. When doing CV,
-    you could pass in "scorer = 'balanced_accuracy'" or any other scorer function which would override the default ClassifierMixin method. This can all be done w/o
-    the score method existing below.
-    
-    However, this score method acts as a replacement for the ClassifierMixin method (so technically, ClassifierMixin doesn't need to be a parent now), so by default,
-    balanced accuracy is the scoring method. In the future, this scorer can be made to be more sophisticated whenever necessary. You can still pass in an external 
-    scorer like above to override this scoring method as well if you want.
-    
-    '''
-    #Commented out score function if continuous phenotype is built in, so that RegressorMixin and ClassifierMixin default methods can be used appropriately
-    def score(self,X,y):
-        predList = self.predict(X)
-        return balanced_accuracy_score(y, predList) #Make it balanced accuracy
-
-    def transform(self, X):
-        """Not needed for eLCS"""
-        return X
-
-    def fit_transform(self, X, y):
-        self.fit(X, y)
-        return self.transform(X)
-
-    ##Helper Functions
     def runIteration(self,state_phenotype,exploreIter):
         #Reset tracking object counters
         self.trackingObj.resetAll()
@@ -510,31 +339,29 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         #Form [M]
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
 
-        if self.evalWhileFit:
+        if self.trackAccuracyWhileFit:
             #Make a Prediction
-            if not self.hasTrained:
-                self.timer.startTimeEvaluation()
+            self.timer.startTimeEvaluation()
             prediction = Prediction(self,self.population)
             phenotypePrediction = prediction.getDecision()
 
-            if phenotypePrediction == None or phenotypePrediction == 'Tie':
-                if self.env.formatData.discretePhenotype:
-                    phenotypePrediction = random.choice(self.env.formatData.phenotypeList)
+            if self.env.formatData.discretePhenotype:
+                if phenotypePrediction == state_phenotype[1]:
+                    if len(self.trackingAccuracy) == self.movingAvgCount:
+                        del self.trackingAccuracy[0]
+                    self.trackingAccuracy.append(1)
                 else:
-                    phenotypePrediction = random.randrange(self.env.formatData.phenotypeList[0],self.env.formatData.phenotypeList[1],(self.env.formatData.phenotypeList[1]-self.env.formatData.phenotypeList[0])/float(1000))
+                    if len(self.trackingAccuracy) == self.movingAvgCount:
+                        del self.trackingAccuracy[0]
+                    self.trackingAccuracy.append(0)
             else:
-                if self.env.formatData.discretePhenotype:
-                    if phenotypePrediction == state_phenotype[1]:
-                        self.correct[exploreIter%self.trackingFrequency] = 1
-                    else:
-                        self.correct[exploreIter%self.trackingFrequency] = 0
-                else:
-                    predictionError = math.fabs(phenotypePrediction-float(state_phenotype[1]))
-                    phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
-                    accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
-                    self.correct[exploreIter%self.trackingFrequency] = accuracyEstimate
-            if not self.hasTrained:
-                self.timer.stopTimeEvaluation()
+                predictionError = math.fabs(phenotypePrediction-float(state_phenotype[1]))
+                phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
+                accuracyEstimate = 1.0 - (predictionError / float(phenotypeRange))
+                if len(self.trackingAccuracy) == self.movingAvgCount:
+                    del self.trackingAccuracy[0]
+                self.trackingAccuracy.append(accuracyEstimate)
+            self.timer.stopTimeEvaluation()
 
         #Form [C]
         self.population.makeCorrectSet(self,state_phenotype[1])
@@ -544,21 +371,17 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
         #Perform Subsumption
         if self.doCorrectSetSubsumption:
-            if not self.hasTrained:
-                self.timer.startTimeSubsumption()
+            self.timer.startTimeSubsumption()
             self.population.doCorrectSetSubsumption(self)
-            if not self.hasTrained:
-                self.timer.stopTimeSubsumption()
+            self.timer.stopTimeSubsumption()
 
         #Perform GA
         self.population.runGA(self,exploreIter,state_phenotype[0],state_phenotype[1])
 
         #Run Deletion
-        if not self.hasTrained:
-            self.timer.startTimeDeletion()
+        self.timer.startTimeDeletion()
         self.population.deletion(self,exploreIter)
-        if not self.hasTrained:
-            self.timer.stopTimeDeletion()
+        self.timer.stopTimeDeletion()
 
         self.trackingObj.macroPopSize = len(self.population.popSet)
         self.trackingObj.microPopSize = self.population.microPopSize
@@ -567,274 +390,158 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.trackingObj.avgIterAge = self.population.getInitStampAverage()
 
         #Clear [M] and [C]
-        self.population.clearSets(self)
+        self.population.clearSets()
 
-    def doPopEvaluation(self):
-        noMatch = 0  # How often does the population fail to have a classifier that matches an instance in the data.
-        tie = 0  # How often can the algorithm not make a decision between classes due to a tie.
-        self.env.resetDataRef()  # Go to the first instance in dataset
-        phenotypeList = self.env.formatData.phenotypeList
+    ##*************** Population Reboot ****************
+    def saveFinalMetrics(self):
+        self.finalMetrics = [self.learningIterations,self.timer.globalTime, self.timer.globalMatching,
+                             self.timer.globalDeletion, self.timer.globalSubsumption, self.timer.globalSelection,
+                             self.timer.globalEvaluation,copy.deepcopy(self.population.popSet)]
 
-        classAccDict = {}
-        for each in phenotypeList:
-            classAccDict[each] = ClassAccuracy()
-        # ----------------------------------------------
-
-        instances = self.env.formatData.numTrainInstances
-
-        # ----------------------------------------------------------------------------------------------
-        for inst in range(instances):
-            state_phenotype = self.env.getTrainInstance()
-            self.population.makeEvalMatchSet(state_phenotype[0],self)
-            prediction = Prediction(self,self.population)
-            phenotypeSelection = prediction.getDecision()
-
-            if phenotypeSelection == None:
-                noMatch += 1
-            elif phenotypeSelection == 'Tie':
-                tie += 1
-            else:  # Instances which failed to be covered are excluded from the accuracy calculation
-                for each in phenotypeList:
-                    thisIsMe = False
-                    accuratePhenotype = False
-                    truePhenotype = state_phenotype[1]
-                    if each == truePhenotype:
-                        thisIsMe = True
-                    if phenotypeSelection == truePhenotype:
-                        accuratePhenotype = True
-                    classAccDict[each].updateAccuracy(thisIsMe, accuratePhenotype)
-
-            self.env.newInstance()  # next instance
-            self.population.clearSets(self)
-
-        # Calculate Standard Accuracy--------------------------------------------
-        instancesCorrectlyClassified = classAccDict[phenotypeList[0]].T_myClass + classAccDict[phenotypeList[0]].T_otherClass
-        instancesIncorrectlyClassified = classAccDict[phenotypeList[0]].F_myClass + classAccDict[phenotypeList[0]].F_otherClass
-        standardAccuracy = float(instancesCorrectlyClassified) / float(instancesCorrectlyClassified + instancesIncorrectlyClassified)
-
-        # Calculate Balanced Accuracy---------------------------------------------
-        T_mySum = 0
-        T_otherSum = 0
-        F_mySum = 0
-        F_otherSum = 0
-        for each in phenotypeList:
-            T_mySum += classAccDict[each].T_myClass
-            T_otherSum += classAccDict[each].T_otherClass
-            F_mySum += classAccDict[each].F_myClass
-            F_otherSum += classAccDict[each].F_otherClass
-        balancedAccuracy = ((0.5 * T_mySum / (float(T_mySum + F_otherSum)) + 0.5 * T_otherSum / (float(T_otherSum + F_mySum))))  # BalancedAccuracy = (Specificity + Sensitivity)/2
-
-        # Adjustment for uncovered instances - to avoid positive or negative bias we incorporate the probability of guessing a phenotype by chance (e.g. 50% if two phenotypes)
-        predictionFail = float(noMatch) / float(instances)
-        predictionTies = float(tie) / float(instances)
-        instanceCoverage = 1.0 - predictionFail
-        predictionMade = 1.0 - (predictionFail + predictionTies)
-
-        adjustedStandardAccuracy = (standardAccuracy * predictionMade) + ((1.0 - predictionMade) * (1.0 / float(len(phenotypeList))))
-        adjustedBalancedAccuracy = (balancedAccuracy * predictionMade) + ((1.0 - predictionMade) * (1.0 / float(len(phenotypeList))))
-
-        resultList = [adjustedBalancedAccuracy,instanceCoverage]
-        return resultList
-
-    def doContPopEvaluation(self):
-        noMatch = 0  # How often does the population fail to have a classifier that matches an instance in the data.
-        accuracyEstimateSum = 0
-        self.env.resetDataRef()  # Go to the first instance in dataset
-
-        instances = self.env.formatData.numTrainInstances
-
-        # ----------------------------------------------------------------------------------------------
-        for inst in range(instances):
-            state_phenotype = self.env.getTrainInstance()
-            self.population.makeEvalMatchSet(state_phenotype[0],self)
-            prediction = Prediction(self, self.population)
-            phenotypePrediction = prediction.getDecision()
-
-            if phenotypePrediction == None:
-                noMatch += 1
-            else:
-                predictionError = math.fabs(float(phenotypePrediction) - float(state_phenotype[1]))
-                phenotypeRange = self.env.formatData.phenotypeList[1] - self.env.formatData.phenotypeList[0]
-                accuracyEstimateSum += 1.0 - (predictionError / float(phenotypeRange))
-
-            self.env.newInstance()  # next instance
-            self.population.clearSets(self)
-
-        # Accuracy Estimate
-        if instances == noMatch:
-            accuracyEstimate = 0
+    def pickleModel(self,filename=None):
+        if self.hasTrained:
+            if filename == None:
+                filename = 'pickled'+str(int(time.time()))
+            outfile = open(filename,'wb')
+            pickle.dump(self.finalMetrics,outfile)
+            outfile.close()
         else:
-            accuracyEstimate = accuracyEstimateSum / float(instances - noMatch)
+            raise Exception("There is model to pickle, as the eLCS model has not been trained")
 
-        # Adjustment for uncovered instances - to avoid positive or negative bias we incorporate the probability of guessing a phenotype by chance (e.g. 50% if two phenotypes)
-        instanceCoverage = 1.0 - (float(noMatch) / float(instances))
-        adjustedAccuracyEstimate = accuracyEstimateSum / float(instances)
+    def rebootPopulation(self):
+        # Sets popSet and microPopSize of self.population, as well as trackingMetrics,
+        file = open(self.rebootFilename, 'rb')
+        rawData = pickle.load(file)
+        file.close()
 
-        resultList = [adjustedAccuracyEstimate, instanceCoverage]
-        return resultList
+        popSet = rawData[7]
+        microPopSize = 0
+        for rule in popSet:
+            microPopSize += rule.numerosity
+        set = ClassifierSet()
+        set.popSet = popSet
+        set.microPopSize = microPopSize
+        self.population = set
+        self.timer = Timer()
+        self.timer.globalAdd = rawData[1]
+        self.timer.globalMatching = rawData[2]
+        self.timer.globalDeletion = rawData[3]
+        self.timer.globalSubsumption = rawData[4]
+        self.timer.globalGA = rawData[5]
+        self.timer.globalEvaluation = rawData[6]
+        self.learningIterations += rawData[0]
+        self.explorIter += rawData[0]
 
-    def exportIterationTrackingDataToCSV(self,filename='iterationData.csv'):
+    ##*************** Export and Evaluation ****************
+    def predict_proba(self, X):
+        """Scikit-learn required: Test Accuracy of eLCS
+            Parameters
+            X: array-like {n_samples, n_features} Test instances to classify. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC
+
+            Returns
+            y: array-like {n_samples} Classifications.
+        """
+        try:
+            for instance in X:
+                for value in instance:
+                    if not (np.isnan(value)):
+                        float(value)
+        except:
+            raise Exception("X must be fully numeric")
+
+        instances = X.shape[0]
+        predList = []
+
+        for inst in range(instances):
+            state = X[inst]
+            self.population.makeEvalMatchSet(state, self)
+            prediction = Prediction(self, self.population)
+            probs = prediction.getProbabilities()
+            predList.append(probs)
+            self.population.clearSets()
+        return np.array(predList)
+
+    def predict(self, X):
+        """Scikit-learn required: Test Accuracy of eLCS
+            Parameters
+            X: array-like {n_samples, n_features} Test instances to classify. ALL INSTANCE ATTRIBUTES MUST BE NUMERIC
+
+            Returns
+            y: array-like {n_samples} Classifications.
+        """
+        try:
+            for instance in X:
+                for value in instance:
+                    if not (np.isnan(value)):
+                        float(value)
+        except:
+            raise Exception("X must be fully numeric")
+
+        instances = X.shape[0]
+        predList = []
+
+        for inst in range(instances):
+            state = X[inst]
+            self.population.makeEvalMatchSet(state, self)
+            prediction = Prediction(self, self.population)
+            phenotypeSelection = prediction.getDecision()
+            predList.append(phenotypeSelection)
+            self.population.clearSets()
+        return np.array(predList)
+
+    #Comment out score function if continuous phenotype is built in, so that RegressorMixin and ClassifierMixin default methods can be used appropriately
+    def score(self,X,y):
+        predList = self.predict(X)
+        return balanced_accuracy_score(y, predList) #Make it balanced accuracy
+
+    def exportIterationTrackingData(self,filename='iterationData.csv'):
         if self.hasTrained:
             self.record.exportTrackingToCSV(filename)
         else:
             raise Exception("There is no tracking data to export, as the eLCS model has not been trained")
 
-    '''
-    If evalWhiteFit was turned off, as long as the iterationNumber is the final iteration, an immediate evaluation will be run
-    on the population and an export will be made. Past unsaved rule populations are not obviously not valid for evaluation or export.
-    '''
-    def exportRulePopulationAtIterationToCSV(self,iterationNumber,headerNames=np.array([]),className='phenotype',filename='populationData.csv',ALKR=False):
-        if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
-            if ALKR:
-                self.record.exportEvaluationToCSVALKR(self, iterationNumber, headerNames, className,filename)
-            else:
-                self.record.exportEvaluationToCSV(self, iterationNumber, headerNames, className, filename)
-        else:
-            self.exportFinalRulePopulationToCSV(headerNames,className,filename,ALKR)
-
-    '''
-    Even if evalWhileFit was turned off, this will run an immediate evaluation and export it.
-    '''
-    def exportFinalRulePopulationToCSV(self,headerNames=np.array([]),className="phenotype",filename='populationData.csv',ALKR=False):
+    def exportFinalRulePopulation(self,headerNames=np.array([]),className="phenotype",filename='populationData.csv',DCAL=True):
         if self.hasTrained:
-            if self.evalWhileFitAfter:
-                if ALKR:
-                    self.record.exportFinalRulePopulationToCSVALKR(self,headerNames,className,filename)
-                else:
-                    self.record.exportFinalRulePopulationToCSV(self, headerNames, className, filename)
+            if DCAL:
+                self.record.exportPopDCAL(self,headerNames,className,filename)
             else:
-                self.population.runPopAveEval(self.explorIter, self)
-                self.population.runAttGeneralitySum(True, self)
-                self.env.startEvaluationMode()  # Preserves learning position in training data
-
-                if self.env.formatData.discretePhenotype:
-                    trainEval = self.doPopEvaluation()
-                else:
-                    trainEval = self.doContPopEvaluation()
-
-                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
-                self.evalWhileFitAfter = True #So it doesn't run this else again if this is invoked again
-                self.env.stopEvaluationMode()  # Returns to learning position in training data
-                if ALKR:
-                    self.record.exportFinalRulePopulationToCSVALKR(self,headerNames, className,filename)
-                else:
-                    self.record.exportFinalRulePopulationToCSV(self, headerNames, className, filename)
+                self.record.exportPop(self, headerNames, className, filename)
         else:
             raise Exception("There is no rule population to export, as the eLCS model has not been trained")
 
-    def exportPopStatsToCSV(self,iterationNumber,headerNames=np.array([]),filename='popStats.csv'):
-        if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
-            self.record.exportSumsToCSV(self, iterationNumber, headerNames,filename)
-        else:
-            self.exportFinalPopStatsToCSV(headerNames,filename)
-
-    '''
-    Even if evalWhileFit was turned off, this will run an immediate evaluation and export it.
-    '''
-    def exportFinalPopStatsToCSV(self,headerNames=np.array([]),filename='popStats.csv'):
-        if self.hasTrained:
-            if self.evalWhileFitAfter:
-                self.record.exportFinalSumsToCSV(self,headerNames,filename)
-            else:
-                self.population.runPopAveEval(self.explorIter, self)
-                self.population.runAttGeneralitySum(True, self)
-                self.env.startEvaluationMode()  # Preserves learning position in training data
-
-                if self.env.formatData.discretePhenotype:
-                    trainEval = self.doPopEvaluation()
-                else:
-                    trainEval = self.doContPopEvaluation()
-
-                self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
-                self.evalWhileFitAfter = True #So it doesn't run this else again if this is invoked again
-                self.env.stopEvaluationMode()  # Returns to learning position in training data
-
-                self.record.exportFinalSumsToCSV(self,headerNames,filename)
-        else:
-            raise Exception("There is no rule population to export, as the eLCS model has not been trained")
-
-    '''
-    Note that all iterationNumbers are zero indexed (i.e. if learningIterations = 1000, the last iteration would be 999)
-    '''
-    def getMacroPopulationSize(self,iterationNumber):
-        return self.record.getMacroPopulationSize(iterationNumber)
-
-    def getFinalMacroPopulationSize(self):
-        return self.record.getFinalMacroPopulationSize()
-
-    def getMicroPopulationSize(self, iterationNumber):
-        return self.record.getMicroPopulationSize(iterationNumber)
-
-    def getFinalMicroPopulationSize(self):
-        return self.record.getFinalMicroPopulationSize()
-
-    def getPopAvgGenerality(self, iterationNumber):
-        return self.record.getPopAvgGenerality(iterationNumber)
-
-    def getFinalPopAvgGenerality(self):
-        return self.record.getFinalPopAvgGenerality()
-
-    def getTimeToTrain(self, iterationNumber):
-        return self.record.getTimeToTrain(iterationNumber)
-
-    def getFinalTimeToTrain(self):
-        return self.record.getFinalTimeToTrain()
-
-    '''
-    If evalWhiteFit was turned off, as long as the iterationNumber is the final iteration, an immediate evaluation will be run
-    on the population. Past unsaved rule populations are not obviously not valid for evaluation.
-    '''
-    def getAccuracy(self, iterationNumber):
-        if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
-            return self.record.getAccuracy(iterationNumber)
-        else:
-            self.getFinalAccuracy()
-
-    def getInstanceCoverage(self,iterationNumber):
-        if self.evalWhileFitAfter or iterationNumber != self.learningIterations - 1:
-            return self.record.getInstanceCoverage(iterationNumber)
-        else:
-            self.getFinalInstanceCoverage()
-
-
-    '''
-    Even if evalWhileFit was turned off, this will run an immediate evaluation and give an accuracy.
-    '''
     def getFinalAccuracy(self):
-        if self.evalWhileFitAfter:
-            return self.record.getFinalAccuracy()
+        if self.hasTrained:
+            originalTrainingData = self.env.formatData.savedRawTrainingData
+            return self.score(originalTrainingData[0], originalTrainingData[1])
         else:
-            self.population.runPopAveEval(self.explorIter, self)
-            self.population.runAttGeneralitySum(True, self)
-            self.env.startEvaluationMode()  # Preserves learning position in training data
-            if self.env.formatData.discretePhenotype:
-                trainEval = self.doPopEvaluation()
-            else:
-                trainEval = self.doContPopEvaluation()
-
-            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
-
-            self.env.stopEvaluationMode()  # Returns to learning position in training data
-            self.evalWhileFitAfter = True #So it doesn't run this again when this is invoked again
-            return self.record.getFinalAccuracy()
+            raise Exception("There is no final training accuracy to return, as the XCS model has not been trained")
 
     def getFinalInstanceCoverage(self):
-        if self.evalWhileFitAfter:
-            return self.record.getFinalInstanceCoverage()
+        if self.hasTrained:
+            numCovered = 0
+            originalTrainingData = self.env.formatData.savedRawTrainingData
+            for state in originalTrainingData[0]:
+                self.population.makeEvalMatchSet(state, self)
+                predictionArray = Prediction(self, self.population)
+                if predictionArray.hasMatch:
+                    numCovered += 1
+                self.population.clearSets()
+            return numCovered/len(originalTrainingData[0])
         else:
-            self.population.runPopAveEval(self.explorIter, self)
-            self.population.runAttGeneralitySum(True, self)
-            self.env.startEvaluationMode()  # Preserves learning position in training data
-            if self.env.formatData.discretePhenotype:
-                trainEval = self.doPopEvaluation()
-            else:
-                trainEval = self.doContPopEvaluation()
+            raise Exception("There is no final instance coverage to return, as the eLCS model has not been trained")
 
-            self.record.addToEval(self.explorIter-1, trainEval[0], trainEval[1], copy.deepcopy(self.population.popSet),copy.deepcopy(self.population.attributeSpecList),copy.deepcopy(self.population.attributeAccList))
+    def getFinalAttributeSpecificityList(self):
+        if self.hasTrained:
+            return self.population.getAttributeSpecificityList(self)
+        else:
+            raise Exception(
+                "There is no final attribute specificity list to return, as the eLCS model has not been trained")
 
-            self.env.stopEvaluationMode()  # Returns to learning position in training data
-            self.evalWhileFitAfter = True #So it doesn't run this again when this is invoked again
-            return self.record.getFinalInstanceCoverage()
+    def getFinalAttributeAccuracyList(self):
+        if self.hasTrained:
+            return self.population.getAttributeAccuracyList(self)
+        else:
+            raise Exception("There is no final attribute accuracy list to return, as the eLCS model has not been trained")
 
     #######################################################PRINT METHODS FOR DEBUGGING################################################################################
 

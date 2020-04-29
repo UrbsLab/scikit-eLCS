@@ -1,9 +1,10 @@
 import numpy as np
-
+import random
 class Prediction():
     def __init__(self,elcs,population):
         self.decision = None
         self.probabilities = {}
+        self.hasMatch = len(population.matchSet) != 0
 
         #Discrete Phenotypes
         if elcs.env.formatData.discretePhenotype:
@@ -96,6 +97,12 @@ class Prediction():
                     self.decision = None
                 else:
                     self.decision = predictionValue / float(valueWeightSum)
+
+        if self.decision == None or self.decision == 'Tie':
+            if elcs.env.formatData.discretePhenotype:
+                self.decision = random.choice(elcs.env.formatData.phenotypeList)
+            else:
+                self.decision = random.randrange(elcs.env.formatData.phenotypeList[0],elcs.env.formatData.phenotypeList[1],(elcs.env.formatData.phenotypeList[1]-elcs.env.formatData.phenotypeList[0])/float(1000))
 
     def getFitnessSum(self, population, low, high):
         """ Get the fitness sum of rules in the rule-set. For continuous phenotype prediction. """
