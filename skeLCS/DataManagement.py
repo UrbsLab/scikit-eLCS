@@ -3,6 +3,7 @@ import numpy as np
 class DataManagement:
     def __init__(self, dataFeatures, dataPhenotypes, elcs):
         # About Attributes
+        self.savedRawTrainingData = [dataFeatures,dataPhenotypes]
         self.numAttributes = dataFeatures.shape[1]  # The number of attributes in the input file.
         self.attributeInfoType = [0]*self.numAttributes #stores false (d) or true (c) depending on its type, which points to parallel reference in one of the below 2 arrays
         self.attributeInfoContinuous = [[0,0]]*self.numAttributes #stores continuous ranges and NaN otherwise
@@ -22,45 +23,11 @@ class DataManagement:
 
         #About Dataset
         self.numTrainInstances = dataFeatures.shape[0]  # The number of instances in the training data
-        self.discriminatePhenotype(dataPhenotypes, elcs)
-        if (self.discretePhenotype):
-            self.discriminateClasses(dataPhenotypes)
-        else:
-            self.characterizePhenotype(dataPhenotypes,elcs)
+        self.discriminateClasses(dataPhenotypes)
 
         self.discriminateAttributes(dataFeatures, elcs)
         self.characterizeAttributes(dataFeatures, elcs)
         self.trainFormatted = self.formatData(dataFeatures,dataPhenotypes,elcs) #The only np array
-
-    def discriminatePhenotype(self,phenotypes,elcs):#Determine if phenotype is discrete or continuous
-        try:
-            int(elcs.discretePhenotypeLimit)
-            self.isPhenotypeDefault = True
-        except:
-            self.isPhenotypeDefault = False
-
-        if (self.isPhenotypeDefault):
-            currentPhenotypeIndex = 0
-            classDict = {}
-            while (self.discretePhenotype and len(list(classDict.keys()))<=elcs.discretePhenotypeLimit and currentPhenotypeIndex < self.numTrainInstances):
-                target = phenotypes[currentPhenotypeIndex]
-                if (target in list(classDict.keys())):
-                    classDict[target]+=1
-                elif np.isnan(target):
-                    pass
-                else:
-                    classDict[target] = 1
-                currentPhenotypeIndex+=1
-
-            if (len(list(classDict.keys())) > elcs.discretePhenotypeLimit):
-                self.discretePhenotype = False
-                self.phenotypeList = [float(target),float(target)]
-        elif elcs.discretePhenotypeLimit == "c":
-            self.discretePhenotype = False
-            self.phenotypeList = [float(phenotypes[0]), float(phenotypes[0])]
-        elif elcs.discretePhenotypeLimit == "d":
-            self.discretePhenotype = True
-            self.phenotypeList = []
 
     def discriminateClasses(self,phenotypes):
         currentPhenotypeIndex = 0

@@ -9,7 +9,7 @@ class Timer:
         # Global Time objects
         self.globalStartRef = time.time()
         self.globalTime = 0.0
-        self.addedTime = 0.0
+        self.globalAdd = 0
 
         # Match Time Variables
         self.startRefMatching = 0.0
@@ -86,18 +86,5 @@ class Timer:
 
         # ************************************************************
 
-    def returnGlobalTimer(self):
-        """ Set the global end timer, call at very end of algorithm. """
-        self.globalTime = (time.time() - self.globalStartRef) + self.addedTime  # Reports time in minutes, addedTime is for population reboot.
-        return self.globalTime
-
-    def reportTimes(self):
-        self.globalTime = (time.time() - self.globalStartRef) + self.addedTime
-        outputTime = {"Global Time":str(self.globalTime),
-                     "Matching Time":str(self.globalMatching),
-                     "Deletion Time":str(self.globalDeletion),
-                     "Subsumption Time":str(self.globalSubsumption),
-                     "Selection Time":str(self.globalSelection),
-                     "Evaluation Time":str(self.globalEvaluation)}
-
-        return outputTime
+    def updateGlobalTime(self):
+        self.globalTime = (time.time() - self.globalStartRef)+self.globalAdd

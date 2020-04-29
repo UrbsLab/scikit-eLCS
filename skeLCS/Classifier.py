@@ -1,8 +1,6 @@
 import random
 import copy
 import math
-import numpy as np
-from skeLCS.DynamicNPArray import ArrayFactory, GenericArray
 
 class Classifier:
     def __init__(self,elcs,a=None,b=None,c=None,d=None):
@@ -15,7 +13,6 @@ class Classifier:
         self.accuracy = 0.0
         self.numerosity = 1
         self.aveMatchSetSize = None
-        self.deletionVote = None
         self.deletionProb = None
 
         # Experience Management
@@ -434,12 +431,9 @@ class Classifier:
     def getDelProp(self, elcs, meanFitness):
         """  Returns the vote for deletion of the classifier. """
         if self.fitness / self.numerosity >= elcs.delta * meanFitness or self.matchCount < elcs.theta_del:
-            self.deletionVote = self.aveMatchSetSize * self.numerosity
-
+            deletionVote = self.aveMatchSetSize * self.numerosity
         elif self.fitness == 0.0:
-            self.deletionVote = self.aveMatchSetSize * self.numerosity * meanFitness / (
-                        elcs.init_fit / self.numerosity)
+            deletionVote = self.aveMatchSetSize * self.numerosity * meanFitness / (elcs.init_fit / self.numerosity)
         else:
-            self.deletionVote = self.aveMatchSetSize * self.numerosity * meanFitness / (
-                        self.fitness / self.numerosity)
-        return self.deletionVote
+            deletionVote = self.aveMatchSetSize * self.numerosity * meanFitness / (self.fitness / self.numerosity)
+        return deletionVote

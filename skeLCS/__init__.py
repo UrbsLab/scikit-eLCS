@@ -20,12 +20,10 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
-from .ClassAccuracy import ClassAccuracy
 from .Classifier import Classifier
 from .ClassifierSet import ClassifierSet
 from .DataCleanup import StringEnumerator
 from .DataManagement import DataManagement
-from .DynamicNPArray import ArrayFactory
 from .eLCS import eLCS
 from .IterationRecord import IterationRecord
 from .OfflineEnvironment import OfflineEnvironment
