@@ -17,7 +17,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     def __init__(self, learningIterations=10000, trackingFrequency=0, learningCheckpoints=np.array([]), evalWhileFit = False, N=1000,
                  p_spec=0.5, discreteAttributeLimit=10, specifiedAttributes = np.array([]), discretePhenotypeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
-                 doSubsumption=True, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none",matchForMissingness=False):
+                 doCorrectSetSubsumption=False, doGASubsumption=True, selectionMethod='tournament', theta_sel=0.5,randomSeed = "none",matchForMissingness=False):
 
         '''
         :param learningIterations:      Must be nonnegative integer. The number of training cycles to run.
@@ -49,7 +49,8 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         :param delta:                   Must be float. Deletion parameter; Used in determining deletion vote calculation.
         :param init_fit:                Must be float. The initial fitness for a new classifier. (typically very small, approaching but not equal to zero)
         :param fitnessReduction:        Must be float. Initial fitness reduction in GA offspring rules.
-        :param doSubsumption:           Must be boolean. Determines if subsumption is done in the learning process.
+        :param doCorrectSetSubsumption: Must be boolean. Determines if subsumption is done in [C] after [C] updates.
+        :param doGASubsumption:         Must be boolean. Determines if subsumption is done between offspring and parents after GA
         :param selectionMethod:         Must be either "tournament" or "roulette". Determines GA selection method. Recommended: tournament
         :param theta_sel:               Must be float from 0 - 1. The fraction of the correct set to be included in tournament selection.
         :param randomSeed:              Must be an integer or "none". Set a constant random seed value to some integer (in order to obtain reproducible results). Put 'none' if none (for pseudo-random algorithm runs).
@@ -197,9 +198,13 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         if not self.checkIsFloat(fitnessReduction):
             raise Exception("fitnessReduction param must be float")
 
-        #doSubsumption
-        if not(isinstance(doSubsumption,bool)):
-            raise Exception("doSubsumption param must be boolean")
+        #doCorrectSetSubsumption
+        if not(isinstance(doCorrectSetSubsumption,bool)):
+            raise Exception("doCorrectSetSubsumption param must be boolean")
+
+        # doGASubsumption
+        if not (isinstance(doGASubsumption, bool)):
+            raise Exception("doGASubsumption param must be boolean")
 
         #selectionMethod
         if selectionMethod != "tournament" and selectionMethod != "roulette":
@@ -247,7 +252,8 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.delta = delta
         self.init_fit = init_fit
         self.fitnessReduction = fitnessReduction
-        self.doSubsumption = doSubsumption
+        self.doCorrectSetSubsumption = doCorrectSetSubsumption
+        self.doGASubsumption = doGASubsumption
         self.selectionMethod = selectionMethod
         self.theta_sel = theta_sel
         self.trackingFrequency = trackingFrequency
@@ -537,7 +543,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.population.updateSets(self,exploreIter)
 
         #Perform Subsumption
-        if self.doSubsumption:
+        if self.doCorrectSetSubsumption:
             if not self.hasTrained:
                 self.timer.startTimeSubsumption()
             self.population.doCorrectSetSubsumption(self)

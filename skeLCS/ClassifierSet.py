@@ -284,7 +284,7 @@ class ClassifierSet:
         return selectList
 
     def insertDiscoveredClassifiers(self,elcs,cl1,cl2,clP1,clP2,exploreIter):
-        if elcs.doSubsumption:
+        if elcs.doGASubsumption:
             if not elcs.hasTrained:
                 elcs.timer.startTimeSubsumption()
             if len(cl1.specifiedAttList) > 0:

@@ -503,12 +503,22 @@ class Test_eLCS(unittest.TestCase):
 
     def testDoSubInvalid(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(doSubsumption=2)
-        self.assertTrue("doSubsumption param must be boolean" in str(context.exception))
+            clf = eLCS(doCorrectSetSubsumption=2)
+        self.assertTrue("doCorrectSetSubsumption param must be boolean" in str(context.exception))
 
     def testDoSub(self):
-        clf = eLCS(doSubsumption=True)
-        self.assertEqual(clf.doSubsumption,True)
+        clf = eLCS(doCorrectSetSubsumption=True)
+        self.assertEqual(clf.doCorrectSetSubsumption,True)
+
+
+    def testDoSub2Invalid(self):
+        with self.assertRaises(Exception) as context:
+            clf = eLCS(doGASubsumption=2)
+        self.assertTrue("doGASubsumption param must be boolean" in str(context.exception))
+
+    def testDoSub2(self):
+        clf = eLCS(doGASubsumption=True)
+        self.assertEqual(clf.doGASubsumption,True)
 
 
     def testSelectionInvalid(self):
@@ -681,7 +691,8 @@ class Test_eLCS(unittest.TestCase):
         delta=0.1
         init_fit=0.01
         fitnessReduction=0.1,
-        doSubsumption=True
+        doCorrectSetSubsumption=False
+        doGASubsumption=True
         selectionMethod='tournament'
         theta_sel=0.5
         
