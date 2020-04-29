@@ -20,8 +20,8 @@ The core Scikit package only supports numeric data. However, an additional Strin
 
 In addition, powerful data tracking collection methods are built into the scikit package, that continuously tracks features every iteration such as:
 
-* Approximate Accuracy (tracked via trackingFrequency param)
-* Average Population Generality (tracked via trackingFrequency param)
+* Approximate Accuracy
+* Average Population Generality
 * Macropopulation Size
 * Micropopulation Size
 * Match Set, Correct Set Sizes
@@ -29,9 +29,9 @@ In addition, powerful data tracking collection methods are built into the scikit
 * Number of crossover/mutation operations performed
 * Times for matching, deletion, subsumption, selection, evaluation
 
-These values can then be exported as a csv after training is complete for analysis using the built in "exportIterationTrackingDataToCSV" method.
+These values can then be exported as a csv after training is complete for analysis using the built in "exportIterationTrackingData" method.
 
-In addition, the package includes functionality that allows detailed training evaluation to be done at given iterations during the training process. At each interval, the package saves a snapshot of the rule population, along with evaluation accuracy and instance coverage. These snapshots of the rule population (including the final rule population) can then be exported as a csv after training is complete for analysis using the built in "exportRulePopulationAtIterationToCSV" and "exportFinalRulePopulationToCSV" methods.
+In addition, the package includes functionality that allows the final rule population to be exported as a csv after training.
 
 ## Usage
 For more information on the eLCS algorithm and how to use it, please refer to the ["eLCS User Guide"](https://github.com/UrbsLab/scikit-eLCS/blob/master/eLCS%20User%20Guide.ipynb) Jupyter Notebook inside this repository.
@@ -73,6 +73,7 @@ scikit-eLCS is built on top of the following Python packages:
   <li> numpy </li>
   <li> pandas </li>
   <li> scikit-learn </li>
+  <li> pickle </li>
 </ol>
 
 Once the prerequisites are installed, you can install scikit-eLCS with a pip command:
