@@ -73,7 +73,6 @@ scikit-eLCS is built on top of the following Python packages:
   <li> numpy </li>
   <li> pandas </li>
   <li> scikit-learn </li>
-  <li> pickle </li>
 </ol>
 
 Once the prerequisites are installed, you can install scikit-eLCS with a pip command:
