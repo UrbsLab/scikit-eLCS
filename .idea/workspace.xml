@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/eLCSPerformanceTests/.ipynb_checkpoints/eLCS Performance Comparison-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/eLCSPerformanceTests/.ipynb_checkpoints/eLCS Performance Comparison-checkpoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eLCSPerformanceTests/eLCS Performance Comparison.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/eLCSPerformanceTests/eLCS Performance Comparison.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_eLCS.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,10 +27,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/skeLCS/eLCS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="58">
+            <state relative-caret-position="7230">
               <caret line="482" column="6" selection-start-line="482" selection-start-column="6" selection-end-line="482" selection-end-column="6" />
               <folding>
                 <element signature="e#0#56#0" expanded="true" />
@@ -63,11 +60,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+            <state relative-caret-position="351">
+              <caret line="24" column="71" lean-forward="true" selection-start-line="24" selection-start-column="71" selection-end-line="24" selection-end-column="71" />
             </state>
           </provider>
         </entry>
@@ -527,7 +524,7 @@
       <workItem from="1588178169391" duration="190000" />
       <workItem from="1588183853343" duration="1503000" />
       <workItem from="1588188215071" duration="3988000" />
-      <workItem from="1588252678191" duration="839000" />
+      <workItem from="1588252678191" duration="1861000" />
     </task>
     <servers />
   </component>
@@ -564,7 +561,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="565999000" />
+    <option name="totallyTimeSpent" value="567021000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="34" y="23" width="1435" height="974" extended-state="0" />
@@ -575,7 +572,7 @@
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32993197" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3548753" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3548753" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997735" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -589,9 +586,9 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.5536028" side_tool="true" visible="true" weight="0.021536253" />
+      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.553288" side_tool="true" visible="true" weight="0.021536253" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="SciView" order="5" sideWeight="0.4463972" visible="true" weight="0.021536253" />
+      <window_info anchor="right" id="SciView" order="5" sideWeight="0.44671202" visible="true" weight="0.021536253" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -913,20 +910,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="24" column="71" lean-forward="true" selection-start-line="24" selection-start-column="71" selection-end-line="24" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/skeLCS/eLCS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
+        <state relative-caret-position="7230">
           <caret line="482" column="6" selection-start-line="482" selection-start-column="6" selection-end-line="482" selection-end-column="6" />
           <folding>
             <element signature="e#0#56#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
         </state>
       </provider>
     </entry>
