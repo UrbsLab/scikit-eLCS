@@ -2,31 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/eLCS User Guide-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/eLCS User Guide-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DynamicNPArraySpeedTests.py" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicNPArraySpeedTests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/defaultExportDir/fileRulePopulation.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/defaultExportDir/iterationData.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/defaultExportDir/popData2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/defaultExportDir/popStats.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/defaultExportDir/popStats2.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/defaultExportDir/populationData.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eLCS User Guide.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/eLCS User Guide.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/ClassAccuracy.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/Classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/Classifier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/ClassifierSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/ClassifierSet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/DataManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/DataManagement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/DynamicNPArray.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/IterationRecord.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/IterationRecord.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/OfflineEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/OfflineEnvironment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/Prediction.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/Prediction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/Timer.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/Timer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skeLCS/eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/skeLCS/eLCS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_ListArray.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_TupleArray.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eLCSPerformanceTests/.ipynb_checkpoints/eLCS Performance Comparison-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/eLCSPerformanceTests/.ipynb_checkpoints/eLCS Performance Comparison-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eLCSPerformanceTests/eLCS Performance Comparison.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/eLCSPerformanceTests/eLCS Performance Comparison.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/test_eLCS.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_eLCS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/testMain.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,10 +19,22 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="484" selection-start-line="484" selection-end-line="484" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/skeLCS/eLCS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="408" column="95" lean-forward="true" selection-start-line="408" selection-start-column="95" selection-end-line="408" selection-end-column="95" />
+            <state relative-caret-position="58">
+              <caret line="482" column="6" selection-start-line="482" selection-start-column="6" selection-end-line="482" selection-end-column="6" />
               <folding>
                 <element signature="e#0#56#0" expanded="true" />
               </folding>
@@ -55,19 +46,37 @@
         <entry file="file://$PROJECT_DIR$/../scikit-XCS/skXCS/XCS.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="421">
-              <caret line="391" column="65" selection-start-line="391" selection-start-column="65" selection-end-line="391" selection-end-column="65" />
+              <caret line="391" column="32" selection-start-line="391" selection-start-column="32" selection-end-line="391" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testMain.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/testMain.py">
+        <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="27" column="70" lean-forward="true" selection-start-line="27" selection-start-column="70" selection-end-line="27" selection-end-column="70" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="336">
+              <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" selection-start-line="4" selection-end-line="4" />
             </state>
           </provider>
         </entry>
@@ -155,7 +164,6 @@
         <option value="$PROJECT_DIR$/../eLCSPerformanceTests/eLCS_OutputFileManager.py" />
         <option value="$PROJECT_DIR$/../eLCSPerformanceTests/eLCS_Algorithm.py" />
         <option value="$PROJECT_DIR$/../eLCSPerformanceTests/eLCS_DataManagement.py" />
-        <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/skeLCS/DataManagement.py" />
         <option value="$PROJECT_DIR$/skeLCS/Prediction.py" />
         <option value="$PROJECT_DIR$/DynamicNPArraySpeedTests.py" />
@@ -163,7 +171,6 @@
         <option value="$PROJECT_DIR$/test/test_TupleArray.py" />
         <option value="$PROJECT_DIR$/skeLCS/OfflineEnvironment.py" />
         <option value="$PROJECT_DIR$/skeLCS/__init__.py" />
-        <option value="$PROJECT_DIR$/test/test_eLCS.py" />
         <option value="$PROJECT_DIR$/../scikit-XCS/skXCS/Classifier.py" />
         <option value="$PROJECT_DIR$/skeLCS/Classifier.py" />
         <option value="$PROJECT_DIR$/skeLCS/Timer.py" />
@@ -172,11 +179,13 @@
         <option value="$PROJECT_DIR$/skeLCS/eLCS.py" />
         <option value="$PROJECT_DIR$/../scikit-XCS/skXCS/XCS.py" />
         <option value="$PROJECT_DIR$/testMain.py" />
+        <option value="$PROJECT_DIR$/test/test_eLCS.py" />
+        <option value="$PROJECT_DIR$/setup.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="46" />
+    <option name="x" value="34" />
     <option name="y" value="23" />
     <option name="width" value="1435" />
     <option name="height" value="974" />
@@ -253,7 +262,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.testMain">
+  <component name="RunManager" selected="Python tests.Unittests for test_eLCS.Test_eLCS">
     <configuration name="DynamicNPArraySpeedTests" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Scikit" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -324,6 +333,9 @@
       <module name="Scikit" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="/usr/local/bin/python3.7" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -514,17 +526,12 @@
       <workItem from="1588175658990" duration="2330000" />
       <workItem from="1588178169391" duration="190000" />
       <workItem from="1588183853343" duration="1503000" />
-      <workItem from="1588188215071" duration="2853000" />
+      <workItem from="1588188215071" duration="3988000" />
+      <workItem from="1588252678191" duration="839000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.04.26 at 11h 20m 50s.xml">
-      <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.04.29 at 08h 42m 18s.xml">
-      <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.04.29 at 12h 05m 31s.xml">
       <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
@@ -549,20 +556,26 @@
     <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.04.29 at 14h 30m 32s.xml">
       <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.04.30 at 09h 31m 44s.xml">
+      <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_eLCS_Test_eLCS - 2020.04.30 at 09h 33m 11s.xml">
+      <configuration name="Unittests for test_eLCS.Test_eLCS" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="564025000" />
+    <option name="totallyTimeSpent" value="565999000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="46" y="23" width="1435" height="974" extended-state="0" />
+    <frame x="34" y="23" width="1435" height="974" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16870065" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17085427" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32993197" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3548753" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3548753" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997735" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -570,15 +583,15 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="10" visible="true" weight="0.3696145" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3696145" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.5521583" side_tool="true" visible="true" weight="0.021536253" />
+      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.5536028" side_tool="true" visible="true" weight="0.021536253" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="SciView" order="5" sideWeight="0.44784173" visible="true" weight="0.021536253" />
+      <window_info anchor="right" id="SciView" order="5" sideWeight="0.4463972" visible="true" weight="0.021536253" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -590,7 +603,7 @@
     <SUITE FILE_PATH="coverage/Scikit$Unittests_for_test_ListArray_TestListArray.coverage" NAME="Unittests for test_ListArray.TestListArray Coverage Results" MODIFIED="1585422562073" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/Scikit$Unittests_for_Test_eLCS_Test_eLCS.coverage" NAME="Unittests for Test_eLCS.Test_eLCS Coverage Results" MODIFIED="1584967565095" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Scikit$Unittests_for_test_TupleArray_TestTupleArray.coverage" NAME="Unittests for test_TupleArray.TestTupleArray Coverage Results" MODIFIED="1585422566121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
-    <SUITE FILE_PATH="coverage/Scikit$Unittests_for_test_eLCS_Test_eLCS.coverage" NAME="Unittests for test_eLCS.Test_eLCS Coverage Results" MODIFIED="1588184920572" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
+    <SUITE FILE_PATH="coverage/Scikit$Unittests_for_test_eLCS_Test_eLCS.coverage" NAME="Unittests for test_eLCS.Test_eLCS Coverage Results" MODIFIED="1588253516012" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/Scikit$Unittests_for_test_DataCleanup_TestDataCleanup.coverage" NAME="Unittests for test_DataCleanup.TestDataCleanup Coverage Results" MODIFIED="1585422574779" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/Scikit$Unittests_in_test.coverage" NAME="Unittests in test Coverage Results" MODIFIED="1585422583473" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/Scikit$Unittests_for_Test_ListArray_TestListArray.coverage" NAME="Unittests for Test_ListArray.TestListArray Coverage Results" MODIFIED="1584967049231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -720,13 +733,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="53" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/eLCSPerformanceTests/eLCS_ParamParser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -736,13 +742,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.ipynb_checkpoints/eLCS User Guide-checkpoint.ipynb">
       <provider selected="true" editor-type-id="jupyter-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MANIFEST.in">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/skeLCS/ClassAccuracy.py" />
     <entry file="file://$PROJECT_DIR$/scikit_eLCS.egg-info/SOURCES.txt">
@@ -880,10 +879,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/testMain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../scikit-XCS/skXCS/XCS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="391" column="32" selection-start-line="391" selection-start-column="32" selection-end-line="391" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="625" column="94" selection-start-line="625" selection-start-column="94" selection-end-line="625" selection-end-column="94" />
+        <state relative-caret-position="173">
+          <caret line="484" selection-start-line="484" selection-end-line="484" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
@@ -892,28 +915,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/skeLCS/eLCS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="408" column="95" lean-forward="true" selection-start-line="408" selection-start-column="95" selection-end-line="408" selection-end-column="95" />
+        <state relative-caret-position="58">
+          <caret line="482" column="6" selection-start-line="482" selection-start-column="6" selection-end-line="482" selection-end-column="6" />
           <folding>
             <element signature="e#0#56#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../scikit-XCS/skXCS/XCS.py">
+    <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="391" column="65" selection-start-line="391" selection-start-column="65" selection-end-line="391" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testMain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="70" lean-forward="true" selection-start-line="27" selection-start-column="70" selection-end-line="27" selection-end-column="70" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="336">
+          <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
         </state>
       </provider>
     </entry>

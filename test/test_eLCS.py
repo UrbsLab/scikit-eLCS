@@ -478,6 +478,29 @@ class Test_eLCS(unittest.TestCase):
         clf = eLCS(randomSeed='none')
         self.assertEqual(clf.randomSeed,'none')
 
+    # rebootFilename (None or String)
+    def testRebootFilenameInv1(self):
+        with self.assertRaises(Exception) as context:
+            clf = eLCS(rebootFilename=2)
+        self.assertTrue("rebootFilename param must be None or String from pickle" in str(context.exception))
+
+    def testRebootFilenameInv2(self):
+        with self.assertRaises(Exception) as context:
+            clf = eLCS(rebootFilename=True)
+        self.assertTrue("rebootFilename param must be None or String from pickle" in str(context.exception))
+
+    def testRebootFilename1(self):
+        clf = eLCS()
+        self.assertEqual(clf.rebootFilename, None)
+
+    def testRebootFilename2(self):
+        clf = eLCS(rebootFilename=None)
+        self.assertEqual(clf.rebootFilename, None)
+
+    def testRebootFilename3(self):
+        clf = eLCS(rebootFilename='hello')
+        self.assertEqual(clf.rebootFilename, 'hello')
+
     '''SECTION 2: TEST eLCS Fit params
     -X, y must be numeric
     -y must be discrete
@@ -576,33 +599,6 @@ class Test_eLCS(unittest.TestCase):
         self.assertTrue(clf.env.formatData.discretePhenotype)
 
     '''SECTION 3: TEST eLCS Performance
-        Testing for
-        -Final balanced accuracy
-        -Final time to train (REMOVED)
-        -Final macro & micro population sizes
-        -Final Average Generality
-
-        Across different # of iterations (1000,5000,10000), running on default settings:
-        N=1000
-        p_spec=0.5
-        discreteAttributeLimit=10
-        nu=5
-        chi=0.8
-        upsilon=0.04
-        theta_GA=25,
-        theta_del=20
-        theta_sub=20
-        acc_sub=0.99
-        beta=0.2
-        delta=0.1
-        init_fit=0.01
-        fitnessReduction=0.1,
-        doCorrectSetSubsumption=False
-        doGASubsumption=True
-        selectionMethod='tournament'
-        theta_sel=0.5
-        
-        "answerKey" variables are arrays that tell the correct answer of order [macroPopSize, microPopSize, averageGenerality, totalTime, balancedAccuracy]
     '''
 
     #####TEST AGAINST OLD ALGORITHM
