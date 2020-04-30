@@ -481,7 +481,7 @@ class Test_eLCS(unittest.TestCase):
     # rebootFilename (None or String)
     def testRebootFilenameInv1(self):
         with self.assertRaises(Exception) as context:
-            clf = XCS(rebootFilename=2)
+            clf = eLCS(rebootFilename=2)
         self.assertTrue("rebootFilename param must be None or String from pickle" in str(context.exception))
 
     def testRebootFilenameInv2(self):
