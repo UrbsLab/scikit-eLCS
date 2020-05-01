@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57677eb1-6855-4328-9a5b-1641ca077d1e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eLCSPerformanceTests/.ipynb_checkpoints/eLCS Performance Comparison-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/eLCSPerformanceTests/.ipynb_checkpoints/eLCS Performance Comparison-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eLCSPerformanceTests/defaultExportDir/fileRulePopulation.csv" beforeDir="false" afterPath="$PROJECT_DIR$/eLCSPerformanceTests/defaultExportDir/fileRulePopulation.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eLCSPerformanceTests/defaultExportDir/iterationData.csv" beforeDir="false" afterPath="$PROJECT_DIR$/eLCSPerformanceTests/defaultExportDir/iterationData.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eLCSPerformanceTests/eLCS Performance Comparison.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/eLCSPerformanceTests/eLCS Performance Comparison.ipynb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +22,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7260">
+            <state relative-caret-position="7200">
               <caret line="484" selection-start-line="484" selection-end-line="484" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
@@ -27,11 +31,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/skeLCS/eLCS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="788">
-              <caret line="482" column="6" selection-start-line="482" selection-start-column="6" selection-end-line="482" selection-end-column="6" />
+            <state relative-caret-position="-316">
+              <caret line="315" column="33" selection-start-line="315" selection-start-column="23" selection-end-line="315" selection-end-column="33" />
               <folding>
                 <element signature="e#0#56#0" expanded="true" />
               </folding>
@@ -39,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="300">
-              <caret line="20" column="38" lean-forward="true" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+              <caret line="20" column="38" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -68,7 +72,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>learningcheckpoints</find>
       <find>runpopaveeval</find>
       <find>dopopevaluation</find>
       <find>learningcheck</find>
@@ -98,6 +101,7 @@
       <find>makeeval</find>
       <find>clear</find>
       <find>clearsets</find>
+      <find>updateglob</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -161,7 +165,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="16" />
+    <option name="x" value="126" />
     <option name="y" value="23" />
     <option name="width" value="1435" />
     <option name="height" value="974" />
@@ -187,6 +191,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -212,7 +217,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -504,7 +508,10 @@
       <workItem from="1588183853343" duration="1503000" />
       <workItem from="1588188215071" duration="3988000" />
       <workItem from="1588252678191" duration="1861000" />
-      <workItem from="1588281607994" duration="28000" />
+      <workItem from="1588281607994" duration="238000" />
+      <workItem from="1588286875820" duration="13000" />
+      <workItem from="1588287170440" duration="72000" />
+      <workItem from="1588288824530" duration="43000" />
     </task>
     <servers />
   </component>
@@ -541,13 +548,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="567049000" />
+    <option name="totallyTimeSpent" value="567387000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="16" y="23" width="1435" height="974" extended-state="0" />
+    <frame x="126" y="23" width="1435" height="974" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17300789" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17946877" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -566,9 +573,9 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.5544218" side_tool="true" visible="true" weight="0.021536253" />
+      <window_info anchor="right" x="0" y="0" width="361" height="761" id="Documentation" order="3" sideWeight="0.5578231" side_tool="true" visible="true" weight="0.021536253" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="SciView" order="5" sideWeight="0.44557822" visible="true" weight="0.021536253" />
+      <window_info anchor="right" id="SciView" order="5" sideWeight="0.44217688" visible="true" weight="0.021536253" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -856,16 +863,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7260">
-          <caret line="484" selection-start-line="484" selection-end-line="484" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../scikit-XCS/skXCS/XCS.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5670">
@@ -883,6 +880,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_eLCS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7200">
+          <caret line="484" selection-start-line="484" selection-end-line="484" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="38" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/MANIFEST.in">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -892,18 +906,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/skeLCS/eLCS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="788">
-          <caret line="482" column="6" selection-start-line="482" selection-start-column="6" selection-end-line="482" selection-end-column="6" />
+        <state relative-caret-position="-316">
+          <caret line="315" column="33" selection-start-line="315" selection-start-column="23" selection-end-line="315" selection-end-column="33" />
           <folding>
             <element signature="e#0#56#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="38" lean-forward="true" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
         </state>
       </provider>
     </entry>
