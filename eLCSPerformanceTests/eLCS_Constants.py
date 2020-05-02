@@ -113,7 +113,7 @@ class Constants:
             for i in range(len(self.split) - 1):
                 t += train[i]
             self.train = t
-            self.test = self.split[0]
+            self.test = self.split[self.cvCount]
             self.cvCount+=1
         
     def referenceTimer(self, timer):
