@@ -39,7 +39,7 @@ For more information on the eLCS algorithm and how to use it, please refer to th
 ## Usage TLDR
 ```python
 #Import Necessary Packages/Modules
-from skeLCS.eLCS import eLCS
+from skeLCS import eLCS
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import cross_val_score
