@@ -1,6 +1,6 @@
 import pandas as pd
-from skeLCS.eLCS import eLCS
-from skeLCS.DataCleanup import StringEnumerator
+from skeLCS import eLCS
+from skeLCS import StringEnumerator
 import time
 import random
 import numpy as np
@@ -17,12 +17,4 @@ dataPhenotypes = formatted[:,-1]
 
 model.fit(dataFeatures,dataPhenotypes)
 print(model.score(dataFeatures,dataPhenotypes))
-print(model.getFinalAccuracy())
-model.exportIterationTrackingData('defaultExportDir/tracking.csv')
 
-model.pickleModel('defaultExportDir/pickled')
-
-newModel = eLCS(learningIterations=5000,rebootFilename='defaultExportDir/pickled')
-newModel.fit(dataFeatures,dataPhenotypes)
-print(newModel.score(dataFeatures,dataPhenotypes))
-newModel.exportIterationTrackingData('defaultExportDir/tracking2.csv')
