@@ -3,3 +3,8 @@ __pycache__/
 MANIFEST
 dist/
 testTrackingData.csv
+venv/
+scikit_eLCS.egg-info/
+.ipynb_checkpoints/
+.idea/
+testMain.py
