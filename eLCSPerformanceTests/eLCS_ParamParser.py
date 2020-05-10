@@ -7,7 +7,7 @@ import copy
 
 class ParamParser:
     def __init__(self, dataFile, cv=False,learningIterations="10000", trackingFrequency=100000, N=1000,
-                 p_spec=0.5, discrete_attribute_limit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
+                 p_spec=0.5, discreteAttributeLimit=10,nu=5, chi=0.8, upsilon=0.04, theta_GA=25,
                  theta_del=20, theta_sub=20, acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1,
                  doSubsumption=True, selectionMethod='tournament', theta_sel=0.5,randomSeed = False,labelInstanceID='InstanceID',labelPhenotype="class",
                  labelMissingData="NA",doPopulationReboot=False,popRebootPath='ExampleRun_eLCS_50000'):
@@ -17,7 +17,7 @@ class ParamParser:
         self.parameters['trackingFrequency'] = trackingFrequency
         self.parameters['N'] = N
         self.parameters['p_spec'] = p_spec
-        self.parameters['discrete_attribute_limit'] = discrete_attribute_limit
+        self.parameters['discreteAttributeLimit'] = discreteAttributeLimit
         self.parameters['nu'] = nu
         self.parameters['chi'] = chi
         self.parameters['upsilon'] = upsilon

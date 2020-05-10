@@ -264,9 +264,6 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
         Returns self
         """
-        #If trained already, raise Exception
-        if self.hasTrained:
-            raise Exception("Cannot train already trained model again")
 
         # Check if X and Y are numeric
         try:

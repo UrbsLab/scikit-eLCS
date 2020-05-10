@@ -315,7 +315,7 @@ class Classifier:
         #-------------------------------------------------------
         for attRef in range(cons.env.formatData.numAttributes):  #Each condition specifies different attributes, so we need to go through all attributes in the dataset.
             attributeInfo = cons.env.formatData.attributeInfo[attRef]
-            if random.random() < cons.mu and state[attRef] != cons.labelMissingData:
+            if random.random() < cons.upsilon and state[attRef] != cons.labelMissingData:
                 #MUTATION--------------------------------------------------------------------------------------------------------------
                 if attRef not in self.specifiedAttList: #Attribute not yet specified
                     self.specifiedAttList.append(attRef)
@@ -372,7 +372,7 @@ class Classifier:
     def discretePhenotypeMutation(self):
         """ Mutate this rule's discrete phenotype. """
         changed = False
-        if random.random() < cons.mu:
+        if random.random() < cons.upsilon:
             phenotypeList = copy.deepcopy(cons.env.formatData.phenotypeList)
             phenotypeList.remove(self.phenotype)
             newPhenotype = random.sample(phenotypeList,1)
@@ -385,7 +385,7 @@ class Classifier:
     def continuousPhenotypeMutation(self, phenotype):
         """ Mutate this rule's continuous phenotype. """
         changed = False
-        if random.random() < cons.mu: #Mutate continuous phenotype
+        if random.random() < cons.upsilon: #Mutate continuous phenotype
             phenRange = self.phenotype[1] - self.phenotype[0]
             mutateRange = random.random()*0.5*phenRange
             tempKey = random.randint(0,2) #Make random choice between 3 scenarios, mutate minimums, mutate maximums, mutate both
