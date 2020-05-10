@@ -15,28 +15,28 @@ import pickle
 import copy
 
 class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
-    def __init__(self, learningIterations=10000, trackAccuracyWhileFit = False, N=1000, p_spec=0.5, discreteAttributeLimit=10,
-                 specifiedAttributes = np.array([]), nu=5, chi=0.8, upsilon=0.04, theta_GA=25, theta_del=20, theta_sub=20,
-                 acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitnessReduction=0.1, doCorrectSetSubsumption=False,
-                 doGASubsumption=True, selectionMethod='tournament', theta_sel=0.5, randomSeed = "none",matchForMissingness=False,
-                 rebootFilename=None):
+    def __init__(self, learning_iterations=10000, track_accuracy_while_fit = False, N=1000, p_spec=0.5, discrete_attribute_limit=10,
+                 specified_attributes = np.array([]), nu=5, chi=0.8, mu=0.04, theta_GA=25, theta_del=20, theta_sub=20,
+                 acc_sub=0.99, beta=0.2, delta=0.1, init_fit=0.01, fitness_reduction=0.1, do_correct_set_subsumption=False,
+                 do_GA_subsumption=True, selection_method='tournament', theta_sel=0.5, random_state = None,match_for_missingness=False,
+                 reboot_filename=None):
 
         '''
-        :param learningIterations:      Must be nonnegative integer. The number of training cycles to run.
-        :param trackAccuracyWhileFit:   Must be boolean. Determines if accuracy is tracked during model training
+        :param learning_iterations:      Must be nonnegative integer. The number of training cycles to run.
+        :param track_accuracy_while_fit:   Must be boolean. Determines if accuracy is tracked during model training
         :param N:                       Must be nonnegative integer. Maximum micro classifier population size (sum of classifier numerosities).
         :param p_spec:                  Must be float from 0 - 1. Probability of specifying an attribute during the covering procedure. Advised: larger amounts of attributes => lower p_spec values
-        :param discreteAttributeLimit:  Must be nonnegative integer OR "c" OR "d". Multipurpose param. If it is a nonnegative integer, discreteAttributeLimit determines the threshold that determines
-                                        if an attribute will be treated as a continuous or discrete attribute. For example, if discreteAttributeLimit == 10, if an attribute has more than 10 unique
+        :param discrete_attribute_limit:  Must be nonnegative integer OR "c" OR "d". Multipurpose param. If it is a nonnegative integer, discrete_attribute_limit determines the threshold that determines
+                                        if an attribute will be treated as a continuous or discrete attribute. For example, if discrete_attribute_limit == 10, if an attribute has more than 10 unique
                                         values in the dataset, the attribute will be continuous. If the attribute has 10 or less unique values, it will be discrete. Alternatively,
-                                        discreteAttributeLimit can take the value of "c" or "d". See next param for this.
-        :param specifiedAttributes:     Must be an ndarray type of nonnegative integer attributeIndices (zero indexed).
+                                        discrete_attribute_limit can take the value of "c" or "d". See next param for this.
+        :param specified_attributes:     Must be an ndarray type of nonnegative integer attributeIndices (zero indexed).
                                         If "c", attributes specified by index in this param will be continuous and the rest will be discrete. If "d", attributes specified by index in this
                                         param will be discrete and the rest will be continuous.
-                                        If this value is given, and discreteAttributeLimit is not "c" or "d", discreteAttributeLimit overrides this specification
+                                        If this value is given, and discrete_attribute_limit is not "c" or "d", discrete_attribute_limit overrides this specification
         :param nu:                      (v) Must be a float. Power parameter used to determine the importance of high accuracy when calculating fitness. (typically set to 5, recommended setting of 1 in noisy data)
         :param chi:                     (X) Must be float from 0 - 1. The probability of applying crossover in the GA. (typically set to 0.5-1.0)
-        :param upsilon:                 (u) Must be float from 0 - 1. The probability of mutating an allele within an offspring.(typically set to 0.01-0.05)
+        :param mu:                 (u) Must be float from 0 - 1. The probability of mutating an allele within an offspring.(typically set to 0.01-0.05)
         :param theta_GA:                Must be nonnegative float. The GA threshold. The GA is applied in a set when the average time (# of iterations) since the last GA in the correct set is greater than theta_GA.
         :param theta_del:               Must be a nonnegative integer. The deletion experience threshold; The calculation of the deletion probability changes once this threshold is passed.
         :param theta_sub:               Must be a nonnegative integer. The subsumption experience threshold
@@ -44,30 +44,30 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         :param beta:                    Must be float. Learning parameter; Used in calculating average correct set size
         :param delta:                   Must be float. Deletion parameter; Used in determining deletion vote calculation.
         :param init_fit:                Must be float. The initial fitness for a new classifier. (typically very small, approaching but not equal to zero)
-        :param fitnessReduction:        Must be float. Initial fitness reduction in GA offspring rules.
-        :param doCorrectSetSubsumption: Must be boolean. Determines if subsumption is done in [C] after [C] updates.
-        :param doGASubsumption:         Must be boolean. Determines if subsumption is done between offspring and parents after GA
-        :param selectionMethod:         Must be either "tournament" or "roulette". Determines GA selection method. Recommended: tournament
+        :param fitness_reduction:        Must be float. Initial fitness reduction in GA offspring rules.
+        :param do_correct_set_subsumption: Must be boolean. Determines if subsumption is done in [C] after [C] updates.
+        :param do_GA_subsumption:         Must be boolean. Determines if subsumption is done between offspring and parents after GA
+        :param selection_method:         Must be either "tournament" or "roulette". Determines GA selection method. Recommended: tournament
         :param theta_sel:               Must be float from 0 - 1. The fraction of the correct set to be included in tournament selection.
-        :param randomSeed:              Must be an integer or "none". Set a constant random seed value to some integer (in order to obtain reproducible results). Put 'none' if none (for pseudo-random algorithm runs).
-        :param matchForMissingness:     Must be boolean. Determines if eLCS matches for missingness (i.e. if a missing value can match w/ a specified value)
-        :param rebootFilename:          Must be String or None. Filename of pickled model to be rebooted
+        :param random_state:              Must be an integer or None. Set a constant random seed value to some integer (in order to obtain reproducible results). Put None if none (for pseudo-random algorithm runs).
+        :param match_for_missingness:     Must be boolean. Determines if eLCS matches for missingness (i.e. if a missing value can match w/ a specified value)
+        :param reboot_filename:          Must be String or None. Filename of pickled model to be rebooted
         '''
 
         '''
         Parameter Validity Checking
         Checks all parameters for valid values
         '''
-        #learningIterations
-        if not self.checkIsInt(learningIterations):
-            raise Exception("learningIterations param must be nonnegative integer")
+        #learning_iterations
+        if not self.checkIsInt(learning_iterations):
+            raise Exception("learning_iterations param must be nonnegative integer")
 
-        if learningIterations < 0:
-            raise Exception("learningIterations param must be nonnegative integer")
+        if learning_iterations < 0:
+            raise Exception("learning_iterations param must be nonnegative integer")
 
-        #trackAccuracyWhileFit
-        if not(isinstance(trackAccuracyWhileFit,bool)):
-            raise Exception("trackAccuracyWhileFit param must be boolean")
+        #track_accuracy_while_fit
+        if not(isinstance(track_accuracy_while_fit,bool)):
+            raise Exception("track_accuracy_while_fit param must be boolean")
 
         #N
         if not self.checkIsInt(N):
@@ -83,26 +83,26 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         if p_spec < 0 or p_spec > 1:
             raise Exception("p_spec param must be float from 0 - 1")
 
-        #discreteAttributeLimit
-        if discreteAttributeLimit != "c" and discreteAttributeLimit != "d":
+        #discrete_attribute_limit
+        if discrete_attribute_limit != "c" and discrete_attribute_limit != "d":
             try:
-                dpl = int(discreteAttributeLimit)
-                if not self.checkIsInt(discreteAttributeLimit):
-                    raise Exception("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'")
+                dpl = int(discrete_attribute_limit)
+                if not self.checkIsInt(discrete_attribute_limit):
+                    raise Exception("discrete_attribute_limit param must be nonnegative integer or 'c' or 'd'")
                 if dpl < 0:
-                    raise Exception("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'")
+                    raise Exception("discrete_attribute_limit param must be nonnegative integer or 'c' or 'd'")
             except:
-                raise Exception("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'")
+                raise Exception("discrete_attribute_limit param must be nonnegative integer or 'c' or 'd'")
 
-        #specifiedAttributes
-        if not (isinstance(specifiedAttributes,np.ndarray)):
-            raise Exception("specifiedAttributes param must be ndarray")
+        #specified_attributes
+        if not (isinstance(specified_attributes,np.ndarray)):
+            raise Exception("specified_attributes param must be ndarray")
 
-        for spAttr in specifiedAttributes:
+        for spAttr in specified_attributes:
             if not self.checkIsInt(spAttr):
-                raise Exception("All specifiedAttributes elements param must be nonnegative integers")
+                raise Exception("All specified_attributes elements param must be nonnegative integers")
             if int(spAttr) < 0:
-                raise Exception("All specifiedAttributes elements param must be nonnegative integers")
+                raise Exception("All specified_attributes elements param must be nonnegative integers")
 
         #nu
         if not self.checkIsFloat(nu):
@@ -115,12 +115,12 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         if chi < 0 or chi > 1:
             raise Exception("chi param must be float from 0 - 1")
 
-        #upsilon
-        if not self.checkIsFloat(upsilon):
-            raise Exception("upsilon param must be float from 0 - 1")
+        #mu
+        if not self.checkIsFloat(mu):
+            raise Exception("mu param must be float from 0 - 1")
 
-        if upsilon < 0 or upsilon > 1:
-            raise Exception("upsilon param must be float from 0 - 1")
+        if mu < 0 or mu > 1:
+            raise Exception("mu param must be float from 0 - 1")
 
         #theta_GA
         if not self.checkIsFloat(theta_GA):
@@ -162,21 +162,21 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         if not self.checkIsFloat(init_fit):
             raise Exception("init_fit param must be float")
 
-        #fitnessReduction
-        if not self.checkIsFloat(fitnessReduction):
-            raise Exception("fitnessReduction param must be float")
+        #fitness_reduction
+        if not self.checkIsFloat(fitness_reduction):
+            raise Exception("fitness_reduction param must be float")
 
-        #doCorrectSetSubsumption
-        if not(isinstance(doCorrectSetSubsumption,bool)):
-            raise Exception("doCorrectSetSubsumption param must be boolean")
+        #do_correct_set_subsumption
+        if not(isinstance(do_correct_set_subsumption,bool)):
+            raise Exception("do_correct_set_subsumption param must be boolean")
 
-        # doGASubsumption
-        if not (isinstance(doGASubsumption, bool)):
-            raise Exception("doGASubsumption param must be boolean")
+        # do_GA_subsumption
+        if not (isinstance(do_GA_subsumption, bool)):
+            raise Exception("do_GA_subsumption param must be boolean")
 
-        #selectionMethod
-        if selectionMethod != "tournament" and selectionMethod != "roulette":
-            raise Exception("selectionMethod param must be 'tournament' or 'roulette'")
+        #selection_method
+        if selection_method != "tournament" and selection_method != "roulette":
+            raise Exception("selection_method param must be 'tournament' or 'roulette'")
 
         #theta_sel
         if not self.checkIsFloat(theta_sel):
@@ -185,35 +185,35 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         if theta_sel < 0 or theta_sel > 1:
             raise Exception("theta_sel param must be float from 0 - 1")
 
-        #randomSeed
-        if randomSeed != "none":
+        #random_state
+        if random_state != None:
             try:
-                if not self.checkIsInt(randomSeed):
-                    raise Exception("randomSeed param must be integer or 'none'")
-                random.seed(int(randomSeed))
-                np.random.seed(int(randomSeed))
+                if not self.checkIsInt(random_state):
+                    raise Exception("random_state param must be integer or None")
+                random.seed(int(random_state))
+                np.random.seed(int(random_state))
             except:
-                raise Exception("randomSeed param must be integer or 'none'")
+                raise Exception("random_state param must be integer or None")
 
-        #matchForMissingness
-        if not (isinstance(matchForMissingness, bool)):
-            raise Exception("matchForMissingness param must be boolean")
+        #match_for_missingness
+        if not (isinstance(match_for_missingness, bool)):
+            raise Exception("match_for_missingness param must be boolean")
 
         # rebootPopulationFilename
-        if rebootFilename != None and not isinstance(rebootFilename, str):
-            raise Exception("rebootFilename param must be None or String from pickle")
+        if reboot_filename != None and not isinstance(reboot_filename, str):
+            raise Exception("reboot_filename param must be None or String from pickle")
         '''
         Set params
         '''
-        self.learningIterations = learningIterations
+        self.learning_iterations = learning_iterations
         self.N = N
         self.p_spec = p_spec
-        self.discreteAttributeLimit = discreteAttributeLimit
-        self.specifiedAttributes = specifiedAttributes
-        self.trackAccuracyWhileFit = trackAccuracyWhileFit
+        self.discrete_attribute_limit = discrete_attribute_limit
+        self.specified_attributes = specified_attributes
+        self.track_accuracy_while_fit = track_accuracy_while_fit
         self.nu = nu
         self.chi = chi
-        self.upsilon = upsilon
+        self.mu = mu
         self.theta_GA = theta_GA
         self.theta_del = theta_del
         self.theta_sub = theta_sub
@@ -221,21 +221,21 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.beta = beta
         self.delta = delta
         self.init_fit = init_fit
-        self.fitnessReduction = fitnessReduction
-        self.doCorrectSetSubsumption = doCorrectSetSubsumption
-        self.doGASubsumption = doGASubsumption
-        self.selectionMethod = selectionMethod
+        self.fitness_reduction = fitness_reduction
+        self.do_correct_set_subsumption = do_correct_set_subsumption
+        self.do_GA_subsumption = do_GA_subsumption
+        self.selection_method = selection_method
         self.theta_sel = theta_sel
-        self.randomSeed = randomSeed
-        self.matchForMissingness = matchForMissingness
+        self.random_state = random_state
+        self.match_for_missingness = match_for_missingness
 
         '''
         Set tracking tools
         '''
-        self.trackingObj = tempTrackingObj()
+        self.trackingObj = TempTrackingObj()
         self.record = IterationRecord()
         self.hasTrained = False
-        self.rebootFilename = rebootFilename
+        self.reboot_filename = reboot_filename
 
     def checkIsInt(self,num):
         try:
@@ -288,15 +288,15 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.trackingAccuracy = []
         self.movingAvgCount = 50
         aveGenerality = 0
-        aveGeneralityFreq = min(self.env.formatData.numTrainInstances,int(self.learningIterations/20)+1)
+        aveGeneralityFreq = min(self.env.formatData.numTrainInstances,int(self.learning_iterations/20)+1)
 
-        if self.rebootFilename == None:
+        if self.reboot_filename == None:
             self.timer = Timer()
             self.population = ClassifierSet()
         else:
             self.rebootPopulation()
 
-        while self.explorIter < self.learningIterations:
+        while self.explorIter < self.learning_iterations:
             #Get New Instance and Run a learning algorithm
             state_phenotype = self.env.getTrainInstance()
 
@@ -339,7 +339,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         #Form [M]
         self.population.makeMatchSet(state_phenotype,exploreIter,self)
 
-        if self.trackAccuracyWhileFit:
+        if self.track_accuracy_while_fit:
             #Make a Prediction
             self.timer.startTimeEvaluation()
             prediction = Prediction(self,self.population)
@@ -370,9 +370,9 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.population.updateSets(self,exploreIter)
 
         #Perform Subsumption
-        if self.doCorrectSetSubsumption:
+        if self.do_correct_set_subsumption:
             self.timer.startTimeSubsumption()
-            self.population.doCorrectSetSubsumption(self)
+            self.population.do_correct_set_subsumption(self)
             self.timer.stopTimeSubsumption()
 
         #Perform GA
@@ -394,11 +394,11 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
     ##*************** Population Reboot ****************
     def saveFinalMetrics(self):
-        self.finalMetrics = [self.learningIterations,self.timer.globalTime, self.timer.globalMatching,
+        self.finalMetrics = [self.learning_iterations,self.timer.globalTime, self.timer.globalMatching,
                              self.timer.globalDeletion, self.timer.globalSubsumption, self.timer.globalSelection,
                              self.timer.globalEvaluation,copy.deepcopy(self.population.popSet)]
 
-    def pickleModel(self,filename=None):
+    def pickle_model(self,filename=None):
         if self.hasTrained:
             if filename == None:
                 filename = 'pickled'+str(int(time.time()))
@@ -410,7 +410,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
     def rebootPopulation(self):
         # Sets popSet and microPopSize of self.population, as well as trackingMetrics,
-        file = open(self.rebootFilename, 'rb')
+        file = open(self.reboot_filename, 'rb')
         rawData = pickle.load(file)
         file.close()
 
@@ -429,7 +429,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.timer.globalSubsumption = rawData[4]
         self.timer.globalGA = rawData[5]
         self.timer.globalEvaluation = rawData[6]
-        self.learningIterations += rawData[0]
+        self.learning_iterations += rawData[0]
         self.explorIter += rawData[0]
 
     ##*************** Export and Evaluation ****************
@@ -494,13 +494,13 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         predList = self.predict(X)
         return balanced_accuracy_score(y, predList) #Make it balanced accuracy
 
-    def exportIterationTrackingData(self,filename='iterationData.csv'):
+    def export_iteration_tracking_data(self,filename='iterationData.csv'):
         if self.hasTrained:
             self.record.exportTrackingToCSV(filename)
         else:
             raise Exception("There is no tracking data to export, as the eLCS model has not been trained")
 
-    def exportFinalRulePopulation(self,headerNames=np.array([]),className="phenotype",filename='populationData.csv',DCAL=True):
+    def export_final_rule_population(self,headerNames=np.array([]),className="phenotype",filename='populationData.csv',DCAL=True):
         if self.hasTrained:
             if DCAL:
                 self.record.exportPopDCAL(self,headerNames,className,filename)
@@ -509,14 +509,14 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         else:
             raise Exception("There is no rule population to export, as the eLCS model has not been trained")
 
-    def getFinalAccuracy(self):
+    def get_final_accuracy(self):
         if self.hasTrained:
             originalTrainingData = self.env.formatData.savedRawTrainingData
             return self.score(originalTrainingData[0], originalTrainingData[1])
         else:
             raise Exception("There is no final training accuracy to return, as the XCS model has not been trained")
 
-    def getFinalInstanceCoverage(self):
+    def get_final_instance_coverage(self):
         if self.hasTrained:
             numCovered = 0
             originalTrainingData = self.env.formatData.savedRawTrainingData
@@ -530,14 +530,14 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         else:
             raise Exception("There is no final instance coverage to return, as the eLCS model has not been trained")
 
-    def getFinalAttributeSpecificityList(self):
+    def get_final_attribute_specificity_list(self):
         if self.hasTrained:
             return self.population.getAttributeSpecificityList(self)
         else:
             raise Exception(
                 "There is no final attribute specificity list to return, as the eLCS model has not been trained")
 
-    def getFinalAttributeAccuracyList(self):
+    def get_final_attribute_accuracy_list(self):
         if self.hasTrained:
             return self.population.getAttributeAccuracyList(self)
         else:
@@ -602,7 +602,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         print()
 
     #######################################################TEMPORARY STORAGE OBJECTS################################################################################
-class tempTrackingObj():
+class TempTrackingObj():
     #Tracks stats of every iteration (except accuracy, avg generality, and times)
     def __init__(self):
         self.macroPopSize = 0

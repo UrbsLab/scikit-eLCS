@@ -99,7 +99,7 @@ class Classifier:
             # Continuous
             if attributeInfoType:
                 instanceValue = state[specifiedIndex]
-                if elcs.matchForMissingness:
+                if elcs.match_for_missingness:
                     if instanceValue == None:
                         pass
                     elif self.condition[i][0] < instanceValue < self.condition[i][1]:
@@ -117,7 +117,7 @@ class Classifier:
             # Discrete
             else:
                 stateRep = state[specifiedIndex]
-                if elcs.matchForMissingness:
+                if elcs.match_for_missingness:
                     if stateRep == self.condition[i] or stateRep == None:
                         pass
                     else:
@@ -319,7 +319,7 @@ class Classifier:
             else:
                 attributeInfoValue = elcs.env.formatData.attributeInfoContinuous[attRef]
 
-            if random.random() < elcs.upsilon and not(state[attRef] == None):
+            if random.random() < elcs.mu and not(state[attRef] == None):
                 # Mutation
                 if attRef not in self.specifiedAttList:
                     self.specifiedAttList.append(attRef)
@@ -362,7 +362,7 @@ class Classifier:
 
     def discretePhenotypeMutation(self, elcs):
         changed = False
-        if random.random() < elcs.upsilon:
+        if random.random() < elcs.mu:
             phenotypeList = copy.deepcopy(elcs.env.formatData.phenotypeList)
             phenotypeList.remove(self.phenotype)
             newPhenotype = random.choice(phenotypeList)
@@ -372,7 +372,7 @@ class Classifier:
 
     def continuousPhenotypeMutation(self, elcs, phenotype):
         changed = False
-        if random.random() < elcs.upsilon:
+        if random.random() < elcs.mu:
             phenRange = self.phenotype[1] - self.phenotype[0]
             mutateRange = random.random() * 0.5 * phenRange
             tempKey = random.randint(0,2)  # Make random choice between 3 scenarios, mutate minimums, mutate maximums, mutate both

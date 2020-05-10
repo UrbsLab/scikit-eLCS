@@ -17,7 +17,7 @@ class DataManagement:
         self.phenotypeRange = None  # Stores the difference between the maximum and minimum values for a continuous phenotype
         self.isDefault = True #Is discrete attribute limit an int or string
         try:
-            int(elcs.discreteAttributeLimit)
+            int(elcs.discrete_attribute_limit)
         except:
             self.isDefault = False
 
@@ -59,7 +59,7 @@ class DataManagement:
             if self.isDefault:
                 currentInstanceIndex = 0
                 stateDict = {}
-                while attIsDiscrete and len(list(stateDict.keys())) <= elcs.discreteAttributeLimit and currentInstanceIndex < self.numTrainInstances:
+                while attIsDiscrete and len(list(stateDict.keys())) <= elcs.discrete_attribute_limit and currentInstanceIndex < self.numTrainInstances:
                     target = features[currentInstanceIndex,att]
                     if target in list(stateDict.keys()):
                         stateDict[target] += 1
@@ -69,15 +69,15 @@ class DataManagement:
                         stateDict[target] = 1
                     currentInstanceIndex+=1
 
-                if len(list(stateDict.keys())) > elcs.discreteAttributeLimit:
+                if len(list(stateDict.keys())) > elcs.discrete_attribute_limit:
                     attIsDiscrete = False
-            elif elcs.discreteAttributeLimit == "c":
-                if att in elcs.specifiedAttributes:
+            elif elcs.discrete_attribute_limit == "c":
+                if att in elcs.specified_attributes:
                     attIsDiscrete = False
                 else:
                     attIsDiscrete = True
-            elif elcs.discreteAttributeLimit == "d":
-                if att in elcs.specifiedAttributes:
+            elif elcs.discrete_attribute_limit == "d":
+                if att in elcs.specified_attributes:
                     attIsDiscrete = True
                 else:
                     attIsDiscrete = False

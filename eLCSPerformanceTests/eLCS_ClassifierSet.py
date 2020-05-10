@@ -279,12 +279,12 @@ class ClassifierSet:
         #-------------------------------------------------------
         if changed:
             cl1.setAccuracy((cl1.accuracy + cl2.accuracy)/2.0)
-            cl1.setFitness(cons.fitnessReduction * (cl1.fitness + cl2.fitness)/2.0)
+            cl1.setFitness(cons.fitness_reduction * (cl1.fitness + cl2.fitness)/2.0)
             cl2.setAccuracy(cl1.accuracy)
             cl2.setFitness(cl1.fitness)
         else:
-            cl1.setFitness(cons.fitnessReduction * cl1.fitness)
-            cl2.setFitness(cons.fitnessReduction * cl2.fitness)
+            cl1.setFitness(cons.fitness_reduction * cl1.fitness)
+            cl2.setFitness(cons.fitness_reduction * cl2.fitness)
             
         #-------------------------------------------------------
         # MUTATION OPERATOR 

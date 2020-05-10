@@ -29,7 +29,7 @@ In addition, powerful data tracking collection methods are built into the scikit
 * Number of crossover/mutation operations performed
 * Times for matching, deletion, subsumption, selection, evaluation
 
-These values can then be exported as a csv after training is complete for analysis using the built in "exportIterationTrackingData" method.
+These values can then be exported as a csv after training is complete for analysis using the built in "export_iteration_tracking_data" method.
 
 In addition, the package includes functionality that allows the final rule population to be exported as a csv after training.
 
@@ -56,7 +56,7 @@ dataFeatures = np.delete(formatted,-1,axis=1)
 dataPhenotypes = formatted[:,-1]
 
 #Initialize eLCS Model
-model = eLCS(learningIterations = 5000)
+model = eLCS(learning_iterations = 5000)
 
 #3-fold CV
 print(np.mean(cross_val_score(model,dataFeatures,dataPhenotypes,cv=3)))

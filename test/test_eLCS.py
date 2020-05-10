@@ -14,32 +14,32 @@ class Test_eLCS(unittest.TestCase):
     '''
     def testParamLearningIterationsNonnumeric(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(learningIterations="hello")
-        self.assertTrue("learningIterations param must be nonnegative integer" in str(context.exception))
+            clf = eLCS(learning_iterations="hello")
+        self.assertTrue("learning_iterations param must be nonnegative integer" in str(context.exception))
 
     def testParamLearningIterationsInvalidNumeric(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(learningIterations=3.3)
-        self.assertTrue("learningIterations param must be nonnegative integer" in str(context.exception))
+            clf = eLCS(learning_iterations=3.3)
+        self.assertTrue("learning_iterations param must be nonnegative integer" in str(context.exception))
 
     def testParamLearningIterationsInvalidNumeric2(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(learningIterations=-2)
-        self.assertTrue("learningIterations param must be nonnegative integer" in str(context.exception))
+            clf = eLCS(learning_iterations=-2)
+        self.assertTrue("learning_iterations param must be nonnegative integer" in str(context.exception))
 
     def testParamLearningIterations(self):
-        clf = eLCS(learningIterations=2000)
-        self.assertEqual(clf.learningIterations,2000)
+        clf = eLCS(learning_iterations=2000)
+        self.assertEqual(clf.learning_iterations,2000)
 
 
     def testTrackAccuracyWhileFitInvalid(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(trackAccuracyWhileFit=2)
-        self.assertTrue("trackAccuracyWhileFit param must be boolean" in str(context.exception))
+            clf = eLCS(track_accuracy_while_fit=2)
+        self.assertTrue("track_accuracy_while_fit param must be boolean" in str(context.exception))
 
     def testTrackAccuracyWhileFit(self):
-        clf = eLCS(trackAccuracyWhileFit=True)
-        self.assertEqual(clf.trackAccuracyWhileFit,True)
+        clf = eLCS(track_accuracy_while_fit=True)
+        self.assertEqual(clf.track_accuracy_while_fit,True)
 
 
     def testParamNNonnumeric(self):
@@ -92,55 +92,55 @@ class Test_eLCS(unittest.TestCase):
 
     def testDiscreteAttributeLimitInv1(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(discreteAttributeLimit="h")
-        self.assertTrue("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'" in str(context.exception))
+            clf = eLCS(discrete_attribute_limit="h")
+        self.assertTrue("discrete_attribute_limit param must be nonnegative integer or 'c' or 'd'" in str(context.exception))
 
     def testDiscreteAttributeLimitInv2(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(discreteAttributeLimit=-10)
-        self.assertTrue("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'" in str(context.exception))
+            clf = eLCS(discrete_attribute_limit=-10)
+        self.assertTrue("discrete_attribute_limit param must be nonnegative integer or 'c' or 'd'" in str(context.exception))
 
     def testDiscreteAttributeLimitInv3(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(discreteAttributeLimit=1.2)
-        self.assertTrue("discreteAttributeLimit param must be nonnegative integer or 'c' or 'd'" in str(context.exception))
+            clf = eLCS(discrete_attribute_limit=1.2)
+        self.assertTrue("discrete_attribute_limit param must be nonnegative integer or 'c' or 'd'" in str(context.exception))
 
     def testDiscreteAttributeLimit1(self):
-        clf = eLCS(discreteAttributeLimit=10)
-        self.assertEqual(clf.discreteAttributeLimit,10)
+        clf = eLCS(discrete_attribute_limit=10)
+        self.assertEqual(clf.discrete_attribute_limit,10)
 
     def testDiscreteAttributeLimit2(self):
-        clf = eLCS(discreteAttributeLimit="c")
-        self.assertEqual(clf.discreteAttributeLimit,"c")
+        clf = eLCS(discrete_attribute_limit="c")
+        self.assertEqual(clf.discrete_attribute_limit,"c")
 
     def testDiscreteAttributeLimit3(self):
-        clf = eLCS(discreteAttributeLimit="d")
-        self.assertEqual(clf.discreteAttributeLimit,"d")
+        clf = eLCS(discrete_attribute_limit="d")
+        self.assertEqual(clf.discrete_attribute_limit,"d")
 
 
     def testParamSpecAttrNonarray(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(specifiedAttributes=2)
-        self.assertTrue("specifiedAttributes param must be ndarray" in str(context.exception))
+            clf = eLCS(specified_attributes=2)
+        self.assertTrue("specified_attributes param must be ndarray" in str(context.exception))
 
     def testParamSpecAttrNonnumeric(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(specifiedAttributes=np.array([2,100,"hi",200]))
-        self.assertTrue("All specifiedAttributes elements param must be nonnegative integers" in str(context.exception))
+            clf = eLCS(specified_attributes=np.array([2,100,"hi",200]))
+        self.assertTrue("All specified_attributes elements param must be nonnegative integers" in str(context.exception))
 
     def testParamSpecAttrInvalidNumeric(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(specifiedAttributes=np.array([2,100,200.2,200]))
-        self.assertTrue("All specifiedAttributes elements param must be nonnegative integers" in str(context.exception))
+            clf = eLCS(specified_attributes=np.array([2,100,200.2,200]))
+        self.assertTrue("All specified_attributes elements param must be nonnegative integers" in str(context.exception))
 
     def testParamSpecAttrInvalidNumeric2(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(specifiedAttributes=np.array([2,100,-200,200]))
-        self.assertTrue("All specifiedAttributes elements param must be nonnegative integers" in str(context.exception))
+            clf = eLCS(specified_attributes=np.array([2,100,-200,200]))
+        self.assertTrue("All specified_attributes elements param must be nonnegative integers" in str(context.exception))
 
     def testParamSpecAttr(self):
-        clf = eLCS(specifiedAttributes=np.array([2, 100, 200, 300]))
-        self.assertTrue(np.array_equal(clf.specifiedAttributes,np.array([2, 100, 200, 300])))
+        clf = eLCS(specified_attributes=np.array([2, 100, 200, 300]))
+        self.assertTrue(np.array_equal(clf.specified_attributes,np.array([2, 100, 200, 300])))
 
 
     def testNuInv1(self):
@@ -217,20 +217,20 @@ class Test_eLCS(unittest.TestCase):
 
     def testFitnessReductionInv1(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(fitnessReduction="hi")
-        self.assertTrue("fitnessReduction param must be float" in str(context.exception))
+            clf = eLCS(fitness_reduction="hi")
+        self.assertTrue("fitness_reduction param must be float" in str(context.exception))
 
     def testFitnessReduction1(self):
-        clf = eLCS(fitnessReduction = -1)
-        self.assertEqual(clf.fitnessReduction,-1)
+        clf = eLCS(fitness_reduction = -1)
+        self.assertEqual(clf.fitness_reduction,-1)
 
     def testFitnessReduction2(self):
-        clf = eLCS(fitnessReduction = 3)
-        self.assertEqual(clf.fitnessReduction,3)
+        clf = eLCS(fitness_reduction = 3)
+        self.assertEqual(clf.fitness_reduction,3)
 
     def testFitnessReduction3(self):
-        clf = eLCS(fitnessReduction = 1.2)
-        self.assertEqual(clf.fitnessReduction,1.2)
+        clf = eLCS(fitness_reduction = 1.2)
+        self.assertEqual(clf.fitness_reduction,1.2)
 
 
     def testParamChiInv1(self):
@@ -263,30 +263,30 @@ class Test_eLCS(unittest.TestCase):
 
     def testParamUpsilonInv1(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(upsilon="hello")
-        self.assertTrue("upsilon param must be float from 0 - 1" in str(context.exception))
+            clf = eLCS(mu="hello")
+        self.assertTrue("mu param must be float from 0 - 1" in str(context.exception))
 
     def testParamUpsilonInv2(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(upsilon=3)
-        self.assertTrue("upsilon param must be float from 0 - 1" in str(context.exception))
+            clf = eLCS(mu=3)
+        self.assertTrue("mu param must be float from 0 - 1" in str(context.exception))
 
     def testParamUpsilonInv3(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(upsilon=-1.2)
-        self.assertTrue("upsilon param must be float from 0 - 1" in str(context.exception))
+            clf = eLCS(mu=-1.2)
+        self.assertTrue("mu param must be float from 0 - 1" in str(context.exception))
 
     def testParamUpsilon1(self):
-        clf = eLCS(upsilon=0)
-        self.assertEqual(clf.upsilon,0)
+        clf = eLCS(mu=0)
+        self.assertEqual(clf.mu,0)
 
     def testParamUpsilon2(self):
-        clf = eLCS(upsilon=0.3)
-        self.assertEqual(clf.upsilon,0.3)
+        clf = eLCS(mu=0.3)
+        self.assertEqual(clf.mu,0.3)
 
     def testParamUpsilon3(self):
-        clf = eLCS(upsilon=1)
-        self.assertEqual(clf.upsilon,1)
+        clf = eLCS(mu=1)
+        self.assertEqual(clf.mu,1)
 
 
     def testParamAccSubInv1(self):
@@ -428,78 +428,78 @@ class Test_eLCS(unittest.TestCase):
 
     def testDoSubInvalid(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(doCorrectSetSubsumption=2)
-        self.assertTrue("doCorrectSetSubsumption param must be boolean" in str(context.exception))
+            clf = eLCS(do_correct_set_subsumption=2)
+        self.assertTrue("do_correct_set_subsumption param must be boolean" in str(context.exception))
 
     def testDoSub(self):
-        clf = eLCS(doCorrectSetSubsumption=True)
-        self.assertEqual(clf.doCorrectSetSubsumption,True)
+        clf = eLCS(do_correct_set_subsumption=True)
+        self.assertEqual(clf.do_correct_set_subsumption,True)
 
 
     def testDoSub2Invalid(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(doGASubsumption=2)
-        self.assertTrue("doGASubsumption param must be boolean" in str(context.exception))
+            clf = eLCS(do_GA_subsumption=2)
+        self.assertTrue("do_GA_subsumption param must be boolean" in str(context.exception))
 
     def testDoSub2(self):
-        clf = eLCS(doGASubsumption=True)
-        self.assertEqual(clf.doGASubsumption,True)
+        clf = eLCS(do_GA_subsumption=True)
+        self.assertEqual(clf.do_GA_subsumption,True)
 
 
     def testSelectionInvalid(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(selectionMethod="hello")
-        self.assertTrue("selectionMethod param must be 'tournament' or 'roulette'" in str(context.exception))
+            clf = eLCS(selection_method="hello")
+        self.assertTrue("selection_method param must be 'tournament' or 'roulette'" in str(context.exception))
 
     def testSelection1(self):
-        clf = eLCS(selectionMethod="tournament")
-        self.assertEqual(clf.selectionMethod,"tournament")
+        clf = eLCS(selection_method="tournament")
+        self.assertEqual(clf.selection_method,"tournament")
 
     def testSelection2(self):
-        clf = eLCS(selectionMethod="roulette")
-        self.assertEqual(clf.selectionMethod,"roulette")
+        clf = eLCS(selection_method="roulette")
+        self.assertEqual(clf.selection_method,"roulette")
 
 
     def testRandomSeedInv1(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(randomSeed="hello")
-        self.assertTrue("randomSeed param must be integer or 'none'" in str(context.exception))
+            clf = eLCS(random_state="hello")
+        self.assertTrue("random_state param must be integer or None" in str(context.exception))
 
     def testRandomSeedInv2(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(randomSeed=1.2)
-        self.assertTrue("randomSeed param must be integer or 'none'" in str(context.exception))
+            clf = eLCS(random_state=1.2)
+        self.assertTrue("random_state param must be integer or None" in str(context.exception))
 
     def testRandomSeed2(self):
-        clf = eLCS(randomSeed=200)
-        self.assertEqual(clf.randomSeed,200)
+        clf = eLCS(random_state=200)
+        self.assertEqual(clf.random_state,200)
 
     def testRandomSeed3(self):
-        clf = eLCS(randomSeed='none')
-        self.assertEqual(clf.randomSeed,'none')
+        clf = eLCS(random_state=None)
+        self.assertEqual(clf.random_state,None)
 
-    # rebootFilename (None or String)
+    # reboot_filename (None or String)
     def testRebootFilenameInv1(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(rebootFilename=2)
-        self.assertTrue("rebootFilename param must be None or String from pickle" in str(context.exception))
+            clf = eLCS(reboot_filename=2)
+        self.assertTrue("reboot_filename param must be None or String from pickle" in str(context.exception))
 
     def testRebootFilenameInv2(self):
         with self.assertRaises(Exception) as context:
-            clf = eLCS(rebootFilename=True)
-        self.assertTrue("rebootFilename param must be None or String from pickle" in str(context.exception))
+            clf = eLCS(reboot_filename=True)
+        self.assertTrue("reboot_filename param must be None or String from pickle" in str(context.exception))
 
     def testRebootFilename1(self):
         clf = eLCS()
-        self.assertEqual(clf.rebootFilename, None)
+        self.assertEqual(clf.reboot_filename, None)
 
     def testRebootFilename2(self):
-        clf = eLCS(rebootFilename=None)
-        self.assertEqual(clf.rebootFilename, None)
+        clf = eLCS(reboot_filename=None)
+        self.assertEqual(clf.reboot_filename, None)
 
     def testRebootFilename3(self):
-        clf = eLCS(rebootFilename='hello')
-        self.assertEqual(clf.rebootFilename, 'hello')
+        clf = eLCS(reboot_filename='hello')
+        self.assertEqual(clf.reboot_filename, 'hello')
 
     '''SECTION 2: TEST eLCS Fit params
     -X, y must be numeric
@@ -512,8 +512,8 @@ class Test_eLCS(unittest.TestCase):
         dataPath = os.path.join(THIS_DIR,"test/DataSets/Tests/NumericTests/numericInts.csv")
         converter = StringEnumerator(dataPath, "class")
         #converter = StringEnumerator("Datasets/Tests/NumericTests/numericInts.csv", "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=2)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=2)
         clf.fit(dataFeatures,dataPhenotypes)
         self.assertTrue(clf.explorIter,2)
 
@@ -521,8 +521,8 @@ class Test_eLCS(unittest.TestCase):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/NumericTests/numericFloats.csv")
         converter = StringEnumerator(dataPath, "class")
         #converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloats.csv", "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=2)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=2)
         clf.fit(dataFeatures, dataPhenotypes)
         self.assertTrue(clf.explorIter, 2)
 
@@ -530,8 +530,8 @@ class Test_eLCS(unittest.TestCase):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/NumericTests/numericFloatsMissing.csv")
         converter = StringEnumerator(dataPath, "class")
         #converter = StringEnumerator("Datasets/Tests/NumericTests/numericFloatsMissing.csv", "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=2)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=2)
         clf.fit(dataFeatures, dataPhenotypes)
         self.assertTrue(clf.explorIter, 2)
 
@@ -543,7 +543,7 @@ class Test_eLCS(unittest.TestCase):
         dataFeatures = data.drop("class", axis=1).values  # splits into an array of instances
         dataPhenotypes = data["class"].values
 
-        clf = eLCS(learningIterations=2)
+        clf = eLCS(learning_iterations=2)
 
         with self.assertRaises(Exception) as context:
             clf.fit(dataFeatures,dataPhenotypes)
@@ -555,7 +555,7 @@ class Test_eLCS(unittest.TestCase):
         data = data.fillna("NA")
         dataFeatures = data.drop("class", axis=1).values  # splits into an array of instances
         dataPhenotypes = data["class"].values
-        clf = eLCS(learningIterations=2)
+        clf = eLCS(learning_iterations=2)
 
         with self.assertRaises(Exception) as context:
             clf.fit(dataFeatures,dataPhenotypes)
@@ -565,8 +565,8 @@ class Test_eLCS(unittest.TestCase):
     def testDefault(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=0)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=0)
         clf.fit(dataFeatures,dataPhenotypes)
         self.assertEqual(clf.env.formatData.attributeInfoType,[True,False,False])
         self.assertTrue(clf.env.formatData.discretePhenotype)
@@ -574,8 +574,8 @@ class Test_eLCS(unittest.TestCase):
     def testDefault2(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=0,discreteAttributeLimit=9)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=0,discrete_attribute_limit=9)
         clf.fit(dataFeatures,dataPhenotypes)
         self.assertEqual(clf.env.formatData.attributeInfoType,[True,True,True])
         self.assertTrue(clf.env.formatData.discretePhenotype)
@@ -583,8 +583,8 @@ class Test_eLCS(unittest.TestCase):
     def testDiscreteSpec(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=0,discreteAttributeLimit="d",specifiedAttributes=np.array([0,2,3]))
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=0,discrete_attribute_limit="d",specified_attributes=np.array([0,2,3]))
         clf.fit(dataFeatures,dataPhenotypes)
         self.assertEqual(clf.env.formatData.attributeInfoType,[False,True,False])
         self.assertTrue(clf.env.formatData.discretePhenotype)
@@ -592,8 +592,8 @@ class Test_eLCS(unittest.TestCase):
     def testContSpec(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Tests/SpecificityTests/Specifics.csv")
         converter = StringEnumerator(dataPath, "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=0,discreteAttributeLimit="c",specifiedAttributes=np.array([0,2,3]))
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=0,discrete_attribute_limit="c",specified_attributes=np.array([0,2,3]))
         clf.fit(dataFeatures,dataPhenotypes)
         self.assertEqual(clf.env.formatData.attributeInfoType,[True,False,True])
         self.assertTrue(clf.env.formatData.discretePhenotype)
@@ -606,30 +606,30 @@ class Test_eLCS(unittest.TestCase):
     def test6BitMultiplexer1000Iterations(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer6.csv")
         converter = StringEnumerator(dataPath, "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=1000)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=1000)
         clf.fit(dataFeatures,dataPhenotypes)
         answerKey = 0.921875
-        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey,True))
+        self.assertTrue(self.approxEqualOrBetter(0.2, clf.get_final_accuracy(), answerKey,True))
 
     def test11BitMultiplexer5000Iterations(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer11.csv")
         converter = StringEnumerator(dataPath, "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=5000)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=5000)
         clf.fit(dataFeatures,dataPhenotypes)
         answerKey = 1
-        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey,True))
+        self.assertTrue(self.approxEqualOrBetter(0.2, clf.get_final_accuracy(), answerKey,True))
 
     #Test performance for continuous attribute training data
     def testContinuous1000Iterations(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/ContinuousAndNonBinaryDiscreteAttributes.csv")
         converter = StringEnumerator(dataPath, "Class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=1000)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=1000)
         clf.fit(dataFeatures,dataPhenotypes)
         answerKey = 0.61
-        self.assertTrue(self.approxEqualOrBetter(0.2, clf.getFinalAccuracy(), answerKey,True))
+        self.assertTrue(self.approxEqualOrBetter(0.2, clf.get_final_accuracy(), answerKey,True))
 
     #####TEST AGAINST CURRENT ALGORITHM
 
@@ -637,8 +637,8 @@ class Test_eLCS(unittest.TestCase):
     def testMPCV(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer6.csv")
         converter = StringEnumerator(dataPath, "class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=2000)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=2000)
         formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
         np.random.shuffle(formatted)
         dataFeatures = np.delete(formatted, -1, axis=1)
@@ -650,8 +650,8 @@ class Test_eLCS(unittest.TestCase):
     def testContMissing(self):
         dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/ContinuousAndNonBinaryDiscreteAttributesMissing.csv")
         converter = StringEnumerator(dataPath, "Class")
-        headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
-        clf = eLCS(learningIterations=5000)
+        headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
+        clf = eLCS(learning_iterations=5000)
         formatted = np.insert(dataFeatures, dataFeatures.shape[1], dataPhenotypes, 1)
         np.random.shuffle(formatted)
         dataFeatures = np.delete(formatted, -1, axis=1)
@@ -663,17 +663,17 @@ class Test_eLCS(unittest.TestCase):
     # def testRandomSeed(self):
     #     dataPath = os.path.join(THIS_DIR, "test/DataSets/Real/Multiplexer11.csv")
     #     converter = StringEnumerator(dataPath, "class")
-    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.getParams()
+    #     headers, classLabel, dataFeatures, dataPhenotypes = converter.get_params()
     #
-    #     clf = eLCS(learningIterations=1000, randomSeed=100)
+    #     clf = eLCS(learning_iterations=1000, random_state=100)
     #     clf.fit(dataFeatures, dataPhenotypes)
-    #     clf.exportIterationTrackingDataToCSV(filename='track1.csv')
-    #     clf.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='pop1.csv')
+    #     clf.export_iteration_tracking_dataToCSV(filename='track1.csv')
+    #     clf.export_final_rule_populationToCSV(headerNames=headers, className=classLabel, filename='pop1.csv')
     #
-    #     clf2 = eLCS(learningIterations=1000, randomSeed=100)
+    #     clf2 = eLCS(learning_iterations=1000, random_state=100)
     #     clf2.fit(dataFeatures, dataPhenotypes)
-    #     clf2.exportIterationTrackingDataToCSV(filename='track2.csv')
-    #     clf2.exportFinalRulePopulationToCSV(headerNames=headers, className=classLabel, filename='pop2.csv')
+    #     clf2.export_iteration_tracking_dataToCSV(filename='track2.csv')
+    #     clf2.export_final_rule_populationToCSV(headerNames=headers, className=classLabel, filename='pop2.csv')
     #
     #     track1 = pd.read_csv('track1.csv').values[:,:13]
     #     pop1 = pd.read_csv('pop1.csv').values

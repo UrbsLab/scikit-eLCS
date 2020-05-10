@@ -85,7 +85,7 @@ class ClassifierSet:
             self.popSet[ref].updateAccuracy()
             self.popSet[ref].updateFitness(elcs)
 
-    def doCorrectSetSubsumption(self,elcs):
+    def do_correct_set_subsumption(self,elcs):
         subsumer = None
         for ref in self.correctSet:
             cl = self.popSet[ref]
@@ -137,11 +137,11 @@ class ClassifierSet:
         changed = False
 
         #Select Parents
-        if elcs.selectionMethod == "roulette":
+        if elcs.selection_method == "roulette":
             selectList = self.selectClassifierRW()
             clP1 = selectList[0]
             clP2 = selectList[1]
-        elif elcs.selectionMethod == "tournament":
+        elif elcs.selection_method == "tournament":
             selectList = self.selectClassifierT(elcs)
             clP1 = selectList[0]
             clP2 = selectList[1]
@@ -162,12 +162,12 @@ class ClassifierSet:
         #Initialize Key Offspring Parameters
         if changed:
             cl1.setAccuracy((cl1.accuracy + cl2.accuracy) / 2.0)
-            cl1.setFitness(elcs.fitnessReduction * (cl1.fitness + cl2.fitness) / 2.0)
+            cl1.setFitness(elcs.fitness_reduction * (cl1.fitness + cl2.fitness) / 2.0)
             cl2.setAccuracy(cl1.accuracy)
             cl2.setFitness(cl1.fitness)
         else:
-            cl1.setFitness(elcs.fitnessReduction * cl1.fitness)
-            cl2.setFitness(elcs.fitnessReduction * cl2.fitness)
+            cl1.setFitness(elcs.fitness_reduction * cl1.fitness)
+            cl2.setFitness(elcs.fitness_reduction * cl2.fitness)
 
         #Mutation Operator
         nowchanged = cl1.Mutation(elcs,state,phenotype)
@@ -273,7 +273,7 @@ class ClassifierSet:
         return selectList
 
     def insertDiscoveredClassifiers(self,elcs,cl1,cl2,clP1,clP2,exploreIter):
-        if elcs.doGASubsumption:
+        if elcs.do_GA_subsumption:
             elcs.timer.startTimeSubsumption()
             if len(cl1.specifiedAttList) > 0:
                 self.subsumeClassifier(elcs,cl1,clP1,clP2)
