@@ -237,6 +237,14 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.hasTrained = False
         self.reboot_filename = reboot_filename
 
+        # Reboot Population
+        if self.reboot_filename != None:
+            self.rebootPopulation()
+            self.hasTrained = True
+        else:
+            self.explorIter = 0
+            self.population = ClassifierSet()
+
     def checkIsInt(self,num):
         try:
             n = float(num)
@@ -277,21 +285,22 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         except:
             raise Exception("X and y must be fully numeric")
 
+        # Handle repeated fit calls
+        if self.learning_iterations == self.explorIter and self.reboot_filename != None:
+            raise Exception("You cannot call fit(X,y) a second time with a rebooted population.")
+
+        if self.reboot_filename == None:
+            self.timer = Timer()
+        else:
+            self.rebootTimer()
+
         #Set up environment
         self.env = OfflineEnvironment(X,y,self)
-
-        self.explorIter = 0
 
         self.trackingAccuracy = []
         self.movingAvgCount = 50
         aveGenerality = 0
-        aveGeneralityFreq = min(self.env.formatData.numTrainInstances,int(self.learning_iterations/20)+1)
-
-        if self.reboot_filename == None:
-            self.timer = Timer()
-            self.population = ClassifierSet()
-        else:
-            self.rebootPopulation()
+        aveGeneralityFreq = min(self.env.formatData.numTrainInstances,1000)
 
         while self.explorIter < self.learning_iterations:
             #Get New Instance and Run a learning algorithm
@@ -393,7 +402,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
     def saveFinalMetrics(self):
         self.finalMetrics = [self.learning_iterations,self.timer.globalTime, self.timer.globalMatching,
                              self.timer.globalDeletion, self.timer.globalSubsumption, self.timer.globalSelection,
-                             self.timer.globalEvaluation,copy.deepcopy(self.population.popSet)]
+                             self.timer.globalEvaluation,copy.deepcopy(self.env),copy.deepcopy(self.population.popSet)]
 
     def pickle_model(self,filename=None):
         if self.hasTrained:
@@ -411,7 +420,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         rawData = pickle.load(file)
         file.close()
 
-        popSet = rawData[7]
+        popSet = rawData[8]
         microPopSize = 0
         for rule in popSet:
             microPopSize += rule.numerosity
@@ -419,6 +428,16 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         set.popSet = popSet
         set.microPopSize = microPopSize
         self.population = set
+
+        self.learning_iterations += rawData[0]
+        self.explorIter = rawData[0]
+        self.env = rawData[7]
+
+    def rebootTimer(self):
+        file = open(self.reboot_filename, 'rb')
+        rawData = pickle.load(file)
+        file.close()
+
         self.timer = Timer()
         self.timer.globalAdd = rawData[1]
         self.timer.globalMatching = rawData[2]
@@ -426,8 +445,7 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
         self.timer.globalSubsumption = rawData[4]
         self.timer.globalGA = rawData[5]
         self.timer.globalEvaluation = rawData[6]
-        self.learning_iterations += rawData[0]
-        self.explorIter += rawData[0]
+
 
     ##*************** Export and Evaluation ****************
     def predict_proba(self, X):

@@ -497,10 +497,6 @@ class Test_eLCS(unittest.TestCase):
         clf = eLCS(reboot_filename=None)
         self.assertEqual(clf.reboot_filename, None)
 
-    def testRebootFilename3(self):
-        clf = eLCS(reboot_filename='hello')
-        self.assertEqual(clf.reboot_filename, 'hello')
-
     '''SECTION 2: TEST eLCS Fit params
     -X, y must be numeric
     -y must be discrete
