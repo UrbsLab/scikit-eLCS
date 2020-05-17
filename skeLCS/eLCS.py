@@ -190,8 +190,6 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
             try:
                 if not self.checkIsInt(random_state):
                     raise Exception("random_state param must be integer or None")
-                random.seed(int(random_state))
-                np.random.seed(int(random_state))
             except:
                 raise Exception("random_state param must be integer or None")
 
@@ -284,6 +282,11 @@ class eLCS(BaseEstimator,ClassifierMixin, RegressorMixin):
 
         except:
             raise Exception("X and y must be fully numeric")
+
+        #Set Random State
+        if self.random_state != None:
+            random.seed(int(self.random_state))
+            np.random.seed(int(self.random_state))
 
         # Handle repeated fit calls
         if self.learning_iterations == self.explorIter and self.reboot_filename != None:
