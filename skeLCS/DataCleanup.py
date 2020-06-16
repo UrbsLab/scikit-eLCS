@@ -1,9 +1,4 @@
-'''
-Name: eLCS.py
-Authors: Robert Zhang in association with Ryan Urbanowicz
-Contact: robertzh@wharton.upenn.edu
-Description: This module creates a class that takes in data, and cleans it up to be used by another machine learning module
-'''
+
 
 import numpy as np
 import pandas as pd
@@ -106,11 +101,11 @@ class StringEnumerator:
     def add_attribute_converter_random(self,headerName):
         if headerName in self.dataHeaders and not (headerName in self.map):
             headerIndex = np.where(self.dataHeaders == headerName)[0][0]
-            uniqueItems = np.array([])
+            uniqueItems = []
             for instance in self.dataFeatures:
                 if not(instance[headerIndex] in uniqueItems) and instance[headerIndex] != "NA":
-                    uniqueItems = np.append(uniqueItems,instance[headerIndex])
-            self.add_attribute_converter(headerName,uniqueItems)
+                    uniqueItems.append(instance[headerIndex])
+            self.add_attribute_converter(headerName,np.array(uniqueItems))
 
     def add_class_converter(self,array):
         if not (self.classLabel in self.map.keys()):
@@ -121,11 +116,11 @@ class StringEnumerator:
 
     def add_class_converter_random(self):
         if not (self.classLabel in self.map.keys()):
-            uniqueItems = np.array([])
+            uniqueItems = []
             for instance in self.dataPhenotypes:
                 if not (instance in uniqueItems) and instance != "NA":
-                    uniqueItems = np.append(uniqueItems, instance)
-            self.add_class_converter(uniqueItems)
+                    uniqueItems.append(instance)
+            self.add_class_converter(np.array(uniqueItems))
 
     def convert_all_attributes(self):
         for attribute in self.dataHeaders:
@@ -144,56 +139,43 @@ class StringEnumerator:
     def delete_attribute(self,headerName):
         if headerName in self.dataHeaders:
             i = np.where(headerName == self.dataHeaders)[0][0]
-            newFeatures = np.array([[2,3]])
             self.dataHeaders = np.delete(self.dataHeaders,i)
             if headerName in self.map.keys():
                 del self.map[headerName]
 
+            newFeatures = []
             for instanceIndex in range(len(self.dataFeatures)):
                 instance = np.delete(self.dataFeatures[instanceIndex],i)
-                if (instanceIndex == 0):
-                    newFeatures = np.array([instance])
-                else:
-                    newFeatures = np.concatenate((newFeatures,[instance]),axis=0)
-            self.dataFeatures = newFeatures
+                newFeatures.append(instance)
+            self.dataFeatures = np.array(newFeatures)
         else:
             raise Exception("Header Doesn't Exist")
 
     def delete_all_instances_without_header_data(self,headerName):
-        newFeatures = np.array([[2,3]])
-        newPhenotypes = np.array([])
+        newFeatures = []
+        newPhenotypes = []
         attributeIndex = np.where(self.dataHeaders == headerName)[0][0]
 
-        firstTime = True
         for instanceIndex in range(len(self.dataFeatures)):
             instance = self.dataFeatures[instanceIndex]
             if instance[attributeIndex] != "NA":
-                if firstTime:
-                    firstTime = False
-                    newFeatures = np.array([instance])
-                else:
-                    newFeatures = np.concatenate((newFeatures,[instance]),axis = 0)
-                newPhenotypes = np.append(newPhenotypes,self.dataPhenotypes[instanceIndex])
+                newFeatures.append(instance)
+                newPhenotypes.append(self.dataPhenotypes[instanceIndex])
 
-        self.dataFeatures = newFeatures
-        self.dataPhenotypes = newPhenotypes
+        self.dataFeatures = np.array(newFeatures)
+        self.dataPhenotypes = np.array(newPhenotypes)
 
     def delete_all_instances_without_phenotype(self):
-        newFeatures = np.array([[2,3]])
-        newPhenotypes = np.array([])
-        firstTime = True
+        newFeatures = []
+        newPhenotypes = []
         for instanceIndex in range(len(self.dataFeatures)):
             instance = self.dataPhenotypes[instanceIndex]
             if instance != "NA":
-                if firstTime:
-                    firstTime = False
-                    newFeatures = np.array([self.dataFeatures[instanceIndex]])
-                else:
-                    newFeatures = np.concatenate((newFeatures,[self.dataFeatures[instanceIndex]]),axis = 0)
-                newPhenotypes = np.append(newPhenotypes,instance)
+                newFeatures.append(self.dataFeatures[instanceIndex])
+                newPhenotypes.append(instance)
 
-        self.dataFeatures = newFeatures
-        self.dataPhenotypes = newPhenotypes
+        self.dataFeatures = np.array(newFeatures)
+        self.dataPhenotypes = np.array(newPhenotypes)
 
     def print(self):
         isFullNumber = self.check_is_full_numeric()
@@ -247,26 +229,20 @@ class StringEnumerator:
         if not(self.check_is_full_numeric()):
             raise Exception("Features and Phenotypes must be fully numeric")
 
-        newFeatures = np.array([[2,3]],dtype=float)
-        newPhenotypes = np.array([],dtype=float)
-        firstTime = True
+        newFeatures = []
+        newPhenotypes = []
         for instanceIndex in range(len(self.dataFeatures)):
-            newInstance = np.array([],dtype=float)
+            newInstance = []
             for attribute in self.dataFeatures[instanceIndex]:
                 if attribute == "NA":
-                    newInstance = np.append(newInstance, np.nan)
+                    newInstance.append(np.nan)
                 else:
-                    newInstance = np.append(newInstance, float(attribute))
+                    newInstance.append(float(attribute))
 
-            if firstTime:
-                firstTime = False
-                newFeatures = np.array([newInstance])
-            else:
-                newFeatures = np.concatenate((newFeatures,[newInstance]),axis = 0)
-
+            newFeatures.append(np.array(newInstance,dtype=float))
             if self.dataPhenotypes[instanceIndex] == "NA": #Should never happen. All NaN phenotypes should be removed automatically at init. Just a safety mechanism.
-                newPhenotypes = np.append(newPhenotypes, np.nan)
+                newPhenotypes.append(np.nan)
             else:
-                newPhenotypes = np.append(newPhenotypes, float(self.dataPhenotypes[instanceIndex]))
+                newPhenotypes.append(float(self.dataPhenotypes[instanceIndex]))
 
-        return self.dataHeaders,self.classLabel,newFeatures,newPhenotypes
+        return self.dataHeaders,self.classLabel,np.array(newFeatures,dtype=float),np.array(newPhenotypes,dtype=float)
