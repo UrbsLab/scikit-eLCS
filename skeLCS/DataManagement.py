@@ -6,7 +6,7 @@ class DataManagement:
         self.savedRawTrainingData = [dataFeatures,dataPhenotypes]
         self.numAttributes = dataFeatures.shape[1]  # The number of attributes in the input file.
         self.attributeInfoType = [0]*self.numAttributes #stores false (d) or true (c) depending on its type, which points to parallel reference in one of the below 2 arrays
-        self.attributeInfoContinuous = [[0,0]]*self.numAttributes #stores continuous ranges and NaN otherwise
+        self.attributeInfoContinuous = [[np.inf,-np.inf] for _ in range(self.numAttributes)] #stores continuous ranges and NaN otherwise
         self.attributeInfoDiscrete = [0]*self.numAttributes #stores arrays of discrete values or NaN otherwise.
         for i in range(0,self.numAttributes):
             self.attributeInfoDiscrete[i] = AttributeInfoDiscreteElement()
