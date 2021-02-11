@@ -6,14 +6,14 @@ with open("README.md","r") as fh:
 setup(
   name = 'scikit-eLCS',
   packages = ['skeLCS'],
-  version = '1.2.2',
+  version = '1.2.3',
   license='License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
   description = 'Educational Learning Classifier System',
   long_description_content_type="text/markdown",
   author = 'Robert Zhang, Ryan J. Urbanowicz',
   author_email = 'robertzh@seas.upenn.edu,ryanurb@upenn.edu',
   url = 'https://github.com/UrbsLab/scikit-eLCS',
-  download_url = 'https://github.com/UrbsLab/scikit-eLCS/archive/v_1.2.2.tar.gz',
+  download_url = 'https://github.com/UrbsLab/scikit-eLCS/archive/v_1.2.3.tar.gz',
   keywords = ['machine learning','data analysis','data science','learning classifier systems'],
   install_requires=['numpy','pandas','scikit-learn'],
   classifiers=[
