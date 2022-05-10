@@ -100,7 +100,8 @@ class Prediction():
 
         if self.decision == None or self.decision == 'Tie':
             if elcs.env.formatData.discretePhenotype:
-                self.decision = random.choice(elcs.env.formatData.phenotypeList)
+                self.decision = elcs.env.formatData.majorityClass
+                #self.decision = random.choice(elcs.env.formatData.phenotypeList)
             else:
                 self.decision = random.randrange(elcs.env.formatData.phenotypeList[0],elcs.env.formatData.phenotypeList[1],(elcs.env.formatData.phenotypeList[1]-elcs.env.formatData.phenotypeList[0])/float(1000))
 

@@ -14,6 +14,8 @@ class DataManagement:
         # About Phenotypes
         self.discretePhenotype = True  # Is the Class/Phenotype Discrete? (False = Continuous)
         self.phenotypeList = []  # Stores all possible discrete phenotype states/classes or maximum and minimum values for a continuous phenotype
+        self.classCount = {}
+        self.majorityClass = None
         self.phenotypeRange = None  # Stores the difference between the maximum and minimum values for a continuous phenotype
         self.isDefault = True #Is discrete attribute limit an int or string
         try:
@@ -31,15 +33,16 @@ class DataManagement:
 
     def discriminateClasses(self,phenotypes):
         currentPhenotypeIndex = 0
-        classCount = {}
+
         while (currentPhenotypeIndex < self.numTrainInstances):
             target = phenotypes[currentPhenotypeIndex]
             if target in self.phenotypeList:
-                classCount[target]+=1
+                self.classCount[target]+=1
             else:
                 self.phenotypeList.append(target)
-                classCount[target] = 1
+                self.classCount[target] = 1
             currentPhenotypeIndex+=1
+        self.majorityClass = max(self.classCount)
 
     def characterizePhenotype(self,phenotypes,elcs):
         for target in phenotypes:
